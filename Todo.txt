@@ -1,0 +1,13 @@
+ Conception vue / affichage
+
+1ière page : 
+Permet de chercher un film en particulier
+Permet de chercher un acteur
+permet d'afficher une liste de film selon critère
+
+Page film :
+Afficher titre, real,  date, durée, affiche, casting, genre, synopsys
+(proposez d'autres films dans le même genre?=
+
+Page acteur
+Afficher nom, prénom, âge, genre, bibliography
