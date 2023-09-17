@@ -1,13 +1,25 @@
  Conception vue / affichage
 
-1ière page : 
-Permet de chercher un film en particulier
-Permet de chercher un acteur
-permet d'afficher une liste de film selon critère
+Home page : 
+-chercher un film
+-filter par genre/date/etc
 
-Page film :
-Afficher titre, real,  date, durée, affiche, casting, genre, synopsys
-(proposez d'autres films dans le même genre?=
+Actor page :
+-détail acteur (nom, prénom, âge, date de naissance, biographie)
+-basculer vers filmographie et roles
 
-Page acteur
-Afficher nom, prénom, âge, genre, bibliography
+Director page :
+-détail réalisateur  (nom, prénom, âge, date de naissance, biographie)
+-basculer vers filmographie
+
+List actor page :
+-afficher la liste des acteurs 
+
+List director page :
+-afficher la liste des réalisateur
+
+List role page :
+-afficher la liste des roles avec liste des acteurs associés
+
+Form page :
+-page pour soumettre acteur, réal, rôle, genre?
