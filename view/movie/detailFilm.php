@@ -10,20 +10,34 @@
 
     <h3>Details : </h3>
 
-    <p>Run time : <?= $movie["movie_duration"] ?></p>
+    <p>Run time : <?= $movie["formatted_duration"] ?></p>
     <p>Release date: <?= $movie["movie_release_date"] ?></p>
-    <p>Director: <?= $movie["person_last_name"] . " " . $movie["person_first_name"]  ?></p>
-    <!-- <p>Genre/s: <?= $movie["label_genre"] ?></p> -->
-    <p>Movie rating: <?= $movie["movie_rating"] ?></p>
+    <p>Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realisateurComplete"] ?></a></p>
+    <p>Genre/s: <?= $movie["genres"] ?></p>
+    <p>Movie rating: <?= $movie["movie_rating"] ?>★</p>
 
+    <h3>Casting : </h3>
+
+    <?php 
+    foreach($requeteCastingFilm->fetchAll() as $play) {
+    ?>  
+
+    <p><a href="index.php?action=detailActeur&id=<?= $play["id_actor"] ?>"><?= $play["actorComplete"] ?></a></p>
+    <?php
+    }
+    ?>
+
+    
 </div>
+
+
 
 
 
 <?php
 
-$titre = "Détail d'un film";
-$titre_secondaire = "Détail d'un film";
+$titre = "Movie";
+$titre_secondaire = "Movie detail";
 $contenu = ob_get_clean();
 
 
