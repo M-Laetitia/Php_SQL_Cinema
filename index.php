@@ -6,6 +6,8 @@
 // On "use" le controller Cinema
 use Controller\MovieController;
 use Controller\ActorController;
+use Controller\DirectorController;
+use Controller\GenreController; 
 
 
 // On autocharge les classes du projet
@@ -16,6 +18,8 @@ spl_autoload_register(function ($class_name) {
 // On instancie le controller Cinema
 $ctrlMovie = new MovieController();
 $ctrlActor = new ActorController();
+$ctrlDirector = new DirectorController();
+$ctrlGenre = new GenreController();
 
 // En fonction de l'action détectée dans l'URL via la propriété "action" on interagit avec
 // la bonne méthode du controller
@@ -32,6 +36,12 @@ if(isset($_GET["action"])) {
 
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
+
+        // DIRECTOR
+        case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
+
+        // GENRE
+        case "listGenres" : $ctrlGenre->listGenres(); break;
         
     }
     
