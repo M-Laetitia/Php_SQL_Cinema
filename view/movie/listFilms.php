@@ -27,9 +27,8 @@ pour stocker le contenu dans une variable $contenu -->
             <tr>
                 <td><?= $movie["movie_title"] ?></td>
                 <td><?= $movie["movie_release_date"] ?></td>
-                <td><?= $movie["realComplete"] ?><td>
+                <td><a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"] ?></a><td>
 
-                
                     
 
                 

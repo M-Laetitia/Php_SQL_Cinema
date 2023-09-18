@@ -13,7 +13,26 @@
     <p><?= $person["person_sexe"] ?> </p>
     <p>Date de naissance : <?= $person["person_birthday"] ?></p>
 
+
+    <h3>Movie/s related :</h3>
+
+    <?php 
+    foreach($requeteFilms->fetchAll() as $movie) {
+    ?>
+
+        <p> <?= $movie["movie_title"] ?> </p>
+
+    <!-- <p><a href="index.php?action=detailRealisateur&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a><p> -->
+        
+
+
+    <?php
+    }
+    ?>
+
 </div>
+
+
 
 
 
