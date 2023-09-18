@@ -33,21 +33,29 @@ class MovieController {
 
     public function detailFilm($id){
         $pdo = Connect::seConnecter();
+
         $requetedetailFilm = $pdo->prepare("
         SELECT movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, 
-        movie.movie_rating, movie.movie_release_date, movie.movie_rating, movie.id_movie, director.id_director, GROUP_CONCAT(genre.label_genre) AS genres
+        movie.movie_rating, movie.movie_release_date, movie.movie_rating, movie.id_movie, director.id_director, genre.label_genre AS genres
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
         INNER JOIN categorise ON categorise.id_movie = movie.id_movie
         INNER JOIN genre ON genre.id_genre = categorise.id_genre
-
-        WHERE movie.id_movie = :id
-        GROUP BY movie.id_movie"
-        
+        WHERE movie.id_movie = :id"
         );
         $requetedetailFilm->execute (["id" => $id]);
 
+        $requeteGenres = $pdo->prepare("
+        SELECT  movie.movie_title, label_genre AS genres, genre.id_genre
+        FROM movie
+        INNER JOIN director ON director.id_director = movie.id_director
+        INNER JOIN person ON person.id_person = director.id_person
+        INNER JOIN categorise ON categorise.id_movie = movie.id_movie
+        INNER JOIN genre ON genre.id_genre = categorise.id_genre
+        WHERE movie.id_movie = :id
+        ");
+        $requeteGenres->execute(["id" => $id]);
 
         $requeteCastingFilm = $pdo->prepare("
         SELECT CONCAT(person.person_first_name, ' ',  person.person_last_name) AS actorComplete, actor.id_actor
