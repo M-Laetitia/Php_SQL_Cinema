@@ -8,7 +8,7 @@ pour stocker le contenu dans une variable $contenu -->
 <?php ob_start(); ?>
 
 
-<p class=""> Il y a <?= $requete->rowCount() ?> films </p>
+<p class=""> There is/are<?= $requete->rowCount() ?> movie/s </p>
 
 
 
@@ -16,7 +16,6 @@ pour stocker le contenu dans une variable $contenu -->
     <thead>
         <tr>
             <th>Title</th>
-            <th>Release Date</th>
             <th>Director</th>
 
         </tr>
@@ -25,15 +24,9 @@ pour stocker le contenu dans une variable $contenu -->
         <?php 
         foreach($requete->fetchAll() as $movie) { ?>
             <tr>
-                <td><?= $movie["movie_title"] ?></td>
-                <td><?= $movie["movie_release_date"] ?></td>
-                <td><a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"] ?></a><td>
-
-                    
-
-                
-                
-            <tr>
+                <td><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a></td>
+                <td><a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></td>
+            </tr>
 
         <?php } ?>
     </tbody>
@@ -41,8 +34,8 @@ pour stocker le contenu dans une variable $contenu -->
 
 <?php
 
-$titre = "Liste des films";
-$titre_secondaire = "Liste des films";
+$titre = "Movie";
+$titre_secondaire = "Movies List";
 $contenu = ob_get_clean();
 
 // Le require de fin permet d'injecter le contenu dans le template "squelette" > template.php

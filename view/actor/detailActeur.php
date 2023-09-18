@@ -6,25 +6,33 @@
     $person = $requetedetailActeur->fetch(); 
     ?>
 
-    <h2> <?= $person["person_first_name"] . " " . $person["person_last_name"] ?> </h2>
+    <h2> <?= $person["acteurComplete"] ?> </h2>
 
-    <h3>Details : </h3>
+    <p>Born : <?= $person["dateDMY"] ?></p>
+    <p>Age : <?= $person["ActorAge"] ?> years old</p>
+    <p>Gender : <?= $person["person_sexe"] ?> </p>
 
-    <p><?= $person["person_sexe"] ?> </p>
-    <p>Date de naissance : <?= $person["person_birthday"] ?></p>
+    
 
 
-    <h3>Movie/s related :</h3>
+    <h3>Filmography :</h3>
 
     <?php 
     foreach($requeteFilms->fetchAll() as $movie) {
+    ?> 
+    <p><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a><p>   
+    <?php
+    }
     ?>
 
-        <p> <?= $movie["movie_title"] ?> </p>
+    <h3>Role played :</h3>
 
-    <!-- <p><a href="index.php?action=detailRealisateur&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a><p> -->
-        
+    <?php
+    foreach($requeteRole->fetchAll() as $play) {
+    ?>
+    <p><a href="index.php?action=detailRole&id=<?= $play["id_role"] ?>"><?= $play["name_role"] ?></a> - <a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a></p>
 
+    
 
     <?php
     }
@@ -34,12 +42,10 @@
 
 
 
-
-
 <?php
 
-$titre = "Détail d'un acteur";
-$titre_secondaire = "Détail d'un acteur";
+$titre = "Actor";
+$titre_secondaire = "Actor details";
 $contenu = ob_get_clean();
 
 

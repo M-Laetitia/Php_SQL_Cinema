@@ -1,13 +1,12 @@
 <?php ob_start(); ?>
 
 
-<p class=""> Il y a <?= $requete->rowCount() ?> acteurs </p>
+<p class=""> There is/are <?= $requete->rowCount() ?> actor/s : </p>
 
 <table class="">
     <thead>
         <tr>
-            <th>Acteur</th>
-            <th>Date de naissance</th>
+            <th>Name : </th>
         </tr>
     </thead>
     <tbody>
@@ -15,7 +14,6 @@
         foreach($requete->fetchAll() as $person) { ?>
             <tr>
                 <td><a href="index.php?action=detailActeur&id=<?= $person["id_actor"] ?>"><?= $person["acteurComplete"] ?></a></td>
-                <td><?= $person["person_birthday"] ?></td>
             <tr>
 
         <?php } ?>
@@ -24,8 +22,8 @@
 
 <?php
 
-$titre = "Liste des acteurs";
-$titre_secondaire = "Liste des acteurs";
+$titre = "Actors";
+$titre_secondaire = "Actors List";
 $contenu = ob_get_clean();
 
 

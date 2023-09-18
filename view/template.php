@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title><?= $titre ?>t</title>
+    <title><?= $titre ?></title>
 </head>
 <body>
     <main>

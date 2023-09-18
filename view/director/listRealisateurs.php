@@ -1,13 +1,12 @@
 <?php ob_start(); ?>
 
 
-<p class=""> Il y a <?= $requete->rowCount() ?> réalisateurs </p>
+<p class=""> There is/are <?= $requete->rowCount() ?> director/s </p>
 
 <table class="">
     <thead>
         <tr>
-            <th>Nom</th>
-            <th>Date de naissance</th>
+            <th>Name : </th>
         </tr>
     </thead>
     <tbody>
@@ -15,7 +14,6 @@
         foreach($requete->fetchAll() as $person) { ?>
             <tr>
                 <td><a href="index.php?action=detailRealisateur&id=<?= $person["id_director"]?>"><?= $person["realComplete"] ?></a></td>
-                <td><?= $person["person_birthday"] ?></td>
             <tr>
 
         <?php } ?>
@@ -24,8 +22,8 @@
 
 <?php
 
-$titre = "Liste des réalisateurs";
-$titre_secondaire = "Liste des réalisateurs";
+$titre = "Director";
+$titre_secondaire = "Director List";
 $contenu = ob_get_clean();
 
 
