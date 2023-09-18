@@ -1,7 +1,11 @@
 <?php
 // localhost/molin/Php_SQL_Cinema/index.php?action=listFilms
+//localhost/molin/Php_SQL_Cinema/index.php?action=listActeurs
+
+
 // On "use" le controller Cinema
-use Controller\CinemaController;
+use Controller\MovieController;
+use Controller\ActorController;
 
 
 // On autocharge les classes du projet
@@ -10,7 +14,8 @@ spl_autoload_register(function ($class_name) {
 });
 
 // On instancie le controller Cinema
-$ctrlCinema = new CinemaController();
+$ctrlMovie = new MovieController();
+$ctrlActor = new ActorController();
 
 // En fonction de l'action détectée dans l'URL via la propriété "action" on interagit avec
 // la bonne méthode du controller
@@ -20,8 +25,14 @@ $id=(isset($_GET["id"])) ? $_GET["id"] : null;
 
 if(isset($_GET["action"])) {
     switch ($_GET["action"]) {
-        case "listFilms" : $ctrlCinema->listFilms(); break;
-        case "detailFilm" : $ctrlCinema->detailFilm($id); break;
+
+        // MOVIE
+        case "listFilms" : $ctrlMovie->listFilms(); break;
+        // case "detailFilm" : $ctrlMovie->detailFilm($id); break;
+
+        // ACTOR
+        case "listActeurs" : $ctrlActor->listActeurs(); break;
+        
     }
     
 }
