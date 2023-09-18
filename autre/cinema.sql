@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `actor` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table cinema_2.actor : ~6 rows (environ)
-INSERT INTO `actor` (`id_actor`, `id_person`) VALUES
+REPLACE INTO `actor` (`id_actor`, `id_person`) VALUES
 	(2, 1),
 	(1, 2),
 	(4, 3),
@@ -47,13 +47,12 @@ CREATE TABLE IF NOT EXISTS `categorise` (
   CONSTRAINT `FK_categorise_movie` FOREIGN KEY (`id_movie`) REFERENCES `movie` (`id_movie`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table cinema_2.categorise : ~21 rows (environ)
-INSERT INTO `categorise` (`id_genre`, `id_movie`) VALUES
+-- Listage des données de la table cinema_2.categorise : ~19 rows (environ)
+REPLACE INTO `categorise` (`id_genre`, `id_movie`) VALUES
 	(7, 12),
 	(9, 12),
 	(11, 12),
 	(15, 13),
-	(6, 13),
 	(6, 15),
 	(14, 15),
 	(6, 13),
@@ -68,8 +67,7 @@ INSERT INTO `categorise` (`id_genre`, `id_movie`) VALUES
 	(21, 19),
 	(6, 20),
 	(21, 20),
-	(10, 21),
-	(6, 21);
+	(10, 21);
 
 -- Listage de la structure de table cinema_2. director
 CREATE TABLE IF NOT EXISTS `director` (
@@ -81,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `director` (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table cinema_2.director : ~8 rows (environ)
-INSERT INTO `director` (`id_director`, `id_person`) VALUES
+REPLACE INTO `director` (`id_director`, `id_person`) VALUES
 	(1, 3),
 	(3, 4),
 	(4, 7),
@@ -99,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `genre` (
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table cinema_2.genre : ~16 rows (environ)
-INSERT INTO `genre` (`id_genre`, `label_genre`) VALUES
+REPLACE INTO `genre` (`id_genre`, `label_genre`) VALUES
 	(6, 'Drama'),
 	(7, 'Fantasy'),
 	(9, 'Adventure'),
@@ -130,20 +128,21 @@ CREATE TABLE IF NOT EXISTS `movie` (
   PRIMARY KEY (`id_movie`),
   KEY `id_director` (`id_director`),
   CONSTRAINT `FK_movie_director` FOREIGN KEY (`id_director`) REFERENCES `director` (`id_director`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table cinema_2.movie : ~10 rows (environ)
-INSERT INTO `movie` (`id_movie`, `movie_title`, `movie_duration`, `movie_release_date`, `movie_synopsys`, `movie_image`, `movie_rating`, `id_director`) VALUES
-	(12, 'The lord of the rings : the Return of the King', '02:59:00', '2003', NULL, NULL, NULL, 4),
-	(13, 'Interstellar', '02:49:00', '2014', NULL, NULL, NULL, 3),
-	(14, 'The Dark Knight Rises', '02:45:00', '2012', NULL, NULL, NULL, 3),
-	(15, 'Lost in transition', '01:42:00', '2004', NULL, NULL, NULL, 1),
-	(16, '28 Days Later', '01:53:00', '2003', NULL, NULL, NULL, 5),
-	(17, 'Memento', '01:53:00', '2000', NULL, NULL, NULL, 3),
-	(18, 'American Psycho', '01:41:00', '2000', NULL, NULL, NULL, 8),
-	(19, 'Schindler\'s List', '03:15:00', '1993', NULL, NULL, NULL, 7),
-	(20, 'The Godfather Part III', '02:42:00', '1990', NULL, NULL, NULL, 6),
-	(21, 'The Machinist', '01:42:00', '2004', NULL, NULL, NULL, 10);
+-- Listage des données de la table cinema_2.movie : ~11 rows (environ)
+REPLACE INTO `movie` (`id_movie`, `movie_title`, `movie_duration`, `movie_release_date`, `movie_synopsys`, `movie_image`, `movie_rating`, `id_director`) VALUES
+	(12, 'The lord of the rings : the Return of the King', '02:59:00', '2003', NULL, NULL, 4, 4),
+	(13, 'Interstellar', '02:49:00', '2014', NULL, NULL, 4, 3),
+	(14, 'The Dark Knight Rises', '02:45:00', '2012', NULL, NULL, 4, 3),
+	(15, 'Lost in transition', '01:42:00', '2004', NULL, NULL, 4, 1),
+	(16, '28 Days Later', '01:53:00', '2003', NULL, NULL, 4, 5),
+	(17, 'Memento', '01:53:00', '2000', NULL, NULL, 4, 3),
+	(18, 'American Psycho', '01:41:00', '2000', NULL, NULL, 4, 8),
+	(19, 'Schindler\'s List', '03:15:00', '1993', NULL, NULL, 4, 7),
+	(20, 'The Godfather Part III', '02:42:00', '1990', NULL, NULL, 4, 6),
+	(21, 'The Machinist', '01:42:00', '2004', NULL, NULL, 4, 10),
+	(23, 'bla', '00:03:00', '2001', NULL, NULL, 4, 4);
 
 -- Listage de la structure de table cinema_2. person
 CREATE TABLE IF NOT EXISTS `person` (
@@ -156,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `person` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table cinema_2.person : ~13 rows (environ)
-INSERT INTO `person` (`id_person`, `person_first_name`, `person_last_name`, `person_birthday`, `person_sexe`) VALUES
+REPLACE INTO `person` (`id_person`, `person_first_name`, `person_last_name`, `person_birthday`, `person_sexe`) VALUES
 	(1, 'Cyllian', 'Murphy', '1976-05-25', 'male'),
 	(2, 'Christian', 'Bale', '1974-01-30', 'male'),
 	(3, 'Sophia', 'Coppola', '1971-05-14', 'female'),
@@ -185,10 +184,10 @@ CREATE TABLE IF NOT EXISTS `play` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table cinema_2.play : ~6 rows (environ)
-INSERT INTO `play` (`id_movie`, `id_actor`, `id_role`) VALUES
-	(18, 2, 2),
-	(21, 2, 3),
-	(14, 2, 1),
+REPLACE INTO `play` (`id_movie`, `id_actor`, `id_role`) VALUES
+	(18, 1, 2),
+	(21, 1, 3),
+	(14, 1, 1),
 	(13, 5, 5),
 	(13, 3, 6),
 	(13, 6, 4);
@@ -201,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table cinema_2.role : ~6 rows (environ)
-INSERT INTO `role` (`id_role`, `name_role`) VALUES
+REPLACE INTO `role` (`id_role`, `name_role`) VALUES
 	(1, 'Bruce Wayne / Batman'),
 	(2, 'Patrick Bateman'),
 	(3, 'Trevor Reznik'),
