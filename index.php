@@ -1,5 +1,5 @@
 <?php
-
+// localhost/molin/Php_SQL_Cinema/index.php?action=listFilms
 // On "use" le controller Cinema
 use Controller\CinemaController;
 
@@ -14,13 +14,6 @@ $ctrlCinema = new CinemaController();
 
 // En fonction de l'action détectée dans l'URL via la propriété "action" on interagit avec
 // la bonne méthode du controller
-if(isset($_GET['action'])) {
-    switch ($_GET["action"]) {
-        case "ListFilms" : $ctrlCinema->ListFilms(); break;
-        case "ListActeurs" : $ctrlCinema->ListActeurs(); break;
-    }
-}
-
 
 $id=(isset($_GET["id"])) ? $_GET["id"] : null;
 // $type = (isset($_GET["type])) ? $_GET["type"] : null;
@@ -30,7 +23,6 @@ if(isset($_GET["action"])) {
         case "listFilms" : $ctrlCinema->listFilms(); break;
         case "detailFilm" : $ctrlCinema->detailFilm($id); break;
     }
-
     
 }
 
