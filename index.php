@@ -21,6 +21,7 @@ $ctrlActor = new ActorController();
 $ctrlDirector = new DirectorController();
 $ctrlGenre = new GenreController();
 
+
 // En fonction de l'action détectée dans l'URL via la propriété "action" on interagit avec
 // la bonne méthode du controller
 
@@ -32,13 +33,15 @@ if(isset($_GET["action"])) {
 
         // MOVIE
         case "listFilms" : $ctrlMovie->listFilms(); break;
-        // case "detailFilm" : $ctrlMovie->detailFilm($id); break;
+        case "detailFilm" : $ctrlMovie->detailFilm($id); break;
 
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
+        case "detailActeur" : $ctrlActor->detailActeur($id); break;
 
         // DIRECTOR
         case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
+        case "detailRealisateur" : $ctrlDirector->detailRealisateur($id); break;
 
         // GENRE
         case "listGenres" : $ctrlGenre->listGenres(); break;

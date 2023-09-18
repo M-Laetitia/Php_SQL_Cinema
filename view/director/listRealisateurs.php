@@ -7,7 +7,6 @@
     <thead>
         <tr>
             <th>Nom</th>
-            <th>Prénom</th>
             <th>Date de naissance</th>
         </tr>
     </thead>
@@ -15,8 +14,7 @@
         <?php 
         foreach($requete->fetchAll() as $person) { ?>
             <tr>
-                <td><?= $person["person_first_name"] ?></td>
-                <td><?= $person["person_last_name"] ?></td>
+                <td><a href="index.php?action=detailRealisateur&id=<?= $person["id_director"]?>"><?= $person["realComplete"] ?></a></td>
                 <td><?= $person["person_birthday"] ?></td>
             <tr>
 
