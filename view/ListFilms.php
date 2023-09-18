@@ -4,9 +4,13 @@
 pour stocker le contenu dans une variable $contenu -->
 
 
+
 <?php ob_start(); ?>
 
-<p class=""> Il y a <?= $requete->rowCount() ?>  films </p>
+
+<p class=""> Il y a  <?= $requete->rowCount() ?> films </p>
+
+
 
 <table class="">
     <thead>
@@ -17,7 +21,7 @@ pour stocker le contenu dans une variable $contenu -->
     </thead>
     <tbody>
         <?php 
-        foreach($requete->fetAll() as $movie) { ?>
+        foreach($requete->fetchAll() as $movie) { ?>
             <tr>
                 <td><?= $movie["movie_title"] ?></td>
                 <td><?= $movie["movie_release_date"] ?></td>
