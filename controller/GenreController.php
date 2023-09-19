@@ -71,9 +71,26 @@ class GenreController {
         require "view/genre/ajouterGenre.php";
      }
 
+
+     // ^ Supprimer genre
+
+     public function supprimerGenre($id) {
+
+        if(isset($_POST['deleteGenre'])) {
+            $pdo = Connect::seConnecter();
+            $requeteSupprimerGenre = $pdo->prepare("
+            DELETE FROM genre WHERE id_genre = :id
+            ");
+            $requeteSupprimerGenre->execute(["id => $id"]);
+        }
+
+        require "view/genre/detailGenre.php";
+
+     }
  
 }
 
 
 ?>
+
 

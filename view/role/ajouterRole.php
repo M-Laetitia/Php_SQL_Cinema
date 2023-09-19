@@ -3,7 +3,7 @@
 
     <form enctype="multipart/form-data" action="index.php?action=ajouterRole" method="post">
         
-        <h3>Add a movie</h3>
+        <h3>Add a role</h3>
         
         <div class="form-input">
             <label for="name_role">Role :</label>

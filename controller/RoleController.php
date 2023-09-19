@@ -68,6 +68,24 @@ class RoleController {
             require "view/role/ajouterRole.php";
         }
 
+    // ^ Supprimer un role
+
+    public function supprimerRole($id) {
+
+        if(isset($_POST['deleteRole'])) {
+            $pdo = Connect::seConnecter();
+            $requeteSupprimerRole = $pdo->prepare("
+            DELETE FROM role WHERE id_role = :id
+            ");
+            $requeteSupprimerRole->execute(["id => $id"]);
+
+        }
+
+        require "view/role/detailRole.php";
+
+    }
+    
+
         
  
 }

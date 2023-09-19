@@ -39,23 +39,49 @@ if(isset($_GET["action"])) {
         // MOVIE
         case "listFilms" : $ctrlMovie->listFilms(); break;
         case "detailFilm" : $ctrlMovie->detailFilm($id); break;
-        // case "castingFilm" : $ctrlMovie->castingFilm($id); break;
+        case "ajouterFilm" : $ctrlMovie->ajouterFilm(); break;
+        case "supprimerFilm" : $ctrlMovie->supprimerFilm(); break;
+        
+
+        //modifier film
+  
 
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
         case "detailActeur" : $ctrlActor->detailActeur($id); break;
+        case "ajouterActeur" : $ctrlActor->ajouterActeur(); break;
+        case "supprimerActeur" : $ctrlActor->supprimerActeur(); break;
+
+        //modifier acteur
+
 
         // DIRECTOR
         case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
         case "detailRealisateur" : $ctrlDirector->detailRealisateur($id); break;
+        case "ajouterRealisateur" : $ctrlDirector->ajouterRealisateur(); break;
+        case "supprimerRealisateur" : $ctrlDirector->supprimerRealisateur(); break;
+
+        //modifier réalisateur
+     
 
         // GENRE
         case "listGenres" : $ctrlGenre->listGenres(); break;
         case "detailGenre" : $ctrlGenre->detailGenre($id); break;
+        case "ajouterGenre" : $ctrlGenre->ajouterGenre(); break;
+        case "supprimerGenre" : $ctrlGenre->supprimerGenre($id); break;
+
+        //modifier genre
+
 
         // ROLE
         case "listRoles" : $ctrlRole->listRoles(); break;
         case "detailRole" : $ctrlRole->detailRole($id); break;
+        case "ajouterRole" : $ctrlRole->ajouterRole(); break;
+        case "supprimerRole" : $ctrlRole->supprimerRole(); break;
+
+
+        //modifier role
+        
         
     }
     

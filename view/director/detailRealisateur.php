@@ -26,6 +26,12 @@
 
 </div>
 
+<div>
+    <form action="index.php?action=supprimerRealisateur&id=<?=$director["id_director"]?>" method="post">
+        <input name="deleteDirector" type="submit" value="Delete this director">
+    </form>
+</div>
+
 
 
 <?php

@@ -107,6 +107,24 @@ class MovieController {
         require "view/movie/ajouterFilm.php";
     }
 
+    // ^ Supprimer un film 
+
+    public function supprimerFilm($id) {
+
+        if(isset($_POST['deleteMovie'])) {
+            $pdo = Connect::seConnecter();
+            $requeteSupprimerFilm = $pdo->prepare("
+            DELETE FROM movie WHERE id_movie = :id
+            ");
+            $requeteSupprimerFilm->execute(["id => $id"]);
+
+        }
+
+        require "view/movie/detailFilm.php";
+
+    }
+    
+
  
 }
 

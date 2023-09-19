@@ -7,7 +7,7 @@
         
         <div class="form-input">
             <label for="movie_title">Movie Title :</label>
-            <input type="text" placeholder="First Name" name="movie_title" id="movie_title">
+            <input type="text" placeholder="Movie Title" name="movie_title" id="movie_title">
         </div>
 
         <div class="form-input">
@@ -17,7 +17,7 @@
 
         <div class="form-input">
             <label for="movie_rating">Movie rating :</label>
-            <input type="number" name="movie_rating" id="movie_rating" required>
+            <input type="number" placeholder="Movie Rating" name="movie_rating" id="movie_rating" required min="0" max="5">
         </div>
 
         <div class="form-input">
@@ -26,8 +26,8 @@
         </div>
 
         <div class="form-input">
-            <label for="movie_synopsys">Movie duration :</label>
-            <input type="text" name="movie_synopsys" id="movie_synopsys" required>
+            <label for="movie_synopsys">Movie synopsis :</label>
+            <input type="text"  placeholder="Synopsys" name="movie_synopsys" id="movie_synopsys" required>
         </div>
 
         <div class="form-input">
@@ -37,7 +37,7 @@
 
         
         <div class="form-input">
-            <input type="submit" class="submit" name="submitMovie" id="submitMovie">
+            <input type="submit" class="submit" name="submitFilm" id="submitFilm">
 
         </div>
     </form>

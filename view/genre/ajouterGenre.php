@@ -7,7 +7,7 @@
         
         <div class="form-input">
             <label for="label_genre">Genre :</label>
-            <input type="text" placeholder="First Name" name="label_genre" id="label_genre">
+            <input type="text" placeholder="Genre" name="label_genre" id="label_genre">
         </div>
 
         

@@ -98,6 +98,25 @@ class DirectorController {
         require "view/director/ajouterRealisateur.php";
     }
 
+  
+
+    
+    // ^ Supprimer un acteur 
+
+    public function supprimerRealisateur($id) {
+
+        if(isset($_POST['deleteDirector'])) {
+            $pdo = Connect::seConnecter();
+            $requeteSupprimerRealisateur = $pdo->prepare("
+            DELETE FROM director WHERE id_director = :id
+            ");
+            $requeteSupprimerRealisateur->execute(["id => $id"]);
+
+        }
+
+        require "view/director/detailRealisateur.php";
+
+    }
 
  
 }

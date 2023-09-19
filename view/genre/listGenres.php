@@ -8,6 +8,8 @@
         <tr>
             <th>Genre</th>
             <th>Number of movie/s</th>
+
+
         </tr>
     </thead>
     <tbody>
@@ -16,7 +18,7 @@
             <tr>
                 <td><a href="index.php?action=detailGenre&id=<?= $genre["id_genre"]?>"><?= $genre["label_genre"]?></a></td>
                 <td><?= $genre["nb_movies"]?></td>
-                
+
 
             <tr>
 

@@ -44,6 +44,13 @@
     
 </div>
 
+<div>
+    <form action="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>" method="post">
+        <input name="deleteMovie" type="submit" value="Delete this movie">
+    </form>
+</div>
+
+
 
 
 

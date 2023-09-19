@@ -30,15 +30,22 @@
     <?php
     foreach($requeteRole->fetchAll() as $play) {
     ?>
-    <p><a href="index.php?action=detailRole&id=<?= $play["id_role"] ?>"><?= $play["name_role"] ?></a> - <a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a></p>
-
-    
-
+    <p><a href="index.php?action=detailRole&id=<?= $play["id_role"] ?>"><?= $play["name_role"] ?></a> - <a href="index.php?action=detailFilm&id=<?= $play["id_actor"]?>"><?= $play["movie_title"] ?></a></p>
     <?php
     }
     ?>
 
 </div>
+
+
+<div>
+    <form action="index.php?action=supprimerActeur&id=<?=$actor["id_actor"]?>" method="post">
+        <input name="deleteActor" type="submit" value="Delete this actor">
+    </form>
+</div>
+
+
+
 
 
 
