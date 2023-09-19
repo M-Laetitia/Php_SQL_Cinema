@@ -44,7 +44,31 @@ class RoleController {
             require "view/role/detailRole.php";
         }
 
+
+        // ^ Ajouter Role
+
+        public function ajouterRole() {
+            if(isset($_POST["submitRole"])) {
+                $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);
+
+                if($name_role) {
+                    $pdo = Connect::seConnecter();
+
+                    $requeteAjouterRole = $pdo->prepare("
+                    INSERT INTO role(name_role)
+                    VALUES (:name_role)
+                    ");
+
+                    $requeteAjouterRole->execute ([
+                        "name_role" => $name_role
+                    ]);
+                }
+            }
+
+            require "view/role/ajouterRole.php";
+        }
+
+        
  
 }
 
-?>
