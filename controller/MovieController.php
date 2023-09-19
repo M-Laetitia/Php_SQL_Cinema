@@ -71,18 +71,46 @@ class MovieController {
         require "view/movie/detailFilm.php";
     }
 
+     // ^ Ajouter film
+
+    public function ajouterFilm() {
+        if(isset($_POST["submitFilm"])) {
+            $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_image  = filter_input(INPUT_POST, "movie_image", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_URL);
+            $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
+
+
+            //? gérer les paramètres non obligatoires?
+            if($movie_title && $movie_duration && $movie_release_date) {
+                $pdo = Connect::seConnecter();
+                $requeteAjouterFilm = $pdo->prepare("
+                    INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_image, movie_rating)
+                    VALUES (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_image, movie_rating)
+                ");
+
+                $requeteAjouterFilm ->execute([
+                    "movie_title"=> $movie_title, 
+                    "movie_duration"=> $movie_duration, 
+                    "movie_release_date"=> $movie_release_date, 
+                    "movie_synopsys"=> $movie_synopsys, 
+                    "movie_image"=> $movie_image,
+                    "movie_rating"=> $movie_rating,  
+
+                ]);
+
+            }
+
+        }
+        require "view/movie/ajouterFilm.php";
+    }
 
  
 }
 
+
+
 ?>
 
-<!-- SELECT movie.movie_title, CONCAT(person.person_first_name, ' ' ,person.person_last_name), 
-		  movie.movie_duration, movie.movie_rating, movie.movie_release_date, movie.movie_rating, genre.label_genre
-        FROM movie
-        INNER JOIN director ON director.id_director = movie.id_director
-        INNER JOIN person ON person.id_person = director.id_person
-        
-        INNER JOIN categorise ON categorise.id_movie = movie.id_movie
-        INNER JOIN genre ON genre.id_genre = categorise.id_genre -->
-        
