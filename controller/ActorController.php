@@ -36,12 +36,26 @@ class ActorController {
         $requetedetailActeur->execute(["id" => $id]);
 
         
+        // ^ Liste des films
+
+        $requeteFilms = $pdo->prepare("
+        SELECT movie.movie_title , movie.id_movie, actor.id_actor
+        FROM movie
+        INNER JOIN play ON play.id_movie = movie.id_movie
+        INNER JOIN actor ON actor.id_actor = play.id_actor
+        INNER JOIN person ON person.id_person = actor.id_person
+        WHERE actor.id_actor = :id
+        ");
+        $requeteFilms->execute(["id" => $id]);
+
+
+    
 
 
      // ^ Liste des rôles
 
         $requeteRole = $pdo->prepare("
-        SELECT  role.name_role, movie.movie_title, role.id_role
+        SELECT  role.name_role, movie.movie_title, role.id_role, play.id_actor
         FROM play
         INNER JOIN movie ON play.id_movie = movie.id_movie
         INNER JOIN role ON play.id_role = role.id_role
@@ -103,6 +117,40 @@ class ActorController {
         }
         require "view/actor/ajouterActeur.php";
     }
+
+    // ^ Supprimer un acteur 
+
+    public function supprimerActeur($id) {
+
+        if(isset($_POST['deleteActor'])) {
+            $pdo = Connect::seConnecter();
+            $requeteSupprimerActeur = $pdo->prepare("
+            DELETE FROM actor WHERE id_actor = :id
+            ");
+            $requeteSupprimerActeur->execute(["id => $id"]);
+
+        }
+
+        require "view/actor/detailActeur.php";
+
+    }
+
+    // ^ Mettre à jour fiche acteur 
+
+    public function updateActeur($id) {
+        $pdo = Connect::seConnecter();
+        $requeteUpdateActeur = $pdo->prepare("
+        SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge
+        FROM person
+        INNER JOIN actor ON person.id_person = actor.id_person
+        WHERE id_actor = :id
+        ");
+
+        $requete->execute(["id" => $id]);
+
+
+    }
+
 }
 
 ?>
@@ -123,3 +171,4 @@ VALUES (value1, value2, value3, ...); -->
 <!-- $stmt = $db->prepare("...");
 $stmt->execute();
 $id = $db->lastInsertId(); -->
+
