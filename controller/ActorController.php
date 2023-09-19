@@ -148,7 +148,6 @@ class ActorController {
 
         $requete->execute(["id" => $id]);
 
-
     }
 
 }
@@ -172,3 +171,5 @@ VALUES (value1, value2, value3, ...); -->
 $stmt->execute();
 $id = $db->lastInsertId(); -->
 
+<!-- https://codingstatus.com/update-data-in-sql-table-with-form-using-php-mysql/ -->
+<!-- <td><a href="form.php?edit=<?php echo $data['id']; ?>" class="btn btn-success">Edit</a></td> -->
