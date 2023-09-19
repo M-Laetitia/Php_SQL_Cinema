@@ -51,6 +51,19 @@ class DirectorController {
             require "view/director/detailRealisateur.php";
         }
 
+     // ^ Aller à la page d'ajout d'un acteur 
+
+       public function getAjouterRealisateur(){
+        $pdo = Connect::seConnecter(); 
+        $requeteGetAjouterRealisateur = $pdo->query("
+        SELECT person.person_first_name, person.person_last_name
+        FROM director
+        INNER JOIN person ON person.id_person = director.id_person
+        ");
+        $requeteGetAjouterRealisateur->execute();
+        require "view/director/ajouterRealisateur.php";
+    }
+
 
     // ^ Ajouter Réalisateur 
 
