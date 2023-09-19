@@ -40,9 +40,12 @@ if(isset($_GET["action"])) {
         case "listFilms" : $ctrlMovie->listFilms(); break;
         case "detailFilm" : $ctrlMovie->detailFilm($id); break;
         case "ajouterFilm" : $ctrlMovie->ajouterFilm(); break;
-        case "supprimerFilm" : $ctrlMovie->supprimerFilm(); break;
+        case "supprimerFilm" : $ctrlMovie->supprimerFilm($id); break;
+        case "getAjouterFilm" : $ctrlMovie->getAjouterFilm($id); break;
+        case "ajouterCasting" : $ctrlMovie->ajouterCasting(); break; 
+        case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         
-
+        // getCasting
         //modifier film
   
 
@@ -50,7 +53,8 @@ if(isset($_GET["action"])) {
         case "listActeurs" : $ctrlActor->listActeurs(); break;
         case "detailActeur" : $ctrlActor->detailActeur($id); break;
         case "ajouterActeur" : $ctrlActor->ajouterActeur(); break;
-        case "supprimerActeur" : $ctrlActor->supprimerActeur(); break;
+        case "supprimerActeur" : $ctrlActor->supprimerActeur($id); break;
+        case "getAjouterActeur" : $ctrlActor->getAjouterActeur(); break;
 
         //modifier acteur
 
@@ -59,7 +63,8 @@ if(isset($_GET["action"])) {
         case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
         case "detailRealisateur" : $ctrlDirector->detailRealisateur($id); break;
         case "ajouterRealisateur" : $ctrlDirector->ajouterRealisateur(); break;
-        case "supprimerRealisateur" : $ctrlDirector->supprimerRealisateur(); break;
+        case "supprimerRealisateur" : $ctrlDirector->supprimerRealisateur($id); break;
+        case "getAjouterRealisateur" : $ctrlDirector->getAjouterRealisateur(); break;
 
         //modifier réalisateur
      
@@ -69,6 +74,7 @@ if(isset($_GET["action"])) {
         case "detailGenre" : $ctrlGenre->detailGenre($id); break;
         case "ajouterGenre" : $ctrlGenre->ajouterGenre(); break;
         case "supprimerGenre" : $ctrlGenre->supprimerGenre($id); break;
+        case "getAjouterGenre" : $ctrlGenre->getAjouterGenre(); break;
 
         //modifier genre
 
@@ -77,7 +83,8 @@ if(isset($_GET["action"])) {
         case "listRoles" : $ctrlRole->listRoles(); break;
         case "detailRole" : $ctrlRole->detailRole($id); break;
         case "ajouterRole" : $ctrlRole->ajouterRole(); break;
-        case "supprimerRole" : $ctrlRole->supprimerRole(); break;
+        case "supprimerRole" : $ctrlRole->supprimerRole($id); break;
+        case "getAjouterRole" : $ctrlRole->getAjouterRole(); break;
 
 
         //modifier role
