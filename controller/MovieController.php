@@ -71,6 +71,27 @@ class MovieController {
         require "view/movie/detailFilm.php";
     }
 
+      // ^ Aller à la page d'ajout d'un film
+
+      public function getAjouterFilm(){
+        $pdo = Connect::seConnecter(); 
+        $requeteRealisateur = $pdo->query("SELECT CONCAT(person.person_first_name, ' ' , person.person_last_name) AS directorComplete, director.id_director
+        FROM director
+        INNER JOIN person ON person.id_person = director.id_person
+        ");
+        $requeteRealisateur->execute();
+
+        $requeteGenre = $pdo->query("SELECT * FROM genre");
+        $requeteGenre-> execute();
+
+        require ("view/movie/ajouterFilm.php");
+
+    }
+
+
+
+
+
      // ^ Ajouter film
 
     public function ajouterFilm() {
@@ -111,22 +132,27 @@ class MovieController {
 
     public function supprimerFilm($id) {
 
+        $pdo = Connect::seConnecter();
         if(isset($_POST['deleteMovie'])) {
-            $pdo = Connect::seConnecter();
-            $requeteSupprimerFilm = $pdo->prepare("
-            DELETE FROM movie WHERE id_movie = :id
-            ");
+
+            $requeteDeleteFilmPlay = $pdo->prepare("DELETE FROM play WHERE id_movie = :id"); //D'abord supprimer les clés étrangères
+            $requeteDeleteFilmPlay ->execute(["id"=>$id]);
+
+            $requeteDeleteFilmCategorise = $pdo->prepare("DELETE FROM categorise WHERE id_movie = :id");
+            $requeteDeleteFilmCategorise->execute(["id"=>$id]);
+
+            $requeteSupprimerFilm = $pdo->prepare("DELETE FROM movie WHERE id_movie = :id");
             $requeteSupprimerFilm->execute(["id => $id"]);
 
         }
-
-        require "view/movie/detailFilm.php";
+        header("Location: index.php?action=listFilms");
+        // require "view/movie/detailFilm.php";
 
     }
     
-
- 
 }
+
+
 
 
 
