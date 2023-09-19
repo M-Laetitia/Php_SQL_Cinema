@@ -10,6 +10,39 @@
             <input type="text" placeholder="Movie Title" name="movie_title" id="movie_title">
         </div>
 
+       <!-- Choisir parmis les genres -->
+       <div class="form-input">
+            <label>Genre :</label>
+            <?php
+            foreach ($requeteGenre->fetchAll() as $genre) {
+            ?>
+            <input type="checkbox" name="genre[]" value="<?= $genre["label_genre"] ?>">
+            <label><?= $genre["label_genre"] ?></label><br>
+            <?php
+            }
+            ?>
+        </div>
+
+
+        <!-- Choisir parmis les réalisateur -->
+
+        <div class="form-input">
+        <label for="director">Director :</label>
+            <select class="select" name="realisateur">
+
+                <?php
+                   
+                    foreach($requeteRealisateur->fetchAll() as $director){
+                ?>
+                    <option value="<?= $director["id_director"]?>"><?= $director["directorComplete"] ?></option>
+                <?php
+                    }
+                ?>
+            </select>
+        </div>
+
+
+
         <div class="form-input">
             <label for="movie_release_date">Release Date :</label>
             <input type="date" name="movie_release_date" id="movie_release_date" required>
