@@ -12,11 +12,8 @@ class GenreController {
     public function listGenres() {
         $pdo = Connect::seConnecter();
             $requete = $pdo->query("
-            SELECT genre.label_genre, genre.id_genre , COUNT(categorise.id_movie) AS nb_movies
-            FROM categorise
-            INNER JOIN genre ON genre.id_genre = categorise.id_genre
-            GROUP BY categorise.id_genre
-            ORDER BY nb_movies DESC
+            SELECT genre.label_genre, genre.id_genre
+            FROM genre
             ");
 
             require "view/genre/listGenres.php";       
@@ -75,19 +72,22 @@ class GenreController {
      // ^ Supprimer genre
 
      public function supprimerGenre($id) {
-
+        $pdo = Connect::seConnecter();
         if(isset($_POST['deleteGenre'])) {
-            $pdo = Connect::seConnecter();
+            
             $requeteSupprimerGenre = $pdo->prepare("
             DELETE FROM genre WHERE id_genre = :id
             ");
-            $requeteSupprimerGenre->execute(["id => $id"]);
+            $requeteSupprimerGenre->execute(["id" => $id]);
         }
 
-        require "view/genre/detailGenre.php";
+        //Ne pas inclure detailGenre avant la redirection. le code de "detailGenre.php" est toujours exécuté après la redirection, ce qui peut provoquer des erreurs car certaines variables ne sont pas définies
+        
+        // require "view/genre/detailGenre.php";
+        header("Location: index.php?action=listGenres");
 
      }
- 
+
 }
 
 
