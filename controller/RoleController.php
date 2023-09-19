@@ -44,6 +44,20 @@ class RoleController {
             require "view/role/detailRole.php";
         }
 
+        // ^ Aller à la page d'ajout d'un Role
+
+        public function getAjouterRole(){
+            $pdo = Connect::seConnecter(); 
+            $requeteGetAjouterRole = $pdo->query("
+            SELECT role.name_role
+            FROM role
+            ");
+            $requeteGetAjouterRole->execute();
+            require "view/role/ajouterRole.php";
+        }
+
+
+
 
         // ^ Ajouter Role
 
@@ -71,20 +85,19 @@ class RoleController {
     // ^ Supprimer un role
 
     public function supprimerRole($id) {
-
+        $pdo = Connect::seConnecter();
         if(isset($_POST['deleteRole'])) {
-            $pdo = Connect::seConnecter();
-            $requeteSupprimerRole = $pdo->prepare("
-            DELETE FROM role WHERE id_role = :id
-            ");
-            $requeteSupprimerRole->execute(["id => $id"]);
+            
+            $requeteSupprimerRole = $pdo->prepare("DELETE FROM role WHERE id_role = :id");
+            $requeteSupprimerRole->execute(["id" => $id]);
 
         }
 
-        require "view/role/detailRole.php";
+        header("Location: index.php?action=listRoles");
 
     }
     
+
 
         
  
