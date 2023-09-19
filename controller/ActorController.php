@@ -72,7 +72,7 @@ class ActorController {
                 $pdo = Connect::seConnecter();
                 $requeteAjouterPersonne = $pdo->prepare(" 
                     INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday) 
-                    VALUES (person_first_name, person_last_name, person_sexe, person_birthday)
+                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday)
                     ");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
@@ -86,12 +86,18 @@ class ActorController {
                 // The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
                 // The INSERT INTO SELECT statement requires that the data types in source and target tables match.
                 // LAST_INSERT_ID() Function Return the AUTO_INCREMENT id of the last row that has been inserted or updated in a table: SELECT LAST_INSERT_ID();
+                $id_acteur = $pdo->lastInsertID();
+                
                 $requeteAjouterActeur = $pdo->prepare("
                     INSERT INTO actor (id_person)
-                    
+                    VALUES (:id_actor)
                     ");
-                    
-                 $requeteAjouterActeur->execute($id = $pdo->lastInsertId());
+                
+                 $requeteAjouterActeur->execute([
+                    "id_actor" => $id_acteur
+                 ]);
+
+                 
                 
             }
         }
@@ -111,3 +117,9 @@ VALUES (value1, value2, value3, ...); -->
 
 
 <!-- https://www.hostinger.com/tutorials/how-to-use-php-to-insert-data-into-mysql-database-->
+<!-- https://stackoverflow.com/questions/10680943/pdo-get-the-last-id-inserted -->
+
+
+<!-- $stmt = $db->prepare("...");
+$stmt->execute();
+$id = $db->lastInsertId(); -->
