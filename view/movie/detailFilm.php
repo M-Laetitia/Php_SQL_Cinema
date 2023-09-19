@@ -24,12 +24,12 @@
     }
 
     // vérifier si un film a un genre, si non, ajouter message 
-    if (!empty($genres)>0) {
+    if (!empty($genres)) {
         // fonction implode() pour concaténer les genres avec une virgule
         $genresConcatenated = implode(', ', $genres);
-        echo '<p>'. $genresConcatenated . '</p>'
+        echo '<p>'. $genresConcatenated . '</p>';
     } else {
-        echo '<p> Pas de genre </p>'
+        echo '<p> Pas de genre </p>';
     }
 
     ?>
