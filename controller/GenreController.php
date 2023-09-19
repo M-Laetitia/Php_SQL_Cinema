@@ -47,9 +47,32 @@ class GenreController {
 
     }
 
+     // ^ Ajouter genre
+
+     public function ajouterGenre() {
+        if(isset($_POST["submitGenre"])) {
+            $label_genre = filter_input(INPUT_POST, "label_genre", FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+            if($label_genre) {
+                $pdo = Connect::seConnecter();
+
+                $requeteAjouterGenre = $pdo->prepare("
+                INSERT INTO genre(label_genre)
+                VALUES (:label_genre)
+                ");
+        
+                $requeteAjouterGenre->execute([
+                    "label_genre" => $label_genre
+                ]);
+            }
+        }
+            
+        require "view/genre/ajouterGenre.php";
+     }
+
  
 }
-
 
 
 ?>
