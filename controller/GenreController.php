@@ -44,6 +44,20 @@ class GenreController {
 
     }
 
+    // ^ Aller à la page d'ajout d'un genre
+
+        public function getAjouterGenre(){
+            $pdo = Connect::seConnecter(); 
+            $requeteGetAjouterGenre = $pdo->query("SELECT movie.movie_title
+            FROM movie
+            INNER JOIN categorise ON categorise.id_movie = movie.id_movie
+            INNER JOIN genre ON genre.id_genre = categorise.id_genre
+            ");
+            $requeteGetAjouterGenre->execute();
+            require "view/Genre/ajouterGenre.php";
+        }
+    
+
      // ^ Ajouter genre
 
      public function ajouterGenre() {
