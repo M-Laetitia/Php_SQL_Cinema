@@ -21,14 +21,20 @@
     $genres = array();
     foreach($requeteGenres->fetchAll() as $movie) {
         $genres[] = '<a href="index.php?action=detailGenre&id=' . $movie["id_genre"] . '">' . $movie["genres"] . '</a>';
-        
     }
 
-    // fonction implode() pour concaténer les genres avec une virgule
-    $genresConcatenated = implode(', ', $genres);
+    // vérifier si un film a un genre, si non, ajouter message 
+    if (!empty($genres)>0) {
+        // fonction implode() pour concaténer les genres avec une virgule
+        $genresConcatenated = implode(', ', $genres);
+        echo '<p>'. $genresConcatenated . '</p>'
+    } else {
+        echo '<p> Pas de genre </p>'
+    }
+
     ?>
 
-    <p><?= $genresConcatenated ?></p>
+    
 
     <h3>Casting : </h3>
 
