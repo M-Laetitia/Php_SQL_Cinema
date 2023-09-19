@@ -68,6 +68,21 @@ class ActorController {
         require "view/actor/detailActeur.php";
     }
 
+       // ^ Aller à la page d'ajout d'un acteur 
+
+       public function getAjouterActeur(){
+        $pdo = Connect::seConnecter(); 
+        $requeteGetAjouterActeur = $pdo->query("
+        SELECT person.person_first_name, person.person_last_name
+        FROM actor
+        INNER JOIN person ON person.id_person = actor.id_person
+        ");
+        $requeteGetAjouterActeur->execute();
+        require "view/actor/ajouterActeur.php";
+    }
+
+
+
     // ^ Ajouter un acteur 
 
     public function ajouterActeur(){
@@ -121,19 +136,23 @@ class ActorController {
     // ^ Supprimer un acteur 
 
     public function supprimerActeur($id) {
-
+        $pdo = Connect::seConnecter();
         if(isset($_POST['deleteActor'])) {
-            $pdo = Connect::seConnecter();
-            $requeteSupprimerActeur = $pdo->prepare("
-            DELETE FROM actor WHERE id_actor = :id
-            ");
-            $requeteSupprimerActeur->execute(["id => $id"]);
+            
+            // d'abord supprimer les clés étrangères
+            $requeteSupprimerActeur = $pdo->prepare("DELETE FROM play  WHERE id_actor = :id");
+            $requeteSupprimerActeur->execute(["id" => $id]);
 
+            $requeteSupprimerActor1 = $pdo->prepare("DELETE FROM actor WHERE id_actor = :id");
+            $requeteSupprimerActor1->execute(["id"=>$id]);
         }
+            
+            // require "view/actor/detailActeur.php";
+            header("Location: index.php?action=listActeurs");
 
-        require "view/actor/detailActeur.php";
 
     }
+
 
     // ^ Mettre à jour fiche acteur 
 
@@ -172,4 +191,3 @@ $stmt->execute();
 $id = $db->lastInsertId(); -->
 
 <!-- https://codingstatus.com/update-data-in-sql-table-with-form-using-php-mysql/ -->
-<!-- <td><a href="form.php?edit=<?php echo $data['id']; ?>" class="btn btn-success">Edit</a></td> -->
