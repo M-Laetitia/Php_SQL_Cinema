@@ -6,7 +6,7 @@ use Model\Connect;
 class ActorController {
 
     
-        // ^ Lister les acteurs
+    // ^ Lister les acteurs
 
     
     public function listActeurs() {
@@ -21,7 +21,7 @@ class ActorController {
                     
     }
 
-        // ^ Afficher détails acteur
+    // ^ Afficher détails acteur
 
     public function detailActeur($id) {
         $pdo = Connect::seConnecter();
@@ -38,7 +38,7 @@ class ActorController {
         
 
 
-        // ^ Liste des rôles
+     // ^ Liste des rôles
 
         $requeteRole = $pdo->prepare("
         SELECT  role.name_role, movie.movie_title, role.id_role
@@ -54,16 +54,60 @@ class ActorController {
         require "view/actor/detailActeur.php";
     }
 
+    // ^ Ajouter un acteur 
 
-    
+    public function ajouterActeur(){
+        if(isset($_POST["submitActor"])){
 
+            //filter les données entrées dans les différents input
+            $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
+            $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
+            $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $person_birthday = filter_input(INPUT_POST, "person_birthday", FILTER_SANITIZE_SPECIAL_CHARS);
 
+            // si filtrées et existantes alors on peut exécuter la requête
 
+            // The INSERT INTO statement is used to insert new records in a table.*
+            if($person_first_name && $person_last_name && $person_sexe && $person_birthday){
+                $pdo = Connect::seConnecter();
+                $requeteAjouterPersonne = $pdo->prepare(" 
+                    INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday) 
+                    VALUES (person_first_name, person_last_name, person_sexe, person_birthday)
+                    ");
+                $requeteAjouterPersonne ->execute([
+                    "person_first_name" => $person_first_name,
+                    "person_last_name" => $person_last_name,
+                    "person_sexe" => $person_sexe,
+                    "person_birthday" => $person_birthday,
+                    
+                ]);
 
-
-
-
- 
+                // Ajouter aussi à la table acteur?
+                // The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
+                // The INSERT INTO SELECT statement requires that the data types in source and target tables match.
+                // LAST_INSERT_ID() Function Return the AUTO_INCREMENT id of the last row that has been inserted or updated in a table: SELECT LAST_INSERT_ID();
+                $requeteAjouterActeur = $pdo->prepare("
+                    INSERT INTO actor (id_person)
+                    
+                    ");
+                    
+                 $requeteAjouterActeur->execute($id = $pdo->lastInsertId());
+                
+            }
+        }
+        require "view/actor/ajouterActeur.php";
+    }
 }
 
 ?>
+
+
+<!-- *It is possible to write the INSERT INTO statement in two ways:
+1. Specify both the column names and the values to be inserted:
+
+INSERT INTO table_name (column1, column2, column3, ...)
+VALUES (value1, value2, value3, ...); -->
+
+
+
+<!-- https://www.hostinger.com/tutorials/how-to-use-php-to-insert-data-into-mysql-database-->
