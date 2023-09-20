@@ -100,19 +100,51 @@ class MovieController {
 
 
         if(isset($_POST["submitFilm"])) {
-            $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
-            $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
-            $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
-            $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
-            $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
-            $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
-            $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            //rajouter iMAGE
+            if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
+
+                // voir upload-img_php pour détail du process
+                $tmpName = $_FILES["movie_image"]["tmp_name"];
+                $name = $_FILES["movie_image"]["name"];
+                $size = $_FILES["movie_image"]["size"];
+                $error = $_FILES["movie_image"]["error"];
+
+                $tabExtension = explode(".", $name); 
+                $extension = strtolower(end($tabExtension)); 
+                $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                $tailleMax = 5242880; // 5 Mo (en octets)
+            
+
+                if(in_array($extension,$extensionsAutorisees) && $size <= $tailleMax && $error == 0)  {
+
+                    $uniqueName = uniqid('', true);
+                    $FileNameUnique = $uniqueName. '.' .$extension;
+                    move_uploaded_file($tmpName, './public/Images/upload'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload'.$FileNameUnique;
+        
+                    echo 'Image enregistrée';
+                }
+    
+                } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                    $movieImageChemin = NULL;
+                }
 
 
-            //? gérer les paramètres non obligatoires?
-           // ajouter vérif pour bien que l'user rentre une année à 4 chiffres
-            if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director) {
-                
+                $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
+                $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
+                $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
+                $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
+                $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
+                $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
+                $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+
+                //? gérer les paramètres non obligatoires?
+                // ajouter vérif pour bien que l'user rentre une année à 4 chiffres
+                if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director) {
+                    
                 $requeteAjouterFilm = $pdo->prepare("
                     INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director)
                     VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director)
@@ -151,9 +183,9 @@ class MovieController {
 
 
 
-           // ^ Aller à la page d'ajout de casting
+        // ^ Aller à la page d'ajout de casting
 
-           public function getAjouterCasting(){
+        public function getAjouterCasting(){
             $pdo = Connect::seConnecter(); 
             
             $requeteFilm = $pdo->query(" SELECT movie.id_movie, movie.movie_title
@@ -262,6 +294,11 @@ class MovieController {
                                     FROM genre");
         $requeteGenre-> execute();
 
+
+
+        // $selectedGenres = array(); // Tableau des genres sélectionnés pour le film en cours d'édition
+
+
         // vérifier si les tableau renvoient bien des données
         // var_dump($requeteGenre->fetchAll());die;
         // var_dump($requeteRealisateur->fetchAll());die;
@@ -297,18 +334,17 @@ class MovieController {
                 $requeteSuprGenres->execute(["id" => $id]);
 
 
-
                 //Update genre
-                $selectedGenres = $_POST["genre"];
+                $NewSelectedGenres = $_POST["genre"];
                 // var_dump($_POST);die;
-                foreach ($selectedGenres as $genre) {
+                foreach ($NewSelectedGenres as $genre) {
 
                     $requeteUpdateGenre = $pdo->prepare("INSERT INTO categorise (id_movie, id_genre) VALUES (:id_movie, :id_genre)");
                     $requeteUpdateGenre->execute(["id_movie" => $id, "id_genre" => $genre]);
                 }
                 
             }
-            // header("Location: index.php?action=listFilms");
+            header("Location: index.php?action=listFilms");
     }
     
         require("view/movie/updateFilm.php");
