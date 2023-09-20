@@ -32,6 +32,10 @@
     <a href="index.php?action=supprimerRealisateur&id=<?=$person["id_director"]?>"> X </a>
 </div>
 
+<div>
+    <a href="index.php?action=updateRealisateur&id=<?=$person["id_director"]?>"> EDIT DIRECTOR</a>
+</div>
+
 
 
 
