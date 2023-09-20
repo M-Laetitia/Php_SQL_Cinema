@@ -82,12 +82,11 @@ class GenreController {
         require "view/genre/ajouterGenre.php";
      }
 
-
      // ^ Supprimer genre
 
      public function supprimerGenre($id) {
         $pdo = Connect::seConnecter();
-        if(isset($_POST['deleteGenre'])) {
+        if (isset($id) && is_numeric($id)) {
             
             $requeteSupprimerGenre = $pdo->prepare("
             DELETE FROM genre WHERE id_genre = :id

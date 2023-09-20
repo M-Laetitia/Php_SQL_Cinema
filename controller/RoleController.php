@@ -12,7 +12,7 @@ class RoleController {
     public function listRoles() {
         $pdo = Connect::seConnecter();
             $requeteListRole = $pdo->query("
-            SELECT role.name_role, CONCAT(person.person_first_name, ' '  ,person.person_last_name) AS actorComplete, movie.movie_title, movie.id_movie, actor.id_actor, role.id_role
+            SELECT role.id_role, role.name_role, CONCAT(person.person_first_name, ' '  ,person.person_last_name) AS actorComplete, movie.movie_title, movie.id_movie, actor.id_actor, role.id_role
             FROM play
             INNER JOIN role ON role.id_role = play.id_role
             INNER JOIN actor ON actor.id_actor = play.id_actor
@@ -31,7 +31,7 @@ class RoleController {
         public function detailRole($id) {
             $pdo = Connect::seConnecter();
             $requeteDetailRole = $pdo->prepare("
-            SELECT role.name_role, movie.movie_title, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS actorComplete, movie.id_movie, actor.id_actor
+            SELECT role.id_role, role.name_role, movie.movie_title, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS actorComplete, movie.id_movie, actor.id_actor
             FROM role
             INNER JOIN play ON play.id_role = role.id_role
             INNER JOIN movie ON movie.id_movie = play.id_movie
@@ -85,7 +85,7 @@ class RoleController {
 
     public function supprimerRole($id) {
         $pdo = Connect::seConnecter();
-        if(isset($_POST['deleteRole'])) {
+        if (isset($id) && is_numeric($id)) {
             
             $requeteSupprimerPlay = $pdo->prepare("DELETE FROM play WHERE id_role = :id");
             $requeteSupprimerPlay->execute(["id" => $id]);
