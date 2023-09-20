@@ -99,5 +99,42 @@ class RoleController {
 
     }
 
+
+    // ^ Update role
+    public function updateRole($id) {
+        $pdo = Connect::seConnecter();
+
+        // récupérer les données du genre à mettre à jour si besoin d'afficher les informations actuelles du genre dans le formulaire de mise à jour, pour que l'utilisateur puisse voir les données existantes avant de les modifier.
+        $requeteRole = $pdo->prepare("SELECT id_role, name_role FROM role WHERE id_role = :id"); 
+        $requeteRole->execute(["id"=>$id]);
+
+
+
+            if(isset($_POST['updateRole'])) {
+                // Récupérez les données du formulaire
+                $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+                 if($name_role !== false) {
+                    $pdo = Connect::seConnecter(); 
+                     // Préparez la requête de mise à jour
+                     $requeteUpdateRole = $pdo->prepare("UPDATE role SET name_role = :name_role WHERE id_role = :id");
+
+                     // Exécutez la mise à jour en liant les paramètres
+                     $requeteUpdateRole->execute([
+                        "name_role" => $name_role,
+                        "id" => $id
+                    ]);
+
+                    header("Location: index.php?action=listRoles");
+            }
+        }
+
+        require "view/role/updateRole.php" ;
+
+        }
+
+
+
 }
     
