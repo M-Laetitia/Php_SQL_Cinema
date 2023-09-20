@@ -17,7 +17,7 @@ class MovieController {
         $pdo = Connect::seConnecter();
         // On exécute la requête de notre choix
         $requete = $pdo->query("
-        SELECT director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie
+        SELECT movie.id_movie,  director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -35,8 +35,8 @@ class MovieController {
         $pdo = Connect::seConnecter();
 
         $requetedetailFilm = $pdo->prepare("
-        SELECT movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, 
-        movie.movie_rating, movie.movie_release_date, movie.movie_rating, movie.id_movie, director.id_director, genre.label_genre AS genres
+        SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, 
+        movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -47,7 +47,7 @@ class MovieController {
         $requetedetailFilm->execute (["id" => $id]);
 
         $requeteGenres = $pdo->prepare("
-        SELECT  movie.movie_title, label_genre AS genres, genre.id_genre
+        SELECT  movie.movie_title, label_genre AS genres, genre.id_genre, movie.id_movie
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -58,7 +58,7 @@ class MovieController {
         $requeteGenres->execute(["id" => $id]);
 
         $requeteCastingFilm = $pdo->prepare("
-        SELECT CONCAT(person.person_first_name, ' ',  person.person_last_name) AS actorComplete, actor.id_actor
+        SELECT CONCAT(person.person_first_name, ' ',  person.person_last_name) AS actorComplete, actor.id_actor, movie.id_movie, role.id_role, role.name_role
         FROM play
         INNER JOIN actor ON play.id_actor = actor.id_actor
         INNER JOIN person ON actor.id_person = person.id_person
@@ -197,7 +197,7 @@ class MovieController {
     public function supprimerFilm($id) {
 
         $pdo = Connect::seConnecter();
-        if(isset($_POST['deleteMovie'])) {
+        if (isset($id) && is_numeric($id)) {
 
             $requeteDeleteFilmPlay = $pdo->prepare("DELETE FROM play WHERE id_movie = :id"); //D'abord supprimer les clés étrangères
             $requeteDeleteFilmPlay ->execute(["id"=>$id]);
@@ -206,7 +206,7 @@ class MovieController {
             $requeteDeleteFilmCategorise->execute(["id"=>$id]);
 
             $requeteSupprimerFilm = $pdo->prepare("DELETE FROM movie WHERE id_movie = :id");
-            $requeteSupprimerFilm->execute(["id => $id"]);
+            $requeteSupprimerFilm->execute(["id" => $id]);
 
         }
         header("Location: index.php?action=listFilms");

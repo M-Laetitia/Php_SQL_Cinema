@@ -11,7 +11,7 @@ class DirectorController {
         public function listRealisateurs() {
             $pdo = Connect::seConnecter();
                 $requete = $pdo->query("
-                SELECT id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, person.person_birthday
+                SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, person.person_birthday
                 FROM person
                 INNER JOIN director ON person.id_person = director.id_person
                 ");
@@ -27,7 +27,7 @@ class DirectorController {
         public function detailRealisateur($id) {
             $pdo = Connect::seConnecter();
             $requetedetailRealisateur = $pdo->prepare("
-            SELECT CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe
+            SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe
             FROM person
             INNER JOIN director ON person.id_person = director.id_person
             WHERE id_director = :id"
@@ -113,21 +113,23 @@ class DirectorController {
 
   
 
-    
-    // ^ Supprimer un acteur 
 
-    public function supprimerRealisateur($id) {
 
-        if(isset($_POST['deleteDirector'])) {
-            $pdo = Connect::seConnecter();
-            $requeteSupprimerRealisateur = $pdo->prepare("
-            DELETE FROM director WHERE id_director = :id
-            ");
-            $requeteSupprimerRealisateur->execute(["id => $id"]);
+      // ^ Supprimer un réalisateur 
 
+      public function supprimerRealisateur($id) {
+        $pdo = Connect::seConnecter();
+
+        if (isset($id) && is_numeric($id)) {
+            
+            $requeteSupprimerMovie = $pdo->prepare("DELETE FROM movie WHERE id_director = :id");
+            $requeteSupprimerMovie->execute(["id"=>$id]);
+
+            $requeteSupprimerActor = $pdo->prepare("DELETE FROM director WHERE id_director = :id");
+            $requeteSupprimerActor->execute(["id" => $id]);
         }
-
-        require "view/director/detailRealisateur.php";
+            
+            header("Location: index.php?action=listRealisateurs");
 
     }
 
