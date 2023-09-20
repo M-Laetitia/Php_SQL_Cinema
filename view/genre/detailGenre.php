@@ -24,6 +24,9 @@
     </div>
 
 
+    <div>
+    <a href="index.php?action=updateGenre&id=<?=$genre["id_genre"]?>"> EDIT  genre</a>
+</div>
 
 
 
