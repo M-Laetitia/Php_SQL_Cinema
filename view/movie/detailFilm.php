@@ -15,6 +15,16 @@
     <p>Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realisateurComplete"] ?></a></p>
     <p>Movie rating: <?= $movie["movie_rating"] ?>★</p>
 
+        <!-- ajout de l'affiche' -->
+    <?php
+            if($movie["movie_image"] == NULL){
+                echo "pas d'image";
+            }
+            else{
+            echo "<img src=". $movie["movie_image"] ." width='300'>";
+            }
+    ?>
+
     
     <?php 
     // initialiser un tableau pour stocker les genres
@@ -34,8 +44,6 @@
 
     ?>
 
-    
-
     <h3>Casting : </h3>
 
     <?php 
@@ -48,8 +56,10 @@
     }
     ?>
 
-    
-</div>
+
+       
+
+
 
 
 
