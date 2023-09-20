@@ -1,11 +1,10 @@
 <?php
-
-
-
 // On remarquera ici l'utilisation du "use" pour accéder à la classe Connect située dans le
 // namespace "Model"
+
 namespace Controller;
 use Model\Connect;
+
 
 
 class MovieController {
@@ -20,7 +19,7 @@ class MovieController {
         $pdo = Connect::seConnecter();
         // On exécute la requête de notre choix
         $requete = $pdo->query("
-        SELECT movie.id_movie,  director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie
+        SELECT movie.id_movie,  director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie, movie.movie_image
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -39,7 +38,7 @@ class MovieController {
 
         $requetedetailFilm = $pdo->prepare("
         SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, 
-        movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres
+        movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres, movie.movie_image
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -114,6 +113,7 @@ class MovieController {
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
                 $tailleMax = 5242880; // 5 Mo (en octets)
+                
             
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
@@ -127,7 +127,8 @@ class MovieController {
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
                     $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
-                    echo 'Image enregistrée.';
+                    // echo 'Image enregistrée.';
+                    // var_dump($movieImageChemin);die;
                 }
 
             } else {
@@ -150,8 +151,8 @@ class MovieController {
                 if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director) {
                     
                 $requeteAjouterFilm = $pdo->prepare("
-                    INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director)
-                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director)
+                    INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, movie_image, id_director)
+                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :movieImageChemin, :director)
                 ");
 
                 $requeteAjouterFilm ->execute([
@@ -161,6 +162,7 @@ class MovieController {
                     "movie_synopsys"=> $movie_synopsys, 
                     "movie_rating"=> $movie_rating,
                     "director" => $director,
+                    "movieImageChemin" => $movieImageChemin,
                 ]);
 
                 
@@ -358,7 +360,6 @@ class MovieController {
    
 
 }
-
 
 
 ?>
