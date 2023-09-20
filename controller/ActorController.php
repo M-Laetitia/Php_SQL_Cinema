@@ -13,7 +13,7 @@ class ActorController {
         $pdo = Connect::seConnecter();
             $requete = $pdo->query("
             SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
-            (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, id_actor, person.id_person
+            (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge
             FROM person
             INNER JOIN actor ON person.id_person = actor.id_person
             ");
@@ -137,7 +137,9 @@ class ActorController {
 
     public function supprimerActeur($id) {
         $pdo = Connect::seConnecter();
-        if(isset($_POST['deleteActor'])) {
+        // if(isset($_POST['deleteActor'])) {
+
+        if (isset($id) && is_numeric($id)) {
             
             // d'abord supprimer les clés étrangères
             $requeteSupprimerActeur = $pdo->prepare("DELETE FROM play WHERE id_actor = :id");
@@ -149,8 +151,10 @@ class ActorController {
             
             header("Location: index.php?action=listActeurs");
 
-
     }
+
+
+     // ^ Editer un acteur 
 
 
 }
