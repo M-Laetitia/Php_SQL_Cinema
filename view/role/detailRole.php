@@ -23,6 +23,10 @@
     <a href="index.php?action=supprimerRole&id=<?=$role["id_role"]?>"> X</a>
 </div>
 
+<div>
+    <a href="index.php?action=updateRole&id=<?=$role["id_role"]?>"> EDIT  ROLE</a>
+</div>
+
 
 <?php
 
