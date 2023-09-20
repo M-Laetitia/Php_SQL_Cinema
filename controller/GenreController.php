@@ -32,7 +32,7 @@ class GenreController {
             $requeteGenre->execute(["id" => $id]);
 
             $requeteDetailGenre = $pdo->prepare("
-            SELECT genre.label_genre, movie.movie_title, movie.id_movie
+            SELECT genre.label_genre, movie.movie_title, movie.id_movie, genre.id_genre
             FROM genre
             INNER JOIN categorise ON categorise.id_genre = genre.id_genre
             INNER JOIN movie ON categorise.id_movie = movie.id_movie
@@ -87,10 +87,11 @@ class GenreController {
      public function supprimerGenre($id) {
         $pdo = Connect::seConnecter();
         if (isset($id) && is_numeric($id)) {
+
+            $requeteSupprimerCategorise = $pdo->prepare("DELETE FROM categorise WHERE id_genre = :id");
+            $requeteSupprimerCategorise->execute(["id" => $id]);
             
-            $requeteSupprimerGenre = $pdo->prepare("
-            DELETE FROM genre WHERE id_genre = :id
-            ");
+            $requeteSupprimerGenre = $pdo->prepare("DELETE FROM genre WHERE id_genre = :id");
             $requeteSupprimerGenre->execute(["id" => $id]);
         }
 
@@ -101,7 +102,49 @@ class GenreController {
 
      }
 
+      // ^ update genre
+
+      
+      public function updateGenre($id) {
+        $pdo = Connect::seConnecter();
+
+        // pourquoi??
+        $requeteGenre = $pdo->prepare("SELECT id_genre, label_genre FROM genre WHERE id_genre = :id"); 
+        $requeteGenre->execute(["id"=>$id]);
+
+
+
+            if(isset($_POST['updateGenre'])) {
+                // Récupérez les données du formulaire
+                $label_genre = filter_input(INPUT_POST, "label_genre", FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+                 if($label_genre !== false) {
+                    $pdo = Connect::seConnecter(); 
+                     // Préparez la requête de mise à jour
+                     $requeteUpdateGenre = $pdo->prepare("UPDATE genre SET label_genre = :label_genre WHERE id_genre = :id");
+
+                     // Exécutez la mise à jour en liant les paramètres
+                     $requeteUpdateGenre->execute([
+                        "label_genre" => $label_genre,
+                        "id" => $id
+                    ]);
+
+                    header("Location: index.php?action=listGenres");
+            }
+        }
+
+        require "view/genre/updateGenre.php" ;
+
+        }
+
+
+
+     
 }
+
+
+
 
 
 ?>
