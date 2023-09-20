@@ -42,7 +42,8 @@
     foreach($requeteCastingFilm->fetchAll() as $play) {
     ?>  
 
-    <p><a href="index.php?action=detailActeur&id=<?= $play["id_actor"] ?>"><?= $play["actorComplete"] ?></a></p>
+    <p><a href="index.php?action=detailActeur&id=<?= $play["id_actor"] ?>"><?= $play["actorComplete"] ?></a> as 
+    <a href="index.php?action=detailRole&id=<?= $play["id_role"] ?>"><?= $play["name_role"] ?></a></p>
     <?php
     }
     ?>
@@ -50,12 +51,11 @@
     
 </div>
 
-<div>
-    <form action="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>" method="post">
-        <input name="deleteMovie" type="submit" value="Delete this movie">
-    </form>
-</div>
 
+
+<div>
+    <a href="index.php?action=supprimerFilm&id=<?=$play["id_movie"]?>"> X</a>
+</div>
 
 
 
