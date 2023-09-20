@@ -158,10 +158,9 @@ class MovieController {
        public function ajouterCasting() {
         $pdo= Connect::seConnecter();
 
-
         $requeteFilm = $pdo->query("SELECT movie.id_movie, movie.movie_title FROM movie");
 
-        $requeteActeur = $pdo->query("SELECT actor.id_actor, person.person_first_name, person.person_last_name
+        $requeteActeur = $pdo->query("SELECT actor.id_actor, person.person_first_name, ' ', person.person_last_name
         FROM person
         INNER JOIN actor ON person.id_person = actor.id_person");
         $requeteRole = $pdo->query("SELECT id_role, role.name_role
@@ -171,11 +170,11 @@ class MovieController {
         if(isset($_POST["submitCasting"])) {
             $movie = filter_input(INPUT_POST, "movie", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $role = filter_input(INPUT_POST, "role", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $actor = filter_input(INPUT_POST, "acteur", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $actor = filter_input(INPUT_POST, "actor", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            if($movie && $role && $actor) {
+            if($movie  &&  $role  && $actor) {
                 $requeteAjouterCasting = $pdo->prepare("INSERT INTO play(id_movie, id_actor, id_role)
-                VALUES (:movie, :actor, :role");
+                VALUES (:movie, :actor, :role)");
 
                 $requeteAjouterCasting ->execute([
                     "movie" => $movie,
@@ -185,12 +184,10 @@ class MovieController {
 
             }
         }
+        require "view/movie/ajouterCasting.php";
+       
         
     }
-
-
-  
-
 
 
 
