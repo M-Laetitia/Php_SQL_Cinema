@@ -108,7 +108,7 @@ class GenreController {
       public function updateGenre($id) {
         $pdo = Connect::seConnecter();
 
-        // pourquoi??
+        // récupérer les données du genre à mettre à jour si besoin d'afficher les informations actuelles du genre dans le formulaire de mise à jour, pour que l'utilisateur puisse voir les données existantes avant de les modifier.
         $requeteGenre = $pdo->prepare("SELECT id_genre, label_genre FROM genre WHERE id_genre = :id"); 
         $requeteGenre->execute(["id"=>$id]);
 
@@ -118,6 +118,8 @@ class GenreController {
                 // Récupérez les données du formulaire
                 $label_genre = filter_input(INPUT_POST, "label_genre", FILTER_SANITIZE_SPECIAL_CHARS);
 
+                
+                // vérifier si la variable $label_genre n'est pas évaluée comme étant false ou nulle. L'utilisation de if($label_genre) sans vérification supplémentaire pourrait poser des problèmes:  si le champ de saisie du nom de genre dans le formulaire est laissé vide, $label_genre serait une chaîne vide (""). Une chaîne vide est évaluée comme true dans un contexte booléen, ce qui signifie que la condition if($label_genre) serait vraie même si le champ est vide.
 
                  if($label_genre !== false) {
                     $pdo = Connect::seConnecter(); 

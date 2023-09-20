@@ -108,7 +108,9 @@ class DirectorController {
    
             }
         }
-        require "view/director/ajouterRealisateur.php";
+        // require "view/director/ajouterRealisateur.php";
+        header("Location: index.php?action=listRealisateurs");
+        
     }
 
   

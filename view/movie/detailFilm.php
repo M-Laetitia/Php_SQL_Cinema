@@ -57,14 +57,8 @@
     ?>
 
 
-       
-
-
-
-
-
 <div>
-    <a href="index.php?action=supprimerFilm&id=<?=$play["id_movie"]?>"> X</a>
+    <a href="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>"> X</a>
 </div>
 
 <div>

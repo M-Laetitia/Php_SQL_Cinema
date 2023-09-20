@@ -127,8 +127,10 @@ class ActorController {
                  
                 
             }
+            
         }
-        require "view/actor/ajouterActeur.php";
+        // require "view/actor/ajouterActeur.php";
+        header("Location: index.php?action=listActeurs");
     }
 
  

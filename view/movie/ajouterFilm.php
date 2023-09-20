@@ -1,4 +1,10 @@
-<?php ob_start(); ?>
+<?php 
+
+ob_start(); ?>
+
+
+
+
 
 
     <form enctype="multipart/form-data" action="index.php?action=ajouterFilm" method="post">
@@ -16,7 +22,7 @@
             <?php
             foreach ($requeteGenre->fetchAll() as $genre) {
             ?>
-            <input type="checkbox" name="genre[]" value="<?= $genre["label_genre"] ?>">
+            <input type="checkbox" name="genre[]" value="<?= $genre["id_genre"] ?>">
             <label><?= $genre["label_genre"] ?></label><br>
             <?php
             }
@@ -28,7 +34,7 @@
 
         <div class="form-input">
         <label for="director">Director :</label>
-            <select class="select" name="realisateur">
+            <select class="select" name="director">
 
                 <?php
                    
@@ -45,7 +51,7 @@
 
         <div class="form-input">
             <label for="movie_release_date">Release Date :</label>
-            <input type="date" name="movie_release_date" id="movie_release_date" required>
+            <input type="text" name="movie_release_date" id="movie_release_date" required>
         </div>
 
         <div class="form-input">
@@ -64,16 +70,20 @@
         </div>
 
         <div class="form-input">
-            <label for="movie_image">Movie Image(poster) :</label>
-            <input type="file" name="movie_image" id="movie_image" required>
+            <!-- label est associé a un input ce qu'on met dans le for va correspondre au name du chemin input que l'on veut associé -->
+            <label for="movie_image">image :</label>
+            <input type="file"  name="movie_image" >
+            <button type="submit"> Send</button>
         </div>
 
-        
+  
         <div class="form-input">
             <input type="submit" class="submit" name="submitFilm" id="submitFilm">
-
+             
         </div>
     </form>
+
+   
 
 
 <?php
