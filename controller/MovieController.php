@@ -115,18 +115,22 @@ class MovieController {
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
                 $tailleMax = 5242880; // 5 Mo (en octets)
             
-
-                if(in_array($extension,$extensionsAutorisees) && $size <= $tailleMax && $error == 0)  {
-
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
-                    move_uploaded_file($tmpName, './public/Images/upload'.$FileNameUnique);
-                    $movieImageChemin = './public/Images/upload'.$FileNameUnique;
-        
-                    echo 'Image enregistrée';
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
+                    echo 'Image enregistrée.';
                 }
-    
-                } else {
+
+            } else {
                     /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }
