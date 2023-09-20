@@ -27,25 +27,44 @@ $movie = $requeteUpdateFilm->fetch(); ?>
         </div>
 
 
-        <!-- Choisir parmis les réalisateur -->
+        <!-- Choisir parmis les réalisateurs mais le réalisateur d'origine n'est pas sélectionné par défault -->
+
+        <?php
+        /*
+        foreach($requeteRealisateur->fetchAll() as $director){
+        ?>
+            <option value="<?= $director["id_director"]?>"><?= $director["person_first_name"] . ' ' .  $director["person_last_name"] ?></option>
+        <?php
+        }
+        */
+        ?>
+
+
+
+
+        <!-- Choisir parmis les réalisateurs mais avec le réalisateur d'origine sélectionné par défault -->
 
         <div class="form-input">
-        <label for="director">Director :</label>
+            <label for="director">Director :</label>
             <select class="select" name="director">
+                <?php
 
-                <?php
-                   
-                    foreach($requeteRealisateur->fetchAll() as $director){
+                // Boucle à travers tous les réalisateurs récupérés de la base de données
+                foreach ($requeteRealisateur->fetchAll() as $director) {
+                    // Récupérer l'ID du réalisateur actuel
+                    // $directorId = $director["id_director"];
                 ?>
-                    <option value="<?= $director["id_director"]?>"><?= $director["person_first_name"] . ' ' .  $director["person_last_name"] ?></option>
+                
+                    <option value="<?= $director["id_director"] ?>" <?php if ($director["id_director"] == $movie["id_director"]) echo "selected"; ?>>
+                        <?= $director["person_first_name"] . ' ' .  $director["person_last_name"] ?>
+                    </option>
+
+                    
                 <?php
-                    }
+                }
                 ?>
             </select>
         </div>
-
-
-        
 
 
 
