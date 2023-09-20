@@ -1,9 +1,12 @@
 <?php
 
+
+
 // On remarquera ici l'utilisation du "use" pour accéder à la classe Connect située dans le
 // namespace "Model"
 namespace Controller;
 use Model\Connect;
+
 
 class MovieController {
 
@@ -85,31 +88,34 @@ class MovieController {
         $requeteGenre-> execute();
 
         require ("view/movie/ajouterFilm.php");
-
     }
-
-
-
 
 
      // ^ Ajouter film
 
     public function ajouterFilm() {
+
+ 
+        $pdo = Connect::seConnecter();
+
+
         if(isset($_POST["submitFilm"])) {
             $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
-            $movie_image  = filter_input(INPUT_POST, "movie_image", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_URL);
             $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
+            $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
+            $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 
             //? gérer les paramètres non obligatoires?
-            if($movie_title && $movie_duration && $movie_release_date) {
-                $pdo = Connect::seConnecter();
+           // ajouter vérif pour bien que l'user rentre une année à 4 chiffres
+            if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director) {
+                
                 $requeteAjouterFilm = $pdo->prepare("
-                    INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_image, movie_rating)
-                    VALUES (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_image, movie_rating)
+                    INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director)
+                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director)
                 ");
 
                 $requeteAjouterFilm ->execute([
@@ -117,16 +123,33 @@ class MovieController {
                     "movie_duration"=> $movie_duration, 
                     "movie_release_date"=> $movie_release_date, 
                     "movie_synopsys"=> $movie_synopsys, 
-                    "movie_image"=> $movie_image,
-                    "movie_rating"=> $movie_rating,  
-
+                    "movie_rating"=> $movie_rating,
+                    "director" => $director,
                 ]);
 
-            }
+                
+               
+                $requeteGenre = $pdo->query("SELECT id_genre, label_genre FROM genre");
+                $requeteGenre-> execute();
+                
 
+                $genresChecked = isset($_POST["genre"]) ? $_POST["genre"] : [];
+
+                foreach ($genresChecked as $genre) {
+                    $requeteAjoutGenre = $pdo->prepare("INSERT INTO categorise (id_movie, id_genre)
+                    VALUES (LAST_INSERT_ID(), :id_genre)");
+                    $requeteAjoutGenre->execute([
+                        "id_genre" => $genre
+                    ]);
+                }
+                header("Location: index.php?action=listFilms");
+            }
+            
         }
-        require "view/movie/ajouterFilm.php";
+        
     }
+
+
 
            // ^ Aller à la page d'ajout de casting
 
@@ -213,10 +236,88 @@ class MovieController {
         // require "view/movie/detailFilm.php";
 
     }
+
+
+    // ^ Update un film 
+
+    public function updateFilm($id) {
+
+        $pdo = Connect::seConnecter();
+        $requeteUpdateFilm = $pdo->prepare("SELECT movie.id_movie, movie.movie_title,  movie_release_date, person.person_first_name, person.person_last_name, movie.movie_duration, movie.movie_synopsys, movie.movie_rating, movie.id_director
+        FROM movie
+        INNER JOIN director ON director.id_director = movie.id_director
+        INNER JOIN person ON person.id_person = director.id_person
+        WHERE movie.id_movie = :id
+        ");        
+        $requeteUpdateFilm->execute(["id" => $id]);
+
+        // afficher les infos déjà existantes
+        $requeteRealisateur = $pdo->query("SELECT director.id_director , person.person_first_name, person.person_last_name
+                                        FROM director
+                                        INNER JOIN person ON person.id_person = director.id_person
+        ");   
+        $requeteRealisateur->execute();
+        
+        $requeteGenre = $pdo->query("SELECT id_genre, label_genre
+                                    FROM genre");
+        $requeteGenre-> execute();
+
+        // vérifier si les tableau renvoient bien des données
+        // var_dump($requeteGenre->fetchAll());die;
+        // var_dump($requeteRealisateur->fetchAll());die;
+
+        // Si on call l'action d'update > cela l'execute
+        if(isset($_POST["updateFilm"])){  
+            
+            $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
+            $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
+            // $movie_image  = filter_input(INPUT_POST, "movie_image", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_URL);
+            $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
+            $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
+
+            if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director !== false ) {
+
+                                
+                //Update Film
+                $requeteUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, id_director = :director WHERE id_movie= :id");
+                $requeteUpdateFilm->execute([
+                    "movie_title" => $movie_title,
+                    "movie_release_date" => $movie_release_date,
+                    "movie_duration" => $movie_duration,
+                    "movie_synopsys" => $movie_synopsys,
+                    "movie_rating" => $movie_rating,
+                    "director" => $director,
+                    "id" => $id
+                ]);
+
+                // Supprimer les genres précédents
+                $requeteSuprGenres = $pdo->prepare("DELETE FROM categorise WHERE id_movie = :id");
+                $requeteSuprGenres->execute(["id" => $id]);
+
+
+
+                //Update genre
+                $selectedGenres = $_POST["genre"];
+                // var_dump($_POST);die;
+                foreach ($selectedGenres as $genre) {
+
+                    $requeteUpdateGenre = $pdo->prepare("INSERT INTO categorise (id_movie, id_genre) VALUES (:id_movie, :id_genre)");
+                    $requeteUpdateGenre->execute(["id_movie" => $id, "id_genre" => $genre]);
+                }
+                
+            }
+            // header("Location: index.php?action=listFilms");
+    }
     
+        require("view/movie/updateFilm.php");
+        
+    }
+
+   
+
 }
-
-
 
 
 
