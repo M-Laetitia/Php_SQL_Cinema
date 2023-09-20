@@ -24,7 +24,7 @@
                         <option value="index.php?action=getAjouterRole">ADD ROLES</option>
                         <option value="index.php?action=getAjouterActeur">ADD ACTORS</option>
                         <option value="index.php?action=getAjouterRealisateur">ADD DIRECTORS</option>
-                        <option value="index.php?action=getAddCasting">ADD CASTING</option>
+                        <option value="index.php?action=getAjouterCasting">ADD CASTING</option>
                     </select>
                 </li>
                 

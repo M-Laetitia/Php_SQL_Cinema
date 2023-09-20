@@ -28,17 +28,13 @@
 
 
 
-
-
 <?php
 
 $titre = "Genre";
 $titre_secondaire = "Detail genre";
 $contenu = ob_get_clean();
 
-
 require "view/template.php";
-
 
 
 ?>

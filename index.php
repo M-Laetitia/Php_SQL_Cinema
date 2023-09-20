@@ -45,7 +45,7 @@ if(isset($_GET["action"])) {
         case "ajouterCasting" : $ctrlMovie->ajouterCasting(); break; 
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         
-        // getCasting
+
         //modifier film
   
 

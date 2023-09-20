@@ -12,7 +12,8 @@ class ActorController {
     public function listActeurs() {
         $pdo = Connect::seConnecter();
             $requete = $pdo->query("
-            SELECT id_actor, CONCAT(person.person_first_name, ' ',person.person_last_name) AS acteurComplete, person.person_birthday
+            SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
+            (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, id_actor, person.id_person
             FROM person
             INNER JOIN actor ON person.id_person = actor.id_person
             ");
@@ -49,10 +50,7 @@ class ActorController {
         $requeteFilms->execute(["id" => $id]);
 
 
-    
-
-
-     // ^ Liste des rôles
+        // ^ Liste des rôles
 
         $requeteRole = $pdo->prepare("
         SELECT  role.name_role, movie.movie_title, role.id_role, play.id_actor
@@ -70,7 +68,7 @@ class ActorController {
 
        // ^ Aller à la page d'ajout d'un acteur 
 
-       public function getAjouterActeur(){
+        public function getAjouterActeur(){
         $pdo = Connect::seConnecter(); 
         $requeteGetAjouterActeur = $pdo->query("
         SELECT person.person_first_name, person.person_last_name
@@ -133,6 +131,8 @@ class ActorController {
         require "view/actor/ajouterActeur.php";
     }
 
+ 
+
     // ^ Supprimer un acteur 
 
     public function supprimerActeur($id) {
@@ -140,54 +140,21 @@ class ActorController {
         if(isset($_POST['deleteActor'])) {
             
             // d'abord supprimer les clés étrangères
-            $requeteSupprimerActeur = $pdo->prepare("DELETE FROM play  WHERE id_actor = :id");
+            $requeteSupprimerActeur = $pdo->prepare("DELETE FROM play WHERE id_actor = :id");
             $requeteSupprimerActeur->execute(["id" => $id]);
 
             $requeteSupprimerActor1 = $pdo->prepare("DELETE FROM actor WHERE id_actor = :id");
-            $requeteSupprimerActor1->execute(["id"=>$id]);
+            $requeteSupprimerActor1->execute(["id" => $id]);
         }
             
-            // require "view/actor/detailActeur.php";
             header("Location: index.php?action=listActeurs");
 
 
     }
 
 
-    // ^ Mettre à jour fiche acteur 
-
-    public function updateActeur($id) {
-        $pdo = Connect::seConnecter();
-        $requeteUpdateActeur = $pdo->prepare("
-        SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge
-        FROM person
-        INNER JOIN actor ON person.id_person = actor.id_person
-        WHERE id_actor = :id
-        ");
-
-        $requete->execute(["id" => $id]);
-
-    }
-
 }
 
 ?>
 
 
-<!-- *It is possible to write the INSERT INTO statement in two ways:
-1. Specify both the column names and the values to be inserted:
-
-INSERT INTO table_name (column1, column2, column3, ...)
-VALUES (value1, value2, value3, ...); -->
-
-
-
-<!-- https://www.hostinger.com/tutorials/how-to-use-php-to-insert-data-into-mysql-database-->
-<!-- https://stackoverflow.com/questions/10680943/pdo-get-the-last-id-inserted -->
-
-
-<!-- $stmt = $db->prepare("...");
-$stmt->execute();
-$id = $db->lastInsertId(); -->
-
-<!-- https://codingstatus.com/update-data-in-sql-table-with-form-using-php-mysql/ -->

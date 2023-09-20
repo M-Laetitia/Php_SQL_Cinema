@@ -3,7 +3,7 @@
 
     <form enctype="multipart/form-data" action="index.php?action=ajouterGenre" method="post">
         
-        <h3>Add a movie</h3>
+        <h3>Add a genre</h3>
         
         <div class="form-input">
             <label for="label_genre">Genre :</label>

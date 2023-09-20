@@ -49,7 +49,7 @@ ob_start();
                   
                     foreach($requeteActeur->fetchAll() as $actor){
                 ?>
-                    <option value="<?= $actor["id_actor"] ?>"><?= $actor["person_first_name"] . " " . $actor["person_last_name"]  ?></option>
+                    <option value="<?= $actor["id_actor"] ?>"><?= $actor["person_first_name"] . ' ' . $actor["person_last_name"]?></option>
                 <?php
                        
                     }
