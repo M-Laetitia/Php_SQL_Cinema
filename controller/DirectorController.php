@@ -133,6 +133,51 @@ class DirectorController {
 
     }
 
+
+         // ^ Editer un réalisateur
+
+         public function updateRealisateur($id) {
+            $pdo = Connect::seConnecter();
+            $requeteUpdateRealisateur = $pdo->prepare(" SELECT director.id_director, CONCAT(person.person_first_name, ' ', person.person_last_name) AS directorComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name
+            FROM director
+            INNER JOIN person ON person.id_person = director.id_person
+            WHERE director.id_director = :id
+            ");
+            $requeteUpdateRealisateur->execute(["id"=>$id]);
+
+            if(isset($_POST["updateDirector"])){ 
+
+                    $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
+                    $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
+                    $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $person_birthday = filter_input(INPUT_POST, "person_birthday", FILTER_SANITIZE_SPECIAL_CHARS);
+
+                if($person_first_name !== false  && $person_last_name !== false  && $person_sexe !== false  && $person_birthday !== false ){
+                    $pdo = Connect::seConnecter();
+                    $requeteAjouterPersonne = $pdo->prepare(" UPDATE person
+                    INNER JOIN director ON director.id_person = person.id_person
+                    SET person_first_name = :person_first_name, person_last_name = :person_last_name, person_sexe = :person_sexe, person_birthday = :person_birthday
+                    WHERE director.id_director = :id
+                        ");
+                    $requeteAjouterPersonne ->execute([
+                        "person_first_name" => $person_first_name,
+                        "person_last_name" => $person_last_name,
+                        "person_sexe" => $person_sexe,
+                        "person_birthday" => $person_birthday,
+                        "id" => $id,
+                        
+                    ]);
+
+                    header("Location: index.php?action=listRealisateurs");
+
+                }
+
+        }
+        require "view/director/updateRealisateur.php" ;
+
+    }
+
+
  
 }
 
