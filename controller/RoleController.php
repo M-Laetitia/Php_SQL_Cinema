@@ -58,7 +58,6 @@ class RoleController {
 
 
 
-
         // ^ Ajouter Role
 
         public function ajouterRole() {
@@ -88,6 +87,9 @@ class RoleController {
         $pdo = Connect::seConnecter();
         if(isset($_POST['deleteRole'])) {
             
+            $requeteSupprimerPlay = $pdo->prepare("DELETE FROM play WHERE id_role = :id");
+            $requeteSupprimerPlay->execute(["id" => $id]);
+
             $requeteSupprimerRole = $pdo->prepare("DELETE FROM role WHERE id_role = :id");
             $requeteSupprimerRole->execute(["id" => $id]);
 
@@ -96,10 +98,6 @@ class RoleController {
         header("Location: index.php?action=listRoles");
 
     }
-    
 
-
-        
- 
 }
-
+    
