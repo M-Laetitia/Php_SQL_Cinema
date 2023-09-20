@@ -38,14 +38,10 @@
 </div>
 
 
+
 <div>
-    <form action="index.php?action=supprimerActeur&id=<?=$actor["id_actor"]?>" method="post">
-        <input name="deleteActor" type="submit" value="Delete this actor">
-    </form>
+    <a href="index.php?action=supprimerActeur&id=<?=$person["id_actor"]?>"> X</a>
 </div>
-
-
-
 
 
 

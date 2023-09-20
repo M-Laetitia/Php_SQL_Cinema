@@ -17,12 +17,11 @@
 
 </div>
 
-<div>
-    <form action="index.php?action=supprimerRole&id=<?=$role["id_role"]?>" method="post">
-        <input name="deleteRole" type="submit" value="Delete this role">
-    </form>
-</div>
 
+
+<div>
+    <a href="index.php?action=supprimerRole&id=<?=$role["id_role"]?>"> X</a>
+</div>
 
 
 <?php
