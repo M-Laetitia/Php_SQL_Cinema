@@ -17,7 +17,7 @@ class ActorController {
             FROM person
             INNER JOIN actor ON person.id_person = actor.id_person
             ");
-
+            $requete->execute();
             require "view/actor/listActeurs.php";
                     
     }
@@ -155,6 +155,49 @@ class ActorController {
 
 
      // ^ Editer un acteur 
+
+        public function updateActeur($id) {
+            $pdo = Connect::seConnecter();
+            $requeteUpdateActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ', person.person_last_name) AS acteurComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name
+            FROM actor
+            INNER JOIN person ON person.id_person = actor.id_person
+            WHERE actor.id_actor = :id
+            ");
+            $requeteUpdateActeur->execute(["id"=>$id]);
+
+            if(isset($_POST["updateActor"])){ 
+
+                    $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
+                    $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
+                    $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                    $person_birthday = filter_input(INPUT_POST, "person_birthday", FILTER_SANITIZE_SPECIAL_CHARS);
+
+                if($person_first_name  && $person_last_name  && $person_sexe  && $person_birthday ){
+                    $pdo = Connect::seConnecter();
+                    $requeteAjouterPersonne = $pdo->prepare(" UPDATE person
+                    INNER JOIN actor ON actor.id_person = person.id_person
+                    SET person_first_name = :person_first_name, person_last_name = :person_last_name, person_sexe = :person_sexe, person_birthday = :person_birthday
+                    WHERE actor.id_actor = :id
+                        ");
+                    $requeteAjouterPersonne ->execute([
+                        "person_first_name" => $person_first_name,
+                        "person_last_name" => $person_last_name,
+                        "person_sexe" => $person_sexe,
+                        "person_birthday" => $person_birthday,
+                        "id" => $id,
+                        
+                    ]);
+
+                    header("Location: index.php?action=listActeurs");
+
+                }
+
+        }
+        require "view/actor/updateActeur.php" ;
+
+    }
+
+
 
 
 }
