@@ -20,10 +20,10 @@
 </div>
 
     <div>
-        <form action="index.php?action=supprimerGenre&id=<?=$genre["id_genre"]?>" method="post">
-            <input name="deleteGenre" type="submit" value="Delete this genre">
-        </form>
+    <a href="index.php?action=supprimerGenre&id=<?=$genre["id_genre"]?>">X</a>
     </div>
+
+
 
 
 
