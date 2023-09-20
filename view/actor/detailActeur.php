@@ -40,7 +40,11 @@
 
 
 <div>
-    <a href="index.php?action=supprimerActeur&id=<?=$person["id_actor"]?>"> X</a>
+    <a href="index.php?action=supprimerActeur&id=<?=$person["id_actor"]?>"> DELETE ACTOR</a>
+</div>
+
+<div>
+    <a href="index.php?action=updateActeur&id=<?=$person["id_actor"]?>"> EDIT ACTOR</a>
 </div>
 
 
