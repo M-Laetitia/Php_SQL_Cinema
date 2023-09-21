@@ -90,15 +90,12 @@ $movie = $requeteUpdateFilm->fetch(); ?>
         </div>
 
         
-
-
-
-
-
-        <!-- <div class="form-input">
-            <label for="movie_image">Movie Image(poster) :</label>
-            <input type="file" name="movie_image" id="movie_image" required>
-        </div> -->
+        <!-- Champ pour upload image -->
+        <div class="form-input">
+            <label for="movie_image">image :</label>
+            <input type="file"  name="movie_image">
+            <button type="submit"> Send</button>
+        </div>
 
         
         <div class="form-input">
