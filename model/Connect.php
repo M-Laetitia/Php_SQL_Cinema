@@ -15,7 +15,7 @@ abstract class Connect {
     const HOST = "localHost";
     const DB = "cinema_2";
     const USER = "root";
-    const PASS = "sakura2410)BC";
+    const PASS = "";
 
 
 // On remarquera au passage le namespace de la classe Connect --> "Model", ainsi que la

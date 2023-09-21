@@ -10,7 +10,6 @@ use Model\Connect;
 class MovieController {
 
 
-
     // ^ Lister les films
 
      public function listFilms() {
@@ -37,7 +36,7 @@ class MovieController {
         $pdo = Connect::seConnecter();
 
         $requetedetailFilm = $pdo->prepare("
-        SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, 
+        SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, movie.movie_synopsys,
         movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres, movie.movie_image
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
@@ -305,13 +304,52 @@ class MovieController {
         // $selectedGenres = array(); // Tableau des genres sélectionnés pour le film en cours d'édition
 
 
-        // vérifier si les tableau renvoient bien des données
+        // vérifier si les tableaux renvoient bien des données
         // var_dump($requeteGenre->fetchAll());die;
         // var_dump($requeteRealisateur->fetchAll());die;
 
         // Si on call l'action d'update > cela l'execute
         if(isset($_POST["updateFilm"])){  
+
             
+            //rajouter iMAGE
+            if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
+
+                // voir upload-img_php pour détail du process
+                $tmpName = $_FILES["movie_image"]["tmp_name"];
+                $name = $_FILES["movie_image"]["name"];
+                $size = $_FILES["movie_image"]["size"];
+                $error = $_FILES["movie_image"]["error"];
+
+                $tabExtension = explode(".", $name); 
+                $extension = strtolower(end($tabExtension)); 
+                $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                $tailleMax = 5242880; // 5 Mo (en octets)
+                
+            
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
+                    $uniqueName = uniqid('', true);
+                    $FileNameUnique = $uniqueName. '.' .$extension;
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
+                    // echo 'Image enregistrée.';
+                    // var_dump($movieImageChemin);die;
+                }
+
+            } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                    $movieImageChemin = NULL;
+                }
+
+
+
             $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -324,7 +362,7 @@ class MovieController {
 
                                 
                 //Update Film
-                $requeteUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, id_director = :director WHERE id_movie= :id");
+                $requeteUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_image =:movieImageChemin, id_director = :director WHERE id_movie= :id");
                 $requeteUpdateFilm->execute([
                     "movie_title" => $movie_title,
                     "movie_release_date" => $movie_release_date,
@@ -332,6 +370,7 @@ class MovieController {
                     "movie_synopsys" => $movie_synopsys,
                     "movie_rating" => $movie_rating,
                     "director" => $director,
+                    "movieImageChemin" => $movieImageChemin,
                     "id" => $id
                 ]);
 
