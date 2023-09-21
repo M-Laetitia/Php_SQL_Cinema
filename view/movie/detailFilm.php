@@ -6,24 +6,76 @@
     $movie = $requetedetailFilm->fetch(); 
     ?>
 
-    <h2> <?= $movie["movie_title"]?> </h2>
+    
+    <div>
+        <p></p>
+    </div>
 
-    <h3>Details : </h3>
+    <div class="container_detail_movie">
+        <h2> <?= $movie["movie_title"]?> </h2>
+        <div class="detail_movie">
+            <div class="image">
+                <figure>
+                    <?php
+                        if($movie["movie_image"] == NULL){
+                            echo "pas d'image";
+                        }
+                        else{
+                        echo "<img src=". $movie["movie_image"] ." width='300'>";
+                        }
+                    ?>
+                </figure>
+            </div>
+            <div class="info">
+                <div class="description">
+                    <ul>
+                        <li> <span class="text_colored ">★</span> <?= $movie["movie_rating"] ?></li>
+                        <li>Genre : <span class="text_colored "></span> </li>
+                        <li>Run Time : <?= $movie["formatted_duration"] ?></li>
+                        <li>Release : <?= $movie["movie_release_date"] ?></li>
+                    </ul>
+                </div>
 
-    <p>Run time : <?= $movie["formatted_duration"] ?></p>
-    <p>Release date: <?= $movie["movie_release_date"] ?></p>
-    <p>Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realisateurComplete"] ?></a></p>
-    <p>Movie rating: <?= $movie["movie_rating"] ?>★</p>
+                <div class="crew">
+                    <ul>
+                        <li>Director : <span class="text_colored"><a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realisateurComplete"] ?></a></span></li>
+                        <li>Actors : 
+                            <?php 
+                                foreach($requeteCastingFilm->fetchAll() as $play) {
+                                ?>  
+
+                                <a href="index.php?action=detailActeur&id=<?= $play["id_actor"] ?>"><?= $play["actorComplete"] . "," ?></a>
+                                <?php
+                                }
+                            ?>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="storyline">
+                <p><span class="text_colored">Storyline</span></p>
+                <textarea readonly> <?= $movie["movie_synopsys"]?>
+                </textarea>
+            </div>
+        </div>
+
+        <div class="edit_delete">
+            <div>
+                <a href="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>"><i class="fa-solid fa-x"></i></a>
+                <a href="index.php?action=updateFilm&id=<?=$movie["id_movie"]?>"> <i class="fa-solid fa-file-pen"></i></a>    
+                    
+            </div>
+        </div>
+
+    </div>
+
+    
+
 
         <!-- ajout de l'affiche' -->
-    <?php
-            if($movie["movie_image"] == NULL){
-                echo "pas d'image";
-            }
-            else{
-            echo "<img src=". $movie["movie_image"] ." width='300'>";
-            }
-    ?>
+ 
 
     
     <?php 
@@ -44,7 +96,7 @@
 
     ?>
 
-    <h3>Casting : </h3>
+    <!-- Casting (actors + roles) : -->
 
     <?php 
     foreach($requeteCastingFilm->fetchAll() as $play) {
@@ -57,23 +109,20 @@
     ?>
 
 
-<div>
-    <a href="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>"> X</a>
-</div>
 
 <div>
-    <a href="index.php?action=updateFilm&id=<?=$movie["id_movie"]?>"> EDIT MOVIE</a>
+    
 </div>
 
 
 
 <?php
 
-$titre = "Movie";
-$titre_secondaire = "Movie detail";
+$titre = "Detail Movie";
 $contenu = ob_get_clean();
-
 
 require "view/template.php";
 
 ?>
+
+

@@ -1,21 +1,41 @@
 <?php ob_start(); ?>
 
-
-<div>
-    <?php 
+<?php 
     $person = $requetedetailActeur->fetch(); 
-    ?>
+?>
 
+<div class="container_detail_actor">
     <h2> <?= $person["acteurComplete"] ?> </h2>
+    <div class="detail_actor">
+        <div class="image">
+            <figure>
+                <img src="#" alt="">
+            </figure>
+        </div>
+        <div class="info">
+            <div class="filmo_role">
+                <ul>
+                    <li>Filmography</li>
+                    <li>Role</li>
+                </ul>
+            </div>
+        </div>
 
-    <p>Born : <?= $person["dateDMY"] ?></p>
-    <p>Age : <?= $person["ActorAge"] ?> years old</p>
-    <p>Gender : <?= $person["person_sexe"] ?> </p>
+        <div class="description">
+            <ul>
+                <li>Born : <span class="text_colored "><?= $person["dateDMY"] ?></span></li>
+                <li>Age : <span class= "text_colored"><?= $person["ActorAge"] ?> years </span></li>
+                <li>Gender : <span class= "text_colored"><?= $person["person_sexe"] ?></span></li>
+            </ul>
+        </div>
+    </div>
 
     
+</div>
 
 
-    <h3>Filmography :</h3>
+<div>
+    
 
     <?php 
     foreach($requeteFilms->fetchAll() as $movie) {
@@ -39,25 +59,9 @@
 
 
 
-<div>
-    <a href="index.php?action=supprimerActeur&id=<?=$person["id_actor"]?>"> DELETE ACTOR</a>
-</div>
-
-<div>
-    <a href="index.php?action=updateActeur&id=<?=$person["id_actor"]?>"> EDIT ACTOR</a>
-</div>
-
-
-
-
 <?php
-
-$titre = "Actor";
-$titre_secondaire = "Actor details";
+$titre = "Detail Actor";
 $contenu = ob_get_clean();
-
-
 require "view/template.php";
-
 ?>
 

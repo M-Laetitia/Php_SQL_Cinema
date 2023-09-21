@@ -8,34 +8,52 @@ pour stocker le contenu dans une variable $contenu -->
 <?php ob_start(); ?>
 
 
-<p class=""> There is/are<?= $requete->rowCount() ?> movie/s </p>
+
+    <div class="container-list-movie">
+        <div class="searchBar"></div>
+
+        <div class="list-movie">
+
+            <?php 
+                foreach($requete->fetchAll() as $movie) { ?>
+
+                <div class="movie-card">
+
+                    <div class="poster">
+                        <img src="#" alt="">
+                    </div>
+
+                    <div class="info">
+                        <div class="primary">
+
+                            <p class="title"><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a><p>
+                            
+                            <p>Genre : </p>
+                            <p><span class="text-colored">★</span></p>
+
+                        </div>
+
+                        <div class="secondary">
+                            <p>Release :</p>
+                            <p>Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></p>
+                        </div>
+                    </div>
+                </div>
+     
+            <?php 
+            } 
+            ?>
 
 
 
-<table class="">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Director</th>
+            
+        </div>
+    </div>
 
-        </tr>
-    </thead>
-    <tbody>
-        <?php 
-        foreach($requete->fetchAll() as $movie) { ?>
-            <tr>
-                <td><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a></td>
-                <td><a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></td>
-            </tr>
-
-        <?php } ?>
-    </tbody>
-</table>
 
 <?php
 
-$titre = "Movie";
-$titre_secondaire = "Movies List";
+$titre = "List movies";
 $contenu = ob_get_clean();
 
 // Le require de fin permet d'injecter le contenu dans le template "squelette" > template.php

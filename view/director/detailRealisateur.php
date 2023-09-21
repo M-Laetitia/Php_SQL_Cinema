@@ -1,13 +1,43 @@
 <?php ob_start(); ?>
 
+<?php 
+    $person = $requetedetailRealisateur->fetch(); 
+?>
+
+<div class="container_detail_director">
+    <h2> <?= $person["realComplete"]?> </h2>
+    <div class="detail_director">
+        <div class="image">
+            <figure>
+                <img src="#" alt="">
+            </figure>
+        </div>
+        <div class="info">
+            <div class="bio-filmo">
+                <ul>
+                    <!-- <li>Biography</li> -->
+                    <li>Filmographie</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="description">
+            <ul>
+                <li>Born : <span class="text_colored "><?= $person["dateDMY"] ?></span></li>
+                <li>Age : <span class= "text_colored"><?= $person["ActorAge"] ?> years </span></li>
+                <li>Gender : <span class= "text_colored"><?= $person["person_sexe"] ?></span></li>
+            </ul>
+        </div>
+    </div>
+
+    
+</div>
+
+
+
 
 <div>
-    <?php 
-    $person = $requetedetailRealisateur->fetch(); 
-    ?>
-
-    <h2> <?= $person["realComplete"]?> </h2>
-
+ 
     <h3>Details : </h3>
 
     <p><?= $person["person_sexe"] ?> </p>
