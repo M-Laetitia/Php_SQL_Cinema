@@ -11,7 +11,7 @@ class ActorController {
         $pdo = Connect::seConnecter();
 
         $requete = $pdo->query(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
-        (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge
+        (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_nationality, person.person_image
         FROM person
         INNER JOIN actor ON person.id_person = actor.id_person
         ");
@@ -23,7 +23,7 @@ class ActorController {
     public function detailActeur($id) {
         $pdo = Connect::seConnecter();
 
-        $requetedetailActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge
+        $requetedetailActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person_nationality, person.person_image
         FROM person
         INNER JOIN actor ON person.id_person = actor.id_person
         WHERE id_actor = :id"
@@ -32,17 +32,18 @@ class ActorController {
         
         // ^ Filmographie de l'acteur
         $requeteFilms = $pdo->prepare("
-        SELECT movie.movie_title , movie.id_movie, actor.id_actor
+        SELECT movie.movie_title , movie.id_movie, actor.id_actor, movie.movie_release_date
         FROM movie
         INNER JOIN play ON play.id_movie = movie.id_movie
         INNER JOIN actor ON actor.id_actor = play.id_actor
         INNER JOIN person ON person.id_person = actor.id_person
+
         WHERE actor.id_actor = :id
         ");
         $requeteFilms->execute(["id" => $id]);
 
         // ^ Rôle/s de l'acteur
-        $requeteRole = $pdo->prepare("SELECT  role.name_role, movie.movie_title, role.id_role, play.id_actor
+        $requeteRole = $pdo->prepare("SELECT  role.name_role, movie.movie_title, role.id_role, play.id_actor, movie.movie_release_date
         FROM play
         INNER JOIN movie ON play.id_movie = movie.id_movie
         INNER JOIN role ON play.id_role = role.id_role
@@ -68,6 +69,42 @@ class ActorController {
     public function ajouterActeur(){
         if(isset($_POST["submitActor"])){
 
+            //rajouter iMAGE
+            if(isset($_FILES["actor_image"])){  // name de l'input dans le formulaire de l'ajout du film
+
+                // voir upload-img_php pour détail du process
+                $tmpName = $_FILES["actor_image"]["tmp_name"];
+                $name = $_FILES["actor_image"]["name"];
+                $size = $_FILES["actor_image"]["size"];
+                $error = $_FILES["actor_image"]["error"];
+
+                $tabExtension = explode(".", $name); 
+                $extension = strtolower(end($tabExtension)); 
+                $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                $tailleMax = 5242880; // 5 Mo (en octets)
+                
+            
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
+                    $uniqueName = uniqid('', true);
+                    $FileNameUnique = $uniqueName. '.' .$extension;
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
+                    // echo 'Image enregistrée.';
+                    // var_dump($movieImageChemin);die;
+                }
+
+            } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                    $movieImageChemin = NULL;
+                }
+            
             
 
             //filter les données entrées dans les différents input
@@ -75,19 +112,22 @@ class ActorController {
             $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $person_birthday = filter_input(INPUT_POST, "person_birthday", FILTER_SANITIZE_SPECIAL_CHARS);
+            $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
             // si filtrées et existantes alors on peut exécuter la requête
             // The INSERT INTO statement is used to insert new records in a table.*
-            if($person_first_name && $person_last_name && $person_sexe && $person_birthday){
+            if($person_first_name && $person_last_name && $person_sexe && $person_birthday && $person_nationality){
                 $pdo = Connect::seConnecter();
-                $requeteAjouterPersonne = $pdo->prepare(" INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday) 
-                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday)
+                $requeteAjouterPersonne = $pdo->prepare(" INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image ) 
+                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin)
                     ");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
                     "person_last_name" => $person_last_name,
                     "person_sexe" => $person_sexe,
                     "person_birthday" => $person_birthday,
+                    "person_nationality" => $person_nationality,
+                    "movieImageChemin" => $movieImageChemin,
                 ]);
 
                 // The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
