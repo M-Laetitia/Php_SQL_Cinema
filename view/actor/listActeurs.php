@@ -1,29 +1,44 @@
 <?php ob_start(); ?>
 
 
-<p class=""> There is/are <?= $requete->rowCount() ?> actor/s : </p>
+<div class="container-list-person">
+        <div class="searchBar"></div>
 
-<table class="">
-    <thead>
-        <tr>
-            <th>Name : </th>
-        </tr>
-    </thead>
-    <tbody>
+        <div class="list-person">
+
         <?php 
         foreach($requete->fetchAll() as $person) { ?>
-            <tr>
-                <td><a href="index.php?action=detailActeur&id=<?= $person["id_actor"] ?>"><?= $person["acteurComplete"] ?></a></td>
-            <tr>
+      
+            <div class="person-card">
+                <div class="portrait">
+                
+                        <?php
+                            if($person["person_image"] == NULL){
+                                echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                            }
+                            else{
+                            echo "<img src=". $person["person_image"] .">";
+                            }
+                        ?>
+          
+                </div>
+                <div class="info">
+                    <p><a href="index.php?action=detailActeur&id=<?= $person["id_actor"] ?>"><?= $person["acteurComplete"] ?></a></p>
+                    <p><?= $person["person_nationality"] . ' - ' . $person["ActorAge"] ?> years</p>
+                </div>
+            </div>
 
-        <?php } ?>
-    </tbody>
-</table>
+        <?php } ?>  
+
+        
+    </div>
+
+
+
 
 <?php
 
-$titre = "Actors";
-$titre_secondaire = "Actors List";
+$titre = "Actors List";
 $contenu = ob_get_clean();
 
 

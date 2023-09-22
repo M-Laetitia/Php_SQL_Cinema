@@ -9,7 +9,14 @@
     <div class="detail_director">
         <div class="image">
             <figure>
-                <img src="#" alt="">
+                    <?php
+                        if($person["person_image"] == NULL){
+                            echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                        }
+                        else{
+                        echo "<img src=". $person["person_image"] .">";
+                        }
+                    ?>
             </figure>
         </div>
         <div class="info">
@@ -19,6 +26,24 @@
                     <li>Filmographie</li>
                 </ul>
             </div>
+
+            <div class="list-filmo_real">
+
+                    
+                <?php 
+                    foreach($requeteFilms->fetchAll() as $movie) {
+                    ?> 
+                    <div class="movie-detail">
+                        <p><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a></p>
+                        <p><?= $movie["movie_release_date"] ?></p>
+                        
+                    </div>   
+                    <?php
+                    }
+                ?>
+
+            </div>
+
         </div>
 
         <div class="description">
@@ -26,45 +51,20 @@
                 <li>Born : <span class="text_colored "><?= $person["dateDMY"] ?></span></li>
                 <li>Age : <span class= "text_colored"><?= $person["ActorAge"] ?> years </span></li>
                 <li>Gender : <span class= "text_colored"><?= $person["person_sexe"] ?></span></li>
+                <li>Nationality : <span class= "text_colored"><?= $person["person_nationality"] ?></span></li>
             </ul>
         </div>
     </div>
 
-    
-</div>
 
 
+    <div class="edit_delete">
+        <div>
+            <a href="index.php?action=supprimerRealisateur&id=<?=$person["id_director"]?>"><i class="fa-solid fa-x"></i></a>
+            <a href="index.php?action=updateRealisateur&id=<?=$person["id_director"]?>"> <i class="fa-solid fa-file-pen"></i></a>    
+        </div>
+    </div>
 
-
-<div>
- 
-    <h3>Details : </h3>
-
-    <p><?= $person["person_sexe"] ?> </p>
-    <p>Date de naissance : <?= $person["dateDMY"] ?></p>
-    <p>Age : <?= $person["ActorAge"] ?></p>
-
-    <h2>Filmography</h2>
-
-    <?php 
-    foreach($requeteFilms->fetchAll() as $movie) {
-    ?> 
-    <p><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"] ?></a><p>   
-    <?php
-    }
-    ?>
-
-</div>
-
-
-
-<div>
-    <a href="index.php?action=supprimerRealisateur&id=<?=$person["id_director"]?>"> X </a>
-</div>
-
-<div>
-    <a href="index.php?action=updateRealisateur&id=<?=$person["id_director"]?>"> EDIT DIRECTOR</a>
-</div>
 
 
 
