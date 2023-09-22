@@ -17,28 +17,34 @@ pour stocker le contenu dans une variable $contenu -->
             <?php 
                 foreach($requete->fetchAll() as $movie) { ?>
 
-                <div class="movie-card">
+                    <div class="movie-card">
 
-                    <div class="poster">
-                        <img src="#" alt="">
-                    </div>
-
-                    <div class="info">
-                        <div class="primary">
-
-                            <p class="title"><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a><p>
-                            
-                            <p>Genre : </p>
-                            <p><span class="text-colored">★</span></p>
-
+                        <div class="poster">
+                            <?php
+                                if($movie["movie_image"] == NULL){
+                                    echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                                }
+                                else{
+                                echo "<img src=". $movie["movie_image"] .">";
+                                }
+                            ?> 
                         </div>
 
-                        <div class="secondary">
-                            <p>Release :</p>
-                            <p>Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></p>
+                        <div class="info">
+                            <div class="primary">
+
+                                <p class="title"><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a><p>
+                                <p><span class="text-colored">★</span> <?= $movie["movie_rating"] ?></p>
+            
+                            </div>
+
+                            <div class="secondary">
+                                <p>Run Time : <?= $movie["formatted_duration"]?></p>
+                                <p>Release : <?= $movie["movie_release_date"]?></p>
+                                <p class="director">Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></p>
+                            </div>
                         </div>
                     </div>
-                </div>
      
             <?php 
             } 
