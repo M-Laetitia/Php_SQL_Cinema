@@ -11,7 +11,8 @@ class DirectorController {
         public function listRealisateurs() {
             $pdo = Connect::seConnecter();
                 $requete = $pdo->query("
-                SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, person.person_birthday
+                SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, person.person_nationality,  DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
+                (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_image
                 FROM person
                 INNER JOIN director ON person.id_person = director.id_person
                 ");
@@ -27,7 +28,7 @@ class DirectorController {
         public function detailRealisateur($id) {
             $pdo = Connect::seConnecter();
             $requetedetailRealisateur = $pdo->prepare("
-            SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe
+            SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe, person.person_nationality, person.person_image
             FROM person
             INNER JOIN director ON person.id_person = director.id_person
             WHERE id_director = :id"
@@ -70,11 +71,49 @@ class DirectorController {
     public function ajouterRealisateur(){
         if(isset($_POST["submitRealisateur"])){
 
+            //rajouter iMAGE
+            if(isset($_FILES["director_image"])){  // name de l'input dans le formulaire de l'ajout du film
+
+                // voir upload-img_php pour détail du process
+                $tmpName = $_FILES["director_image"]["tmp_name"];
+                $name = $_FILES["director_image"]["name"];
+                $size = $_FILES["director_image"]["size"];
+                $error = $_FILES["director_image"]["error"];
+
+                $tabExtension = explode(".", $name); 
+                $extension = strtolower(end($tabExtension)); 
+                $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                $tailleMax = 5242880; // 5 Mo (en octets)
+                
+            
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
+                    $uniqueName = uniqid('', true);
+                    $FileNameUnique = $uniqueName. '.' .$extension;
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
+                    // echo 'Image enregistrée.';
+                    // var_dump($movieImageChemin);die;
+                }
+
+            } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                    $movieImageChemin = NULL;
+                }
+            
+
             //filter les données entrées dans les différents input
             $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $person_birthday = filter_input(INPUT_POST, "person_birthday", FILTER_SANITIZE_SPECIAL_CHARS);
+            $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
             // si filtrées et existantes alors on peut exécuter la requête
 
@@ -82,14 +121,16 @@ class DirectorController {
             if($person_first_name && $person_last_name && $person_sexe && $person_birthday){
                 $pdo = Connect::seConnecter();
                 $requeteAjouterPersonne = $pdo->prepare(" 
-                    INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday) 
-                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday)
+                    INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image) 
+                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin)
                     ");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
                     "person_last_name" => $person_last_name,
                     "person_sexe" => $person_sexe,
                     "person_birthday" => $person_birthday,
+                    "person_nationality" => $person_nationality,
+                    "movieImageChemin" => $movieImageChemin,
                     
                 ]);
 
