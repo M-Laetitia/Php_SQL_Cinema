@@ -1,37 +1,25 @@
 <?php ob_start(); ?>
 
+<div class="container-list">
+    <div class="searchBar"></div>
 
-<p class=""> Il y a <?= $requete->rowCount() ?> genre/s </p>
+    <div class="list-genre">
 
-<table class="">
-    <thead>
-        <tr>
-            <th>Genre</th>
-          
-
-
-        </tr>
-    </thead>
-    <tbody>
         <?php 
-        foreach($requete->fetchAll() as $genre) { ?>
-            <tr>
-                <td><a href="index.php?action=detailGenre&id=<?= $genre["id_genre"]?>"><?= $genre["label_genre"]?></a></td>
-            
+            foreach($requete->fetchAll() as $genre) { ?>
+                <div class="element-list">
+                    <p><a href="index.php?action=detailGenre&id=<?= $genre["id_genre"]?>"><?= $genre["label_genre"]?></a><p>
 
-            <tr>
-
-        <?php } ?>
-    </tbody>
-</table>
+                    <p><span class="text-highlight"><?= $genre["nb_movie"]?></span> Movie/s</p>
+                </div>
+        <?php 
+            } 
+        ?>
+    </div>
 
 <?php
-
-$titre = "Liste des genres";
-$titre_secondaire = "Liste des genres";
+$titre = "Genres List";
 $contenu = ob_get_clean();
-
-
 require "view/template.php";
-
 ?>
+
