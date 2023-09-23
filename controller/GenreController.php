@@ -1,5 +1,4 @@
 <?php
-
 namespace Controller;
 use Model\Connect;
 
@@ -8,12 +7,13 @@ class GenreController {
     
     // ^ Lister les genres
     
-
     public function listGenres() {
         $pdo = Connect::seConnecter();
-            $requete = $pdo->query("
-            SELECT genre.label_genre, genre.id_genre
+            $requete = $pdo->query(" SELECT genre.label_genre, genre.id_genre,  COUNT(categorise.id_movie) AS nb_movie
             FROM genre
+            INNER JOIN categorise ON categorise.id_genre = genre.id_genre
+            GROUP BY genre.id_genre, genre.label_genre
+            ORDER BY nb_movie DESC
             ");
 
             require "view/genre/listGenres.php";       
