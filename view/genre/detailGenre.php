@@ -1,45 +1,60 @@
 <?php ob_start(); ?>
 
+<?php $genre = $requeteGenre->fetch();?>
 
-<div>
-    <?php
-        $genre = $requeteGenre->fetch();
-    ?>
-        <h2><?= $genre["label_genre"] ?></h2>
-        <h3>Movies related : </h3>
+<div class="container container-genre">
+    <h1><?= $genre["label_genre"] ?></h1>
 
-
-    <?php 
-    foreach($requeteDetailGenre->fetchAll() as $genre) {
-    ?>
-    <p><a href="index.php?action=detailFilm&id=<?= $genre["id_movie"]?>"><?= $genre["movie_title"]?></a></p>
-    <?php
-    }
-    ?>
-
-</div>
-
-    <div>
-    <a href="index.php?action=supprimerGenre&id=<?=$genre["id_genre"]?>">X</a>
+    <div class="edit_delete">
+        <div><a href="index.php?action=supprimerGenre&id=<?=$genre["id_genre"]?>"><i class="fa-solid fa-x"></i></a></div>
+        <div><a href="index.php?action=updateGenre&id=<?=$genre["id_genre"]?>"><i class="fa-solid fa-file-pen"></i></a></div>
     </div>
 
+    <div class="list">
 
-    <div>
-    <a href="index.php?action=updateGenre&id=<?=$genre["id_genre"]?>"> EDIT  genre</a>
+        <?php foreach($requeteDetailGenre->fetchAll() as $genre) {
+            ?>
+
+            <div class="card">
+                <figure>
+                    <?php
+                        if($genre["movie_image"] == NULL){
+                            echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                        }
+                        else{
+                        echo "<img src=". $genre["movie_image"] .">";
+                        }
+                    ?> 
+                </figure>
+
+                <div class="info">
+                    <p><a href="index.php?action=detailFilm&id=<?= $genre["id_movie"]?>"><?= $genre["movie_title"]?></a></p>
+                    <p><a href="index.php?action=detailRealisateur&id=<?= $genre["id_director"]?>"><?= $genre["directorComplete"]?></a></p>
+                </div>
+            </div>
+
+        <?php
+            }
+        ?>
+
+
+    </div>
 </div>
+
+
+    
+
+    
+
+
 
 
 
 
 <?php
-
-$titre = "Genre";
-$titre_secondaire = "Detail genre";
+$titre = "List Genre";
 $contenu = ob_get_clean();
-
 require "view/template.php";
-
-
 ?>
 
 
