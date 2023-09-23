@@ -25,7 +25,7 @@ pour stocker le contenu dans une variable $contenu -->
                                     echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
                                 }
                                 else{
-                                echo "<img src=". $movie["movie_image"] .">";
+                                    echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="' . $movie["movie_image"] . '"></a>';
                                 }
                             ?> 
                         </div>
