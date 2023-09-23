@@ -13,14 +13,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="./public/css/style.css">
+    <link rel="stylesheet" href="./public/css/style-form.css">
+    <link rel="stylesheet" href="./public/css/style-listing.css">
+    <link rel="stylesheet" href="./public/css/style-detail.css">
 
 
     <title><?= $titre ?></title>
 </head>
-<body>
+
+<body id="movie_background">
 
     <header>
-        <div class="logo"><img src="./public/Images/logo2.png" alt="logo CineVault"></div>
+        <div class="logo"><img src="./public/Images/logo.png" alt="logo CineVault"></div>
+        
         <nav>
             <div class="primary-navigation">
                 <ul>
@@ -31,8 +36,25 @@
                     <li><a href="index.php?action=listRoles"> Role</a></li>
                 </ul>
             </div>
+
+            <div class="dropdown">
+                <div class="dropdown">
+                    <span>Contribute <i class="fa-solid fa-angle-down" style="color: #e03058;"></i></span>
+                    <div class="dropdown-content">
+                        <p><a href="index.php?action=getAjouterFilm">Add Movie</a></p>
+                        <p><a href="index.php?action=getAjouterGenre">Add Genre</a></p>
+                        <p><a href="index.php?action=getAjouterRole">Add Role</a></p>
+                        <p><a href="index.php?action=getAjouterActeur">Add Actor</a></p>
+                        <p><a href="index.php?action=getAjouterRealisateur">Add Director</a></p>
+                        <p><a href="index.php?action=getAjouterCasting">Add Casting</a></p>
+                    </div>
+                </div>
+            </div>
+           
+
             <div class="nav-search">
                 <p>Search</p>
+                
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </nav>
@@ -40,36 +62,18 @@
 
 
 
-    <!-- <header>
-        <nav>
-            <ul>
-                <li>
-                    <select onchange="location = this.value;">
-                        <option>--ADD INFOS</option>
-                        <option value="index.php?action=getAjouterFilm">ADD MOVIES</option>
-                        <option value="index.php?action=getAjouterGenre">ADD GENRES</option>
-                        <option value="index.php?action=getAjouterRole">ADD ROLES</option>
-                        <option value="index.php?action=getAjouterActeur">ADD ACTORS</option>
-                        <option value="index.php?action=getAjouterRealisateur">ADD DIRECTORS</option>
-                        <option value="index.php?action=getAjouterCasting">ADD CASTING</option>
-                    </select>
-                </li>
-                
-            </ul>
-        </nav>
-    </header> -->
-
-    <footer>
-        <div>
-            <p><span id="date"></span></p>
-        </div>
-    </footer>
-
-
     <main>
         <?= $contenu ?> 
     </main>
 
+
+    <footer>
+        <div>
+            <p>&copy;<script>document.write(new Date().getFullYear());</script> <span class="text-colored">Cine</span>Vault</p>
+        </div>
+    </footer>
+
+    <script src="./public/js/script.js"></script>
 
     
 </body>
