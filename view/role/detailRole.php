@@ -1,30 +1,46 @@
 <?php ob_start(); ?>
 
 
-<div>
-    <?php 
-    $role = $requeteDetailRole->fetch(); 
-    ?>
 
-    <h3> <?= $role["name_role"]?> </h3>
+<?php $role = $requeteDetailRole->fetch();?>
 
-    <h4>Details : </h4>
+<div class="container container-genre">
+    <h1> <?= $role["name_role"]?></h1>
+
+    <div class="edit_delete">
+        <div><a href="index.php?action=supprimerRole&id=<?=$role["id_role"]?>"><i class="fa-solid fa-x"></i></a></div>
+        <div><a href="index.php?action=updateRole&id=<?=$role["id_role"]?>"><i class="fa-solid fa-file-pen"></i></a></div>
+    </div>
+
+    <div class="list">
+
+        <?php foreach($requeteDetailRole->fetchAll() as $role) {
+            ?>
+
+            <div class="card">
+                <figure>
+                    <?php
+                        if($role["person_image"] == NULL){
+                            echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                        }
+                        else{
+                        echo "<img src=". $role["person_image"] .">";
+                        }
+                    ?> 
+                </figure>
+
+                <div class="info">
+                <p><a href="index.php?action=detailActeur&id=<?= $role["id_actor"] ?>"><?= $role["actorComplete"] ?></a></p>
+                <p><a href="index.php?action=detailFilm&id=<?= $role["id_movie"]?>"><?= $role["movie_title"]?></a></p>
+                </div>
+            </div>
+
+        <?php
+            }
+        ?>
 
 
-    <p>Actor :<a href="index.php?action=detailActeur&id=<?= $role["id_actor"] ?>"><?= $role["actorComplete"] ?></a></p>
-    <p>Movie : <a href="index.php?action=detailFilm&id=<?= $role["id_movie"]?>"><?= $role["movie_title"]?></a></p>
-
-
-</div>
-
-
-
-<div>
-    <a href="index.php?action=supprimerRole&id=<?=$role["id_role"]?>"> X</a>
-</div>
-
-<div>
-    <a href="index.php?action=updateRole&id=<?=$role["id_role"]?>"> EDIT  ROLE</a>
+    </div>
 </div>
 
 
