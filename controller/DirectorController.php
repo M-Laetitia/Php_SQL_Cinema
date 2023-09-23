@@ -181,7 +181,7 @@ class DirectorController {
 
          public function updateRealisateur($id) {
             $pdo = Connect::seConnecter();
-            $requeteUpdateRealisateur = $pdo->prepare(" SELECT director.id_director, CONCAT(person.person_first_name, ' ', person.person_last_name) AS directorComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name
+            $requeteUpdateRealisateur = $pdo->prepare(" SELECT director.id_director, CONCAT(person.person_first_name, ' ', person.person_last_name) AS directorComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name, person.person_nationality
             FROM director
             INNER JOIN person ON person.id_person = director.id_person
             WHERE director.id_director = :id
@@ -189,17 +189,54 @@ class DirectorController {
             $requeteUpdateRealisateur->execute(["id"=>$id]);
 
             if(isset($_POST["updateDirector"])){ 
+                //rajouter iMAGE
+                if(isset($_FILES["director_image"])){  // name de l'input dans le formulaire de l'ajout du film
+
+                    // voir upload-img_php pour détail du process
+                    $tmpName = $_FILES["director_image"]["tmp_name"];
+                    $name = $_FILES["director_image"]["name"];
+                    $size = $_FILES["director_image"]["size"];
+                    $error = $_FILES["director_image"]["error"];
+
+                    $tabExtension = explode(".", $name); 
+                    $extension = strtolower(end($tabExtension)); 
+                    $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                    $tailleMax = 5242880; // 5 Mo (en octets)
+                    
+                
+                    if ($error != 0) {
+                        echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                    } elseif (!in_array($extension, $extensionsAutorisees)) {
+                        echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                    } elseif ($size > $tailleMax) {
+                        echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                    } else {
+                        // L'image est valide, on procède au traitement
+                        $uniqueName = uniqid('', true);
+                        $FileNameUnique = $uniqueName. '.' .$extension;
+                        move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                        $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
+                        // echo 'Image enregistrée.';
+                        // var_dump($movieImageChemin);die;
+                    }
+
+                } else {
+                        /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                        $movieImageChemin = NULL;
+                    }
+                
 
                     $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
                     $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
                     $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                     $person_birthday = filter_input(INPUT_POST, "person_birthday", FILTER_SANITIZE_SPECIAL_CHARS);
+                    $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
-                if($person_first_name !== false  && $person_last_name !== false  && $person_sexe !== false  && $person_birthday !== false ){
+                if($person_first_name !== false  && $person_last_name !== false  && $person_sexe !== false  && $person_birthday !== false  && $person_nationality !== false){
                     $pdo = Connect::seConnecter();
                     $requeteAjouterPersonne = $pdo->prepare(" UPDATE person
                     INNER JOIN director ON director.id_person = person.id_person
-                    SET person_first_name = :person_first_name, person_last_name = :person_last_name, person_sexe = :person_sexe, person_birthday = :person_birthday
+                    SET person_first_name = :person_first_name, person_last_name = :person_last_name, person_sexe = :person_sexe, person_birthday = :person_birthday, person_nationality = :person_nationality, person_image =:movieImageChemin
                     WHERE director.id_director = :id
                         ");
                     $requeteAjouterPersonne ->execute([
@@ -208,6 +245,8 @@ class DirectorController {
                         "person_sexe" => $person_sexe,
                         "person_birthday" => $person_birthday,
                         "id" => $id,
+                        "person_nationality" => $person_nationality,
+                        "movieImageChemin" => $movieImageChemin,
                         
                     ]);
 
