@@ -1,6 +1,5 @@
-<?php ob_start(); ?>
-
-<?php $genre = $requeteGenre->fetch();?>
+<?php ob_start();
+$genre = $requeteGenre->fetch();?>
 
 <div class="container container-genre">
     <h1><?= $genre["label_genre"] ?></h1>
@@ -11,19 +10,16 @@
     </div>
 
     <div class="list">
-
-        <?php foreach($requeteDetailGenre->fetchAll() as $genre) {
-            ?>
-
+        <?php foreach($requeteDetailGenre->fetchAll() as $genre) { ?>
             <div class="card">
                 <figure>
                     <?php
-                        if($genre["movie_image"] == NULL){
-                            echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
-                        }
-                        else{
-                        echo "<img src=". $genre["movie_image"] .">";
-                        }
+                    if($genre["movie_image"] == NULL){
+                        echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                    }
+                    else{
+                    echo "<img src=". $genre["movie_image"] .">";
+                    }
                     ?> 
                 </figure>
 
@@ -32,29 +28,12 @@
                     <p><a href="index.php?action=detailRealisateur&id=<?= $genre["id_director"]?>"><?= $genre["directorComplete"]?></a></p>
                 </div>
             </div>
-
-        <?php
-            }
-        ?>
-
-
+        <?php } ?>
     </div>
 </div>
-
-
-    
-
-    
-
-
-
-
-
 
 <?php
 $titre = "List Genre";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>
-
-
