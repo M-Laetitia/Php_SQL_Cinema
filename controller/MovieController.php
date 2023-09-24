@@ -78,17 +78,18 @@ class MovieController {
 
         if(isset($_POST["submitFilm"])) {
 
-            if(isset($_FILES["movie_image"])){
+            //rajouter iMAGE
+            if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
+                // voir upload-img_php pour détail du process
                 $tmpName = $_FILES["movie_image"]["tmp_name"];
                 $name = $_FILES["movie_image"]["name"];
                 $size = $_FILES["movie_image"]["size"];
                 $error = $_FILES["movie_image"]["error"];
-
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880;
-                
+                $tailleMax = 5242880; // 5 Mo (en octets)
+            
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
                 } elseif (!in_array($extension, $extensionsAutorisees)) {
@@ -96,15 +97,18 @@ class MovieController {
                 } elseif ($size > $tailleMax) {
                     echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
                 } else {
+                    // L'image est valide, on procède au traitement
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
                     $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
                 }
+
             } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }
-
+            
                 $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
                 $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
                 $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -112,20 +116,23 @@ class MovieController {
                 $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
                 $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
                 $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $movie_country = filter_input(INPUT_POST, "movie_country", FILTER_SANITIZE_SPECIAL_CHARS);
 
-                if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director) {
-                    
-                $requeteAjouterFilm = $pdo->prepare("INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, movie_image, id_director)
-                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :movieImageChemin, :director)
-                ");
-                $requeteAjouterFilm ->execute([
-                    "movie_title"=> $movie_title, 
-                    "movie_duration"=> $movie_duration, 
-                    "movie_release_date"=> $movie_release_date, 
-                    "movie_synopsys"=> $movie_synopsys, 
-                    "movie_rating"=> $movie_rating,
-                    "director" => $director,
-                    "movieImageChemin" => $movieImageChemin,
+                if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director && $movie_country) {
+                    $pdo = Connect::seConnecter();   
+                    $requeteAjouterFilm = $pdo->prepare("INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, movie_image, id_director, movie_country)
+                        VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :movieImageChemin, :director, :movie_country)
+                    ");
+                    $requeteAjouterFilm ->execute([
+                        "movie_title"=> $movie_title, 
+                        "movie_duration"=> $movie_duration, 
+                        "movie_release_date"=> $movie_release_date, 
+                        "movie_synopsys"=> $movie_synopsys, 
+                        "movie_rating"=> $movie_rating,
+                        "movieImageChemin" => $movieImageChemin,
+                        "director" => $director,
+                        "movie_country" => $movie_country,
+                        
                 ]);
 
                 $requeteGenre = $pdo->query("SELECT id_genre, label_genre FROM genre");
@@ -277,13 +284,13 @@ class MovieController {
             $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
-            // $movie_image  = filter_input(INPUT_POST, "movie_image", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_URL);
             $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
             $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
+            $movie_country = filter_input(INPUT_POST, "movie_country", FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director !== false ) {    
+            if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director !== false && $movie_country !== false) {    
                 //Update Film
-                $requeteUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_image =:movieImageChemin, id_director = :director WHERE id_movie= :id");
+                $requeteUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_image =:movieImageChemin, id_director = :director WHERE id_movie= :id, movie_country = :movie_country");
                 $requeteUpdateFilm->execute([
                     "movie_title" => $movie_title,
                     "movie_release_date" => $movie_release_date,
@@ -292,6 +299,7 @@ class MovieController {
                     "movie_rating" => $movie_rating,
                     "director" => $director,
                     "movieImageChemin" => $movieImageChemin,
+                    "movie_country" => $movie_country,
                     "id" => $id
                 ]);
 
