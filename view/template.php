@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,6 @@
     <link rel="stylesheet" href="./public/css/style-form.css">
     <link rel="stylesheet" href="./public/css/style-listing.css">
     <link rel="stylesheet" href="./public/css/style-detail.css">
-
 
     <title><?= $titre ?></title>
 </head>
@@ -54,31 +54,25 @@
 
             <div class="nav-search">
                 <p>Search</p>
-                
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
+
         </nav>
+        
     </header>
-
-
 
     <main>
         <?= $contenu ?> 
     </main>
 
-
-    <footer>
+    <!-- <footer>
         <div>
             <p>&copy;<script>document.write(new Date().getFullYear());</script> <span class="text-colored">Cine</span>Vault</p>
         </div>
-    </footer>
+    </footer> -->
 
     <script src="./public/js/script.js"></script>
 
-    
 </body>
 
 </html>
-
-
-

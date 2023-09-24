@@ -2,9 +2,7 @@
 // localhost/molin/Php_SQL_Cinema/index.php?action=listFilms
 //localhost/molin/Php_SQL_Cinema/index.php?action=listActeurs
 //localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailActeur&id=1
-
 //localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailRole&id=2
-
 
 // On "use" le controller Cinema
 use Controller\MovieController;
@@ -12,7 +10,6 @@ use Controller\ActorController;
 use Controller\DirectorController;
 use Controller\GenreController; 
 use Controller\RoleController; 
-
 
 // On autocharge les classes du projet
 spl_autoload_register(function ($class_name) {
@@ -25,7 +22,6 @@ $ctrlActor = new ActorController();
 $ctrlDirector = new DirectorController();
 $ctrlGenre = new GenreController();
 $ctrlRole = new RoleController();
-
 
 // En fonction de l'action détectée dans l'URL via la propriété "action" on interagit avec
 // la bonne méthode du controller
@@ -45,11 +41,7 @@ if(isset($_GET["action"])) {
         case "ajouterCasting" : $ctrlMovie->ajouterCasting(); break; 
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
-        
-
-        //modifier casting
-  
-
+ 
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
         case "detailActeur" : $ctrlActor->detailActeur($id); break;
@@ -57,9 +49,6 @@ if(isset($_GET["action"])) {
         case "supprimerActeur" : $ctrlActor->supprimerActeur($id); break;
         case "getAjouterActeur" : $ctrlActor->getAjouterActeur(); break;
         case "updateActeur" : $ctrlActor->updateActeur($id); break; 
-
-
-
 
         // DIRECTOR
         case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
@@ -69,9 +58,6 @@ if(isset($_GET["action"])) {
         case "getAjouterRealisateur" : $ctrlDirector->getAjouterRealisateur(); break;
         case "updateRealisateur" : $ctrlDirector->updateRealisateur($id); break; 
 
-        
-     
-
         // GENRE
         case "listGenres" : $ctrlGenre->listGenres(); break;
         case "detailGenre" : $ctrlGenre->detailGenre($id); break;
@@ -80,7 +66,6 @@ if(isset($_GET["action"])) {
         case "getAjouterGenre" : $ctrlGenre->getAjouterGenre(); break;
         case "updateGenre" : $ctrlGenre->updateGenre($id); break;
 
-
         // ROLE
         case "listRoles" : $ctrlRole->listRoles(); break;
         case "detailRole" : $ctrlRole->detailRole($id); break;
@@ -88,17 +73,6 @@ if(isset($_GET["action"])) {
         case "supprimerRole" : $ctrlRole->supprimerRole($id); break;
         case "getAjouterRole" : $ctrlRole->getAjouterRole(); break;
         case "updateRole" : $ctrlRole->updateRole($id); break;
-
-
-        
-        
     }
-    
 }
-
 ?>
-
-
-<!-- 
-Piste dans "index.php" pour afficher le détail d'un film par exemple, c'est encore une fois
-l'URL qui fera passer un "id" en paramètre -->
