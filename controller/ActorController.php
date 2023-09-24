@@ -1,15 +1,12 @@
 <?php
-
 namespace Controller;
 use Model\Connect;
 
 class ActorController {
 
-    
     // ^ Lister les acteurs
     public function listActeurs() {
         $pdo = Connect::seConnecter();
-
         $requete = $pdo->query(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
         (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_nationality, person.person_image
         FROM person
@@ -22,7 +19,6 @@ class ActorController {
     // ^ Afficher le détail d'un acteur
     public function detailActeur($id) {
         $pdo = Connect::seConnecter();
-
         $requetedetailActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person_nationality, person.person_image
         FROM person
         INNER JOIN actor ON person.id_person = actor.id_person
@@ -31,8 +27,7 @@ class ActorController {
         $requetedetailActeur->execute(["id" => $id]);
         
         // ^ Filmographie de l'acteur
-        $requeteFilms = $pdo->prepare("
-        SELECT movie.movie_title , movie.id_movie, actor.id_actor, movie.movie_release_date
+        $requeteFilms = $pdo->prepare("SELECT movie.movie_title , movie.id_movie, actor.id_actor, movie.movie_release_date
         FROM movie
         INNER JOIN play ON play.id_movie = movie.id_movie
         INNER JOIN actor ON actor.id_actor = play.id_actor
@@ -71,18 +66,15 @@ class ActorController {
 
             //rajouter iMAGE
             if(isset($_FILES["actor_image"])){  // name de l'input dans le formulaire de l'ajout du film
-
                 // voir upload-img_php pour détail du process
                 $tmpName = $_FILES["actor_image"]["tmp_name"];
                 $name = $_FILES["actor_image"]["name"];
                 $size = $_FILES["actor_image"]["size"];
                 $error = $_FILES["actor_image"]["error"];
-
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
                 $tailleMax = 5242880; // 5 Mo (en octets)
-                
             
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
@@ -96,8 +88,6 @@ class ActorController {
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
                     $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
-                    // echo 'Image enregistrée.';
-                    // var_dump($movieImageChemin);die;
                 }
 
             } else {
@@ -105,8 +95,6 @@ class ActorController {
                     $movieImageChemin = NULL;
                 }
             
-            
-
             //filter les données entrées dans les différents input
             $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -129,12 +117,10 @@ class ActorController {
                     "person_nationality" => $person_nationality,
                     "movieImageChemin" => $movieImageChemin,
                 ]);
-
                 // The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
                 // The INSERT INTO SELECT statement requires that the data types in source and target tables match.
                 // LAST_INSERT_ID() Function Return the AUTO_INCREMENT id of the last row that has been inserted or updated in a table: SELECT LAST_INSERT_ID();
                 $id_acteur = $pdo->lastInsertID();
-                
                 $requeteAjouterActeur = $pdo->prepare("
                     INSERT INTO actor (id_person)
                     VALUES (:id_actor)
@@ -145,14 +131,12 @@ class ActorController {
                 ]);  
             }  
         }
-        // require "view/actor/ajouterActeur.php";
         header("Location: index.php?action=listActeurs");
     }
 
     // ^ Supprimer un acteur 
     public function supprimerActeur($id) {
         $pdo = Connect::seConnecter();
-        // if(isset($_POST['deleteActor'])) {
 
         if (isset($id) && is_numeric($id)) {
             // d'abord supprimer les clés étrangères
@@ -162,7 +146,7 @@ class ActorController {
             $requeteSupprimerActor1 = $pdo->prepare("DELETE FROM actor WHERE id_actor = :id");
             $requeteSupprimerActor1->execute(["id" => $id]);
         }
-            header("Location: index.php?action=listActeurs");
+        header("Location: index.php?action=listActeurs");
     }
 
     // ^ Editer un acteur 
@@ -177,21 +161,16 @@ class ActorController {
 
         if(isset($_POST["updateActor"])){ 
 
-            //rajouter iMAGE
-            if(isset($_FILES["actor_image"])){  // name de l'input dans le formulaire de l'ajout du film
-
-                // voir upload-img_php pour détail du process
+            if(isset($_FILES["actor_image"])){ 
                 $tmpName = $_FILES["actor_image"]["tmp_name"];
                 $name = $_FILES["actor_image"]["name"];
                 $size = $_FILES["actor_image"]["size"];
                 $error = $_FILES["actor_image"]["error"];
-
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880; // 5 Mo (en octets)
+                $tailleMax = 5242880; 
                 
-            
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
                 } elseif (!in_array($extension, $extensionsAutorisees)) {
@@ -199,23 +178,15 @@ class ActorController {
                 } elseif ($size > $tailleMax) {
                     echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
                 } else {
-                    // L'image est valide, on procède au traitement
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
                     $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
-                    // echo 'Image enregistrée.';
-                    // var_dump($movieImageChemin);die;
                 }
-
             } else {
-                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }
             
-
-
-
             $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_sexe = filter_input(INPUT_POST, "person_sexe", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -237,12 +208,10 @@ class ActorController {
                     "movieImageChemin" => $movieImageChemin,
                     "id" => $id,
                 ]);
-
                 header("Location: index.php?action=listActeurs");
             }
         }
     require "view/actor/updateActeur.php" ;
     }
 }
-
 ?>
