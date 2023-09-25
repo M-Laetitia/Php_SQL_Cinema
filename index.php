@@ -10,6 +10,9 @@ use Controller\ActorController;
 use Controller\DirectorController;
 use Controller\GenreController; 
 use Controller\RoleController; 
+use Controller\SearchController;
+use Controller\UserController;
+
 
 // On autocharge les classes du projet
 spl_autoload_register(function ($class_name) {
@@ -22,6 +25,8 @@ $ctrlActor = new ActorController();
 $ctrlDirector = new DirectorController();
 $ctrlGenre = new GenreController();
 $ctrlRole = new RoleController();
+$ctrlSearch = new SearchController();
+$ctrlUser = new UserController();
 
 // En fonction de l'action détectée dans l'URL via la propriété "action" on interagit avec
 // la bonne méthode du controller
@@ -32,6 +37,21 @@ $id=(isset($_GET["id"])) ? $_GET["id"] : null;
 if(isset($_GET["action"])) {
     switch ($_GET["action"]) {
 
+        // USER 
+
+        // case "user" : $ctrlUser->user(); break;
+        // case "userSession" : $ctrlUser->userSession($id_utilisateur); break;
+        // case "deleteAccount" : $ctrlUser->deleteAccount($id_utilisateur);break;
+        
+
+        case "register" : $ctrlUser->register(); break;
+        case "login" : $ctrlUser->login(); break;
+        // case "logout" : $ctrlUser->logout(); break;
+
+
+        // SEARCH
+        case "search" : $ctrlSearch->search(); break;
+
         // MOVIE
         case "listFilms" : $ctrlMovie->listFilms(); break;
         case "detailFilm" : $ctrlMovie->detailFilm($id); break;
@@ -41,6 +61,10 @@ if(isset($_GET["action"])) {
         case "ajouterCasting" : $ctrlMovie->ajouterCasting(); break; 
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
+
+        case "landingPage" : $ctrlMovie->landingPage(); break;
+        // case "searching" : $ctrlMovie->searching(); break;
+        
  
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
