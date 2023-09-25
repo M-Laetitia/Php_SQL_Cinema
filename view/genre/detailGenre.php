@@ -12,16 +12,18 @@ $genre = $requeteGenre->fetch();?>
     <div class="list">
         <?php foreach($requeteDetailGenre->fetchAll() as $genre) { ?>
             <div class="card">
-                <figure>
+                <div class="poster">
                     <?php
                     if($genre["movie_image"] == NULL){
-                        echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                        // echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                        echo '<a href="index.php?action=detailFilm&id=' . $genre["id_movie"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
                     }
                     else{
-                    echo "<img src=". $genre["movie_image"] .">";
+                    // echo "<img src=". $genre["movie_image"] .">";
+                    echo '<a href="index.php?action=detailFilm&id=' . $genre["id_movie"] . '"><img src="' . $genre["movie_image"] . '"></a>';
                     }
                     ?> 
-                </figure>
+                </div>
 
                 <div class="info">
                     <p><a href="index.php?action=detailFilm&id=<?= $genre["id_movie"]?>"><?= $genre["movie_title"]?></a></p>
