@@ -1,21 +1,26 @@
 <?php
-
-
-
 // On remarquera ici l'utilisation du "use" pour accéder à la classe Connect située dans le
 // namespace "Model"
 namespace Controller;
 use Model\Connect;
 
+// Ajoutez ces lignes pour activer l'affichage des erreurs
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+// ini_set('file_uploads', 'On');
 
 class MovieController {
 
-
-
+    // ^ landing page 
+    public function landingPage(){
+        require "view/landingPage/landingPage.php";
+    }
+   
+    
     // ^ Lister les films
-
-     public function listFilms() {
-
+    public function listFilms() {
         // On se connecte
         $pdo = Connect::seConnecter();
         // On exécute la requête de notre choix
@@ -24,16 +29,12 @@ class MovieController {
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
-
         ");
-
         // On relie par un "require" la vue qui nous intéresse (située dans le dossier "view")
         require "view/movie/listFilms.php";
     }
 
-
-     // ^ Détail d'un film
-
+    // ^ Détail d'un film
     public function detailFilm($id){
         $pdo = Connect::seConnecter();
 
@@ -74,9 +75,8 @@ class MovieController {
         require "view/movie/detailFilm.php";
     }
 
-      // ^ Aller à la page d'ajout d'un film
-
-      public function getAjouterFilm(){
+    // ^ Aller à la page d'ajout d'un film
+    public function getAjouterFilm(){
         $pdo = Connect::seConnecter(); 
         $requeteRealisateur = $pdo->query("SELECT CONCAT(person.person_first_name, ' ' , person.person_last_name) AS directorComplete, director.id_director
         FROM director
@@ -91,46 +91,44 @@ class MovieController {
     }
 
 
-     // ^ Ajouter film
-
+    // ^ Ajouter film
     public function ajouterFilm() {
 
- 
         $pdo = Connect::seConnecter();
-
 
         if(isset($_POST["submitFilm"])) {
 
             //rajouter iMAGE
             if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
-
                 // voir upload-img_php pour détail du process
                 $tmpName = $_FILES["movie_image"]["tmp_name"];
                 $name = $_FILES["movie_image"]["name"];
                 $size = $_FILES["movie_image"]["size"];
                 $error = $_FILES["movie_image"]["error"];
-
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
                 $tailleMax = 5242880; // 5 Mo (en octets)
             
-
-                if(in_array($extension,$extensionsAutorisees) && $size <= $tailleMax && $error == 0)  {
-
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
-                    move_uploaded_file($tmpName, './public/Images/upload'.$FileNameUnique);
-                    $movieImageChemin = './public/Images/upload'.$FileNameUnique;
-        
-                    echo 'Image enregistrée';
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
                 }
-    
+
                 } else {
                     /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }
-
+            
 
                 $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
                 $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -141,8 +139,6 @@ class MovieController {
                 $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $movie_country = filter_input(INPUT_POST, "movie_country", FILTER_SANITIZE_SPECIAL_CHARS);
 
-
-                //? gérer les paramètres non obligatoires?
                 // ajouter vérif pour bien que l'user rentre une année à 4 chiffres
                 if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director && $movie_country) {
                     
@@ -162,12 +158,9 @@ class MovieController {
                     "movie_country" =>$movie_country,
                 ]);
 
-                
-               
                 $requeteGenre = $pdo->query("SELECT id_genre, label_genre FROM genre");
                 $requeteGenre-> execute();
                 
-
                 $genresChecked = isset($_POST["genre"]) ? $_POST["genre"] : [];
 
                 foreach ($genresChecked as $genre) {
@@ -184,36 +177,31 @@ class MovieController {
         
     }
 
+    // ^ Aller à la page d'ajout de casting
+
+    public function getAjouterCasting(){
+        $pdo = Connect::seConnecter(); 
+        
+        $requeteFilm = $pdo->query(" SELECT movie.id_movie, movie.movie_title
+        FROM movie
+        ");
+
+        $requeteActeur = $pdo->query(" SELECT actor.id_actor, person.person_first_name, person.person_last_name
+        FROM person
+        INNER JOIN actor ON person.id_person = actor.id_person
+        ");
+
+        $requeteRole = $pdo->query(" SELECT role.id_role, role.name_role
+        FROM role
+        ");
+
+        require "view/movie/ajouterCasting.php";
+    }
 
 
-        // ^ Aller à la page d'ajout de casting
+    // ^ Ajouter casting
 
-        public function getAjouterCasting(){
-            $pdo = Connect::seConnecter(); 
-            
-            $requeteFilm = $pdo->query(" SELECT movie.id_movie, movie.movie_title
-            FROM movie
-            ");
-
-            $requeteActeur = $pdo->query(" SELECT actor.id_actor, person.person_first_name, person.person_last_name
-            FROM person
-            INNER JOIN actor ON person.id_person = actor.id_person
-            ");
-
-            $requeteRole = $pdo->query(" SELECT role.id_role, role.name_role
-            FROM role
-            ");
-
-
-            require "view/movie/ajouterCasting.php";
-        }
-
-
-
-
-       // ^ Ajouter casting
-
-       public function ajouterCasting() {
+    public function ajouterCasting() {
         $pdo= Connect::seConnecter();
 
         $requeteFilm = $pdo->query("SELECT movie.id_movie, movie.movie_title FROM movie");
@@ -247,12 +235,8 @@ class MovieController {
     }
 
 
-
-
     // ^ Supprimer un film 
-
     public function supprimerFilm($id) {
-
         $pdo = Connect::seConnecter();
         if (isset($id) && is_numeric($id)) {
 
@@ -268,12 +252,10 @@ class MovieController {
         }
         header("Location: index.php?action=listFilms");
         // require "view/movie/detailFilm.php";
-
     }
 
 
     // ^ Update un film 
-
     public function updateFilm($id) {
 
         $pdo = Connect::seConnecter();
@@ -298,55 +280,47 @@ class MovieController {
 
         if(isset($_POST["updateFilm"])){  
 
-            $movieImageChemin = NULL;
-            //rajouter iMAGE
-            if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
-
-                // voir upload-img_php pour détail du process
+    
+            if(isset($_FILES["movie_image"])){ 
                 $tmpName = $_FILES["movie_image"]["tmp_name"];
                 $name = $_FILES["movie_image"]["name"];
                 $size = $_FILES["movie_image"]["size"];
                 $error = $_FILES["movie_image"]["error"];
-
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880; // 5 Mo (en octets)
-            
-
-                if(in_array($extension,$extensionsAutorisees) && $size <= $tailleMax && $error == 0)  {
-
+                $tailleMax = 5242880; 
+                
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
-                    move_uploaded_file($tmpName, './public/Images/upload'.$FileNameUnique);
-                    $movieImageChemin = './public/Images/upload'.$FileNameUnique;
-        
-                    // echo 'Image enregistrée';
-                    return $movieImageChemin; 
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
                 }
-    
-                } else {
+            } else {
                     $movieImageChemin = NULL;
                 }
 
-               
 
-            
             $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_synopsys  = filter_input(INPUT_POST, "movie_synopsys", FILTER_SANITIZE_SPECIAL_CHARS);
-            // $movie_image  = filter_input(INPUT_POST, "movie_image", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_URL);
             $movie_rating = filter_input(INPUT_POST, "movie_rating", FILTER_SANITIZE_NUMBER_INT);
             $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
             $movie_country = filter_input(INPUT_POST, "movie_country", FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_rating && $director !== false && $movie_country ) {
+            if($movie_title  && $movie_duration  && $movie_release_date  && strlen($movie_release_date) === 4 && $movie_rating && $director  && $movie_country &&  $synopsis ) {
 
-                                
                 //Update Film
-                $requeteUpdateFilm2 = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_country = :movie_country, movie_image = :movieImageChemin, id_director = :director WHERE id_movie= :id");
-                $requeteUpdateFilm2->execute([
+                $reqUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_country = :movie_country, movie_image = :movieImageChemin, id_director = :director WHERE id_movie= :id");
+                $reqUpdateFilm->execute([
                     "movie_title" => $movie_title,
                     "movie_release_date" => $movie_release_date,
                     "movie_duration" => $movie_duration,
@@ -362,7 +336,6 @@ class MovieController {
                 $requeteSuprGenres = $pdo->prepare("DELETE FROM categorise WHERE id_movie = :id");
                 $requeteSuprGenres->execute(["id" => $id]);
 
-
                 //Update genre
                 $NewSelectedGenres = $_POST["genre"];
                 // var_dump($_POST);die;
@@ -371,18 +344,12 @@ class MovieController {
                     $requeteUpdateGenre = $pdo->prepare("INSERT INTO categorise (id_movie, id_genre) VALUES (:id_movie, :id_genre)");
                     $requeteUpdateGenre->execute(["id_movie" => $id, "id_genre" => $genre]);
                 }
-                
             }
             header("Location: index.php?action=listFilms");
-    }
-    
+        }
         require("view/movie/updateFilm.php");
-        
     }
-
-   
 
 }
-
 
 ?>
