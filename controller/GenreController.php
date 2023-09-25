@@ -9,7 +9,7 @@ class GenreController {
         $pdo = Connect::seConnecter();
         $requete = $pdo->query(" SELECT genre.label_genre, genre.id_genre,  COUNT(categorise.id_movie) AS nb_movie
         FROM genre
-        INNER JOIN categorise ON categorise.id_genre = genre.id_genre
+        LEFT JOIN categorise ON categorise.id_genre = genre.id_genre
         GROUP BY genre.id_genre, genre.label_genre
         ORDER BY nb_movie DESC
         ");
@@ -67,6 +67,7 @@ class GenreController {
                 $requeteAjouterGenre->execute([
                     "label_genre" => $label_genre
                 ]);
+                header("Location: index.php?action=listGenres");
             }
         }
     require "view/genre/ajouterGenre.php";

@@ -1,5 +1,6 @@
 <?php ob_start(); ?>
 
+<div class="wrapper-form">
     <div class="container_form">
         <div class="left_section">
             <h1>Let's Build a <br> <span class="text-colored">Cinematic Treasure <br> Trove</span>  together.</h1>
@@ -27,6 +28,7 @@
             </div>
         </div>
     </div>
+</div>
 <?php
 
 $titre = "Genre";

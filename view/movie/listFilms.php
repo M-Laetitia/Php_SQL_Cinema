@@ -14,9 +14,10 @@ pour stocker le contenu dans une variable $contenu -->
 
                     <div class="poster">
                         <?php if($movie["movie_image"] == NULL) {
-                                echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                                echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
                             }
                             else{
+                                // echo "<img src=". $movie["movie_image"] .">";
                                 echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="' . $movie["movie_image"] . '"></a>';
                             }
                         ?> 
@@ -33,9 +34,8 @@ pour stocker le contenu dans une variable $contenu -->
                             <p>Release : <?= $movie["movie_release_date"]?></p>
                             <p class="director">Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></p>
                         </div>
-
+                        
                     </div>
-                    
                 </div>
      
             <?php } ?>

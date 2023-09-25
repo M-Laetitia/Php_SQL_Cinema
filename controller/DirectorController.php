@@ -31,12 +31,13 @@ class DirectorController {
         SELECT movie.movie_title, movie.movie_release_date, director.id_director, movie.id_movie
         FROM movie
         INNER JOIN director ON movie.id_director = director.id_director
-        INNER JOIN person ON person.id_person = director.id_director
+        INNER JOIN person ON person.id_person = director.id_person
         WHERE director.id_director = :id
         ");
         $requeteFilms->execute(["id" => $id]);
         require "view/director/detailRealisateur.php";
     }
+
 
     // ^ Aller à la page d'ajout d'un acteur 
     public function getAjouterRealisateur(){
@@ -51,6 +52,7 @@ class DirectorController {
 
     // ^ Ajouter Réalisateur 
     public function ajouterRealisateur(){
+        $pdo = Connect::seConnecter();
         if(isset($_POST["submitRealisateur"])){
             
             if(isset($_FILES["director_image"])){ 
@@ -87,7 +89,7 @@ class DirectorController {
             $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($person_first_name && $person_last_name && $person_sexe && $person_birthday){
-                $pdo = Connect::seConnecter();
+                
                 $requeteAjouterPersonne = $pdo->prepare(" 
                     INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image) 
                     VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin)
@@ -193,7 +195,5 @@ class DirectorController {
         }
     require "view/director/updateRealisateur.php" ;
     }
-  
 }
-
 ?>

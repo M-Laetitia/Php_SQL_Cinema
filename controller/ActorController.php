@@ -62,6 +62,7 @@ class ActorController {
 
     // ^ Ajouter un acteur 
     public function ajouterActeur(){
+        $pdo = Connect::seConnecter();
         if(isset($_POST["submitActor"])){
 
             //rajouter iMAGE
@@ -90,7 +91,7 @@ class ActorController {
                     $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
                 }
 
-            } else {
+                } else {
                     /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }

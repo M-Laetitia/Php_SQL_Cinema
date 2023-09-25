@@ -59,8 +59,10 @@ class RoleController {
                     "name_role" => $name_role
                 ]);
             }
+            header("Location: index.php?action=listRoles");
         }
         require "view/role/ajouterRole.php";
+       
     }
 
     // ^ Supprimer un role

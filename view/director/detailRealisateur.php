@@ -58,7 +58,6 @@ $person = $requetedetailRealisateur->fetch();
 <?php
 
 $titre = "Détail d'un réalisateur";
-$titre_secondaire = "Détail d'un réalisateur";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

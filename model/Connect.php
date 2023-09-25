@@ -15,12 +15,11 @@ abstract class Connect {
     const HOST = "localHost";
     const DB = "cinema_2";
     const USER = "root";
-    const PASS = "";
+    const PASS = "sakura2410)BC";
 
-
-// On remarquera au passage le namespace de la classe Connect --> "Model", ainsi que la
-// présence d'un "\" devant PDO indiquant au framework que PDO est une classe native et
-// non une classe du projet
+    // On remarquera au passage le namespace de la classe Connect --> "Model", ainsi que la
+    // présence d'un "\" devant PDO indiquant au framework que PDO est une classe native et
+    // non une classe du projet
 
     public static function seConnecter() {
         try {
