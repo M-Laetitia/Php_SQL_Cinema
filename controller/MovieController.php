@@ -316,8 +316,8 @@ class MovieController {
             $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_NUMBER_INT);
             $movie_country = filter_input(INPUT_POST, "movie_country", FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if($movie_title  && $movie_duration  && $movie_release_date  && strlen($movie_release_date) === 4 && $movie_rating && $director  && $movie_country &&  $synopsis ) {
-
+            if($movie_title  && $movie_duration  && $movie_release_date  && strlen($movie_release_date) === 4 && $movie_rating && $director  && $movie_country &&  $movie_synopsys ) {
+                // var_dump("ok"); die;
                 //Update Film
                 $reqUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_country = :movie_country, movie_image = :movieImageChemin, id_director = :director WHERE id_movie= :id");
                 $reqUpdateFilm->execute([
