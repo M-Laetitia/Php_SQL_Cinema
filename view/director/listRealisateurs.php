@@ -9,10 +9,10 @@
                 <div class="portrait">
                     <?php
                         if($person["person_image"] == NULL){
-                            echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
+                            echo '<a href="index.php?action=detailRealisateur&id=' . $person["id_director"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
                         }
                         else{
-                        echo "<img src=". $person["person_image"] .">";
+                            echo '<a href="index.php?action=detailRealisateur&id=' . $person["id_director"] . '"><img src="' . $person["person_image"] . '"></a>';
                         }
                     ?>  
                 </div>
