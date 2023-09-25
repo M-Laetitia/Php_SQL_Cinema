@@ -18,13 +18,18 @@
     <link rel="stylesheet" href="./public/css/style-listing.css">
     <link rel="stylesheet" href="./public/css/style-detail.css">
 
+
     <title><?= $titre ?></title>
 </head>
 
 <body id="movie_background">
 
     <header>
-        <div class="logo"><img src="./public/Images/logo.png" alt="logo CineVault"></div>
+        <a href="index.php?action=landingPage">
+            <div class="logo">
+                <img src="./public/Images/logo.png" alt="logo CineVault">
+            </div>
+        </a>
         
         <nav>
             <div class="primary-navigation">
@@ -42,32 +47,52 @@
                     <span>Contribute <i class="fa-solid fa-angle-down" style="color: #e03058;"></i></span>
                     <div class="dropdown-content">
                         <p><a href="index.php?action=getAjouterFilm">Add Movie</a></p>
-                        <p><a href="index.php?action=getAjouterGenre">Add Genre</a></p>
-                        <p><a href="index.php?action=getAjouterRole">Add Role</a></p>
                         <p><a href="index.php?action=getAjouterActeur">Add Actor</a></p>
                         <p><a href="index.php?action=getAjouterRealisateur">Add Director</a></p>
+                        <p><a href="index.php?action=getAjouterGenre">Add Genre</a></p>
+                        <p><a href="index.php?action=getAjouterRole">Add Role</a></p>
                         <p><a href="index.php?action=getAjouterCasting">Add Casting</a></p>
                     </div>
                 </div>
             </div>
            
+            <div class="menu-burger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
 
             <div class="nav-search">
                 <p>Search</p>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </div>
 
+            
+            <form enctype="multipart/form-data" method="POST" action="index.php?action=search">
+                <input type="text" name="search" placeholder="Rechercher...">
+                <button type="submit" name="submit-search">Rechercher</button>
+            </form>
+
+
         </nav>
-        
+
     </header>
 
+
+    <div class="userConn">
+        <p><a href="index.php?action=register">S'inscrire</a></p>
+        <p><a href="index.php?action=login">Se connecter</a></p>
+    </div>
+
     <main>
+        
         <?= $contenu ?> 
     </main>
 
+
     <!-- <footer>
         <div>
-            <p>&copy;<script>document.write(new Date().getFullYear());</script> <span class="text-colored">Cine</span>Vault</p>
+            <p>&copy;<script>document.write(new Date().getFullYear());</script> <span class="text-highlight">Cine</span>Vault</p>
         </div>
     </footer> -->
 
