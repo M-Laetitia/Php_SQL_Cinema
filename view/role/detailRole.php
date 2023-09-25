@@ -24,8 +24,17 @@ $role = $requeteDetailRole->fetch();?>
                 </figure>
 
                 <div class="info">
-                    <p><a href="index.php?action=detailActeur&id=<?= $role["id_actor"] ?>"><?= $role["actorComplete"] ?></a></p>
-                    <p><a href="index.php?action=detailFilm&id=<?= $role["id_movie"]?>"><?= $role["movie_title"]?></a></p>
+                    <?php if ($role["id_actor"]) { ?>
+                        <p><a href="index.php?action=detailActeur&id=<?= $role["id_actor"] ?>"><?= $role["actorComplete"] ?></a></p>
+                    <?php } else { ?>
+                        <p>Pas d'acteur attribué</p>
+                    <?php } ?>
+
+                    <?php if ($role["id_movie"]) { ?>
+                        <p><a href="index.php?action=detailFilm&id=<?= $role["id_movie"]?>"><?= $role["movie_title"]?></a></p>
+                    <?php } else { ?>
+                        <p>Pas de film attribué</p>
+                    <?php } ?>
                 </div>
                 
             </div>
