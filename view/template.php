@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="./public/css/style-detail.css">
     <link rel="stylesheet" href="./public/css/style-results.css">
     <link rel="stylesheet" href="./public/css/style-user.css">
+    <link rel="stylesheet" href="./public/css/style-home.css">
 
 
     <title><?= $titre ?></title>
