@@ -13,6 +13,9 @@
     <!-- Font awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Google icon -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     <link rel="stylesheet" href="./public/css/style.css">
     <link rel="stylesheet" href="./public/css/style-form.css">
     <link rel="stylesheet" href="./public/css/style-listing.css">
@@ -71,10 +74,28 @@
 
             
             <form enctype="multipart/form-data" method="POST" action="index.php?action=search" class="search-feature">
-                <input type="text" name="search" placeholder="i'm looking for...">
+                <input type="text" name="search" placeholder="I'm looking for...">
                 <button type="submit" name="submit-search"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
 
+            <?php
+
+                if(isset($_SESSION["user"])) { ?>
+                    <div class="nav-user">
+                        <div id="profile-btn">
+                            <p><a href="index.php?action=profile"><i class="fa-solid fa-user"></i></a></p>
+                        </div>
+                    </div>     
+                    
+
+                <?php } else { ?>
+                    <div class="nav-user">
+                        <div id="SignIn-btn">
+                            <p><a href="index.php?action=login">SIGN IN</a></p>
+                        </div>
+                    </div>     
+
+            <?php } ?>
             
         </nav>
 
@@ -90,21 +111,9 @@
     </div> -->
 
 
-    <div class="userConn">
-        <?php
 
-        if(isset($_SESSION["user"])) { ?>
-            <p><a href="index.php?action=logout">Log out</a></p>
-            <p><a href="index.php?action=profile">Profile</a></p>
-            <p><a href="index.php?action=deleteAccount">Delete Account</a></p>
+        
 
-        <?php } else { ?>
-                <p><a href="index.php?action=register">Register</a></p>
-                <p><a href="index.php?action=login">Log in</a></p>
-
-            
-        <?php } ?>
-    </div>
 
 
     <main>
