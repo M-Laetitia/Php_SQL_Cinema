@@ -39,14 +39,17 @@ if(isset($_GET["action"])) {
 
         // USER 
 
-        // case "user" : $ctrlUser->user(); break;
-        // case "userSession" : $ctrlUser->userSession($id_utilisateur); break;
-        // case "deleteAccount" : $ctrlUser->deleteAccount($id_utilisateur);break;
+
         
 
         case "register" : $ctrlUser->register(); break;
         case "login" : $ctrlUser->login(); break;
-        // case "logout" : $ctrlUser->logout(); break;
+        case "logout" : $ctrlUser->logout($user); break;
+        case "profile" : $ctrlUser->profile($user); break;
+  
+
+        // case "logout"
+        // case "deleteAccount"
 
 
         // SEARCH
