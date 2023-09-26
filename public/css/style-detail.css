@@ -134,7 +134,7 @@ select {
 .container-genre img {
     object-fit: cover;
     width: 100%;
-    width: 150%;
+    
 }
 
 .container-genre .info {

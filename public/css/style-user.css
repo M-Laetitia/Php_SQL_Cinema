@@ -88,8 +88,16 @@ select {
     }
 }
 
+
+
+
+
+
+
+
+
 /* &---------------------------------- */
-/* & REGISTER / PROFIL     --                */
+/* & REGISTER / PROFIL     --          */
 /* & --------------------------------- */
 
 .userConn p a{
@@ -100,13 +108,34 @@ select {
 .register h1 {
     color: var(--clr-pink);
     text-align: center;
+    padding-top: 0.8rem;;
 }
 
 .register .list {
     display: flex;
     align-items: center;
     flex-direction: column;
+    /* border-top: 1px solid red; */
+    position: relative;
+    border-top: 1px solid var(--clr-pink);
+
 }
+
+/* .register .list::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    display: block;
+    /* width: 90%; */
+    /* background: linear-gradient(90deg, #ff55a5 0%, #ff5860 100%); */
+    /* box-shadow: 0 0 20px 0 rgba(255,88,96,0.5); */
+
+
+
+
 
 /* .register form {
     display: flex;
@@ -161,7 +190,7 @@ select {
 }
 
 .register #btn-register input:hover {
-    transform: scale(1.1);
+    box-shadow: 0 0 16px 0 rgba(255,88,96,0.3);
 }
 
 #logoutDelete {
@@ -195,3 +224,20 @@ select {
 
 /* background-color: var(--clr-grey-medium); */
 /* border-bottom: 1px solid var(--clr-grey-light); */
+
+#sign-up {
+    margin: 1rem 0; 
+}
+
+#sign-up span {
+    font-size: var(--fs-500);
+    cursor: pointer;
+}
+
+#sign-up span:hover {
+    color: var(--clr-orange);
+}
+
+#sign-up a {
+    text-decoration: none;
+}
