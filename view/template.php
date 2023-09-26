@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="./public/css/style-listing.css">
     <link rel="stylesheet" href="./public/css/style-detail.css">
     <link rel="stylesheet" href="./public/css/style-results.css">
+    <link rel="stylesheet" href="./public/css/style-user.css">
 
 
     <title><?= $titre ?></title>
@@ -80,10 +81,31 @@
     </header>
 
 
+    <!-- <div class="userConn">
+        <p><a href="index.php?action=register">Register</a></p>
+        <p><a href="index.php?action=login">Log in</a></p>
+        <p><a href="index.php?action=profile">Profile</a></p>
+        <p><a href="index.php?action=logout">Log out</a></p>
+        <p><a href="index.php?action=deleteAccount">Delete Account</a></p>
+    </div> -->
+
+
     <div class="userConn">
-        <p><a href="index.php?action=register">S'inscrire</a></p>
-        <p><a href="index.php?action=login">Se connecter</a></p>
+        <?php
+
+        if(isset($_SESSION["user"])) { ?>
+            <p><a href="index.php?action=logout">Log out</a></p>
+            <p><a href="index.php?action=profile">Profile</a></p>
+            <p><a href="index.php?action=deleteAccount">Delete Account</a></p>
+
+        <?php } else { ?>
+                <p><a href="index.php?action=register">Register</a></p>
+                <p><a href="index.php?action=login">Log in</a></p>
+
+            
+        <?php } ?>
     </div>
+
 
     <main>
         
