@@ -21,7 +21,7 @@ ob_start();
         <div class="user-profile">
             <p><span>Username:</span> <?= $infoSession["pseudo"] ?></p>
             <p><span>Mail:</span> <?= $infoSession["email"] ?></p>
-            <p><span>Register Date:</span> <?= $infoSession["register_date"] ?></p>
+            <p><span>Register Date:</span> <?= date("d-m-Y", strtotime($infoSession["register_date"])) ?></p>
         
         </div>
 
