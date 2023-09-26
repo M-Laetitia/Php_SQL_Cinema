@@ -10,6 +10,8 @@
         <h1>Join Us !</h1>
     </div>
 
+    
+
     <form enctype="multipart/form-data" action="index.php?action=register" method="POST">
 
         <div class="register-input">
@@ -25,13 +27,25 @@
             <label for="pass2">Password confirmation : </label>
             <input type="password" name="pass2" id="pass2">
         </div>
+
+        
         
         <div id=btn-register >
             <input  type="submit" name="submit" value="Register">
         </div>
 
-
+        
     </form>
+
+        <div>
+            <?php
+                if (isset($_SESSION["message"])) {
+                    echo "<p>" . $_SESSION["message"] . "</p>";
+                    unset($_SESSION["message"]); // Supprimer le message de la session
+             }?>
+        </div>
+
+    
 
 
     </div>
