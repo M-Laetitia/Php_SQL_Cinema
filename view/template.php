@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="./public/css/style-form.css">
     <link rel="stylesheet" href="./public/css/style-listing.css">
     <link rel="stylesheet" href="./public/css/style-detail.css">
+    <link rel="stylesheet" href="./public/css/style-results.css">
 
 
     <title><?= $titre ?></title>
@@ -62,15 +63,15 @@
                 <div class="bar"></div>
             </div>
 
-            <div class="nav-search">
+            <!-- <div class="nav-search">
                 <p>Search</p>
                 <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
+            </div> -->
 
             
-            <form enctype="multipart/form-data" method="POST" action="index.php?action=search">
-                <input type="text" name="search" placeholder="Rechercher...">
-                <button type="submit" name="submit-search">Rechercher</button>
+            <form enctype="multipart/form-data" method="POST" action="index.php?action=search" class="search-feature">
+                <input type="text" name="search" placeholder="i'm looking for...">
+                <button type="submit" name="submit-search"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
 
             
