@@ -32,21 +32,31 @@ class UserController {
                 } else {
                     // var_dump("utilisateur inexistant");die;
                     //insertion de l'utilisateur en BDD
-                    if($pass1 == $pass2  && strlen($pass1) >= 5) {
+                    if($pass1 == $pass2) {
                         // ajouter la date d'inscription
                         $dateInscription = date("Y-m-d H:i:s");  // date et  heure actuelles au format AAAA-MM-JJ HH:MM:SS
-                        //mettre en place une regX
-                        $insertUser = $pdo->prepare("INSERT INTO user (pseudo, password, email, register_date ) 
-                        VALUES (:pseudo, :password, :email, :dateInscription)");
-                        $insertUser->execute ([
-                            "pseudo" => $pseudo,
-                            "password" => password_hash($pass1, PASSWORD_DEFAULT),
-                            "email" => $email,
-                            "dateInscription" => $dateInscription
+
+                        $pattern =  '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
+                        if (preg_match($pattern,$pass1)) {
+                            echo "password is strong enoug";
+
+                            $insertUser = $pdo->prepare("INSERT INTO user (pseudo, password, email, register_date ) 
+                            VALUES (:pseudo, :password, :email, :dateInscription)");
+                            $insertUser->execute ([
+                                "pseudo" => $pseudo,
+                                "password" => password_hash($pass1, PASSWORD_DEFAULT),
+                                "email" => $email,
+                                "dateInscription" => $dateInscription
+                                
+                            ]);
+                            header ("Location: index.php?action=landingPage"); exit;
+
                             
-                        ]);
-                        header ("Location: index.php?action=landingPage"); exit;
-                
+                        } else {
+                            echo "password is not strong enough";
+                        }
+
+           
                     } else {
                         echo "les mots de passe ne sont pas identiques ou trop courts";
                     }
@@ -153,11 +163,10 @@ class UserController {
             header ("Location: index.php?action=landingPage"); exit;
         }
 
-           
-
-
     }
+
     
+     
 }
 ?>
 
