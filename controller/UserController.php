@@ -18,17 +18,12 @@ class UserController {
 
             if($pseudo && $email && $pass1 && $pass2) {
 
-                $requete = $pdo->prepare("SELECT * 
-                FROM user
-                WHERE  email = :email 
-                ");
-
-                $requete->execute(["email"=> $email]);
+                $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email OR pseudo = :pseudo");
+                $requete->execute(["email" => $email, "pseudo" => $pseudo]);
                 $user = $requete->fetch();
                 // si user existe redirection vers register
                 if($user) {
-                    echo "Il existe déjà un compte avec cette adresse mail";
-                    // header("Location: register.php"); exit;
+                    $_SESSION["message"] = "This username or email already exists.";
                 } else {
                     // var_dump("utilisateur inexistant");die;
                     //insertion de l'utilisateur en BDD
@@ -38,7 +33,7 @@ class UserController {
 
                         $pattern =  '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
                         if (preg_match($pattern,$pass1)) {
-                            echo "password is strong enoug";
+                            echo "password is strong enough";
 
                             $insertUser = $pdo->prepare("INSERT INTO user (pseudo, password, email, register_date ) 
                             VALUES (:pseudo, :password, :email, :dateInscription)");
@@ -53,19 +48,19 @@ class UserController {
 
                             
                         } else {
-                            echo "password is not strong enough";
+                            $_SESSION["message"] = "The password is not strong enough. It must contain at least one capital letter, one number, one special character and be between 8 and 20 characters long.";
                         }
 
            
                     } else {
-                        echo "les mots de passe ne sont pas identiques ou trop courts";
+                        
+                        $_SESSION["message"] = "The passwords are different";
                     }
                 }
 
             } else {
-                echo "Un problème est survenu, des champs n'ont pas été remplis correctement";
+                $_SESSION["message"] = "A problem has occurred. Please fill in all fields correctly.";
             }
-
 
         }
         require("view/user/register.php");
@@ -78,14 +73,11 @@ class UserController {
     // ^ Login
     public function login() {
         
-
         if(isset($_POST["submit"]))  {
         $pdo = Connect::seConnecter();
 
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
             $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-            
 
             if($email && $password ) {
                 $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email ");
@@ -106,17 +98,16 @@ class UserController {
                     } else {
                         // Identifiants invalides
                         
-                        echo " <p> Invalid email or password </p>";
+                       $_SESSION["message"] = "Invalid email or password.";
                     }
                 } else {
                     
-                    echo " <p> Invalid email or password </p>";
+                   $_SESSION["message"] = "Invalid email or password.";
                 }
             }
         }
         require("view/user/login.php");
     }
-
 
     // ^ Log out
 
@@ -151,9 +142,10 @@ class UserController {
 
         // supprimer user de la table user
         if($_SESSION["user"]) {
-             $requete = $pdo->prepare("DELETE FROM user WHERE user = :user ");
-            $requete->execute(["user" => $user]);
-            var_dump(($_SESSION["user"]));die;
+            $user= $_SESSION["user"]["id_user"]; // obtenir l'identifisant de l'user connecté
+            $requete = $pdo->prepare("DELETE FROM user WHERE id_user = :id_user ");
+            $requete->execute(["id_user" => $user]);
+            // var_dump(($_SESSION["user"]));die;
             // Destroys all data registered to a session
             session_destroy();
             echo "Account deleted";
