@@ -40,16 +40,14 @@ if(isset($_GET["action"])) {
         // USER 
 
 
-        
+        // page pour être redirigé vers inscription ou connexion
 
         case "register" : $ctrlUser->register(); break;
         case "login" : $ctrlUser->login(); break;
-        case "logout" : $ctrlUser->logout($user); break;
-        case "profile" : $ctrlUser->profile($user); break;
-  
 
-        // case "logout"
-        // case "deleteAccount"
+        case "logout" : $ctrlUser->logout(); break;
+        case "profile" : $ctrlUser->profile(); break;
+        case "deleteAccount": $ctrlUser->deleteAccount(); break;
 
 
         // SEARCH
