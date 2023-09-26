@@ -1,25 +1,29 @@
 <?php ob_start(); ?>
 
 
-<div class="container-list">
+<div class="container-list register">
 
     <div class="list">
         <div>
-            <p>Welcome Back ! </p>
+            <h1>Welcome Back ! </h1>
         </div>
 
         <form enctype="multipart/form-data" action="index.php?action=login" method="POST">
 
             <!-- <label for="pseudo">Pseudo</label>
             <input type="text" name="pseudo" id="pseudo"><br> -->
+            <div class="register-input">
 
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email"><br>
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email"><br>
 
-            <label for="password">password</label>
-            <input type="password" name="password" id="password"><br>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password"><br>
+            </div>
 
-            <input type="submit" name="submit" value="Se connecter">
+            <div id=btn-register >
+                <input type="submit" name="submit" value="Connect">
+            </div>
 
         </form>
 

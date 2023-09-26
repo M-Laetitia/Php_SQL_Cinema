@@ -89,5 +89,98 @@ select {
 }
 
 /* &---------------------------------- */
-/* & REGISTER /      --                */
+/* & REGISTER / PROFIL     --                */
 /* & --------------------------------- */
+
+.userConn p a{
+    color: var(--clr-white);
+    text-decoration: none;
+}
+
+.register h1 {
+    color: var(--clr-pink);
+    text-align: center;
+}
+
+.register .list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* .register form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+} */
+
+.register input {
+    background-color: var(--clr-grey-medium); 
+    border: none;
+    color: var(--clr-white);
+    margin: 0.2rem 0px 0.8rem 0px;
+    padding: 0.2rem;
+
+    border-radius: 0.3rem;
+}
+
+.register #btn-register {
+    display: flex;
+    justify-content: center;
+}
+
+.register-input {
+    /* background-color: #18181E; */
+    width: 100%;
+    height: 80%;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.register form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.register #btn-register input {
+    background: linear-gradient(to right, var(--clr-pink), var(--clr-orange));
+    color: var(--clr-white);
+    font-weight: 500;
+    padding: 8px 35px;
+    border: none;
+    border-radius: 25px;
+   
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: ease-in-out 0.2s;
+    display: flex;
+    justify-content: center;
+}
+
+.register #btn-register input:hover {
+    transform: scale(1.1);
+}
+
+#logoutDelete {
+    display: flex;
+    gap:2rem;
+    margin-top: 2rem;
+}
+
+#logoutDelete a  {
+    color: var(--clr-white);
+    text-decoration: none;
+    /* background-color: #EF832C; */
+}
+
+#logoutDelete a:hover  {
+    color: var(--clr-pink);
+
+}
+
+
+/* background-color: var(--clr-grey-medium); */
+/* border-bottom: 1px solid var(--clr-grey-light); */
