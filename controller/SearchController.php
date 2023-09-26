@@ -44,7 +44,11 @@ class SearchController {
 
 
             // requête SQL pour rechercher par genre
-            $requeteGenres = $pdo->prepare("SELECT * FROM genre WHERE genre.label_genre LIKE :search");
+            $requeteGenres = $pdo->prepare("SELECT genre.id_genre, genre.label_genre, COUNT(categorise.id_movie) AS nb_movies
+            FROM genre
+            LEFT JOIN categorise ON genre.id_genre = categorise.id_genre
+            WHERE genre.label_genre LIKE :search
+            GROUP BY genre.id_genre, genre.label_genre ");
     
             // Exécutez toutes les requêtes SQL
             $requeteFilms->execute(['search' => "%$search%"]);

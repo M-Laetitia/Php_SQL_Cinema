@@ -107,7 +107,7 @@ ini_set('display_errors', 1);
                                 </p>
 
                                 <p>
-                                    <!-- <?= $genre["nb_movie"]?> movie/s -->
+                                    <?= $genre["nb_movies"]?> movie/s
                                 </p>
 
                             <?php } ?>
