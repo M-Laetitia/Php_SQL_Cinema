@@ -19,9 +19,9 @@ ob_start();
         </div>
 
         <div class="user-profile">
-            <p>Username: <?= $infoSession["pseudo"] ?></p>
-            <p>Mail: <?= $infoSession["email"] ?></p>
-            <p>Register date: <?= $infoSession["register_date"] ?></p>
+            <p><span>Username:</span> <?= $infoSession["pseudo"] ?></p>
+            <p><span>Mail:</span> <?= $infoSession["email"] ?></p>
+            <p><span>Register Date:</span> <?= $infoSession["register_date"] ?></p>
         
         </div>
 
