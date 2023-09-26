@@ -1,0 +1,93 @@
+
+/* ---------------------------------- */
+/* Root                             */
+/* ---------------------------------- */
+
+:root {
+    /* colors */
+    --clr-white : #dad8d8;
+    --clr-grey-light : #4c4a60;
+    --clr-grey-medium : #282737;
+    --clr-grey-dark: #201F2C;
+    --clr-grey-black: #18181E;
+    --clr-pink: #E03058;
+    --clr-orange : #EF832C;
+
+    /* font-sizes */
+    --fs-big: 8rem;
+    --fs-900: 2.5rem;
+    --fs-800: 2.1rem;
+    --fs-700: 1.8rem;
+    --fs-600: 1.5rem; /* 24px */
+    --fs-500: 1.24rem; /* 20px */
+    --fs-400: 1rem; /* 17px */
+    --fs-300: 0.9rem;
+    --fs-200: 0.75rem;
+
+    /* font-families */
+    --ff-quickSand: 'Quicksand', sans-serif;
+}
+
+@media (min-width: 35em) { /*560px*/
+}
+
+@media (min-width: 45em) { /*720px*/
+}
+
+/* ---------------------------------- */
+/* Reset                              */
+/* ---------------------------------- */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+/* Reset margins */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: 400;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {  
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+}
+
+/* &---------------------------------- */
+/* & REGISTER /      --                */
+/* & --------------------------------- */
