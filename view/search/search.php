@@ -4,81 +4,129 @@ ini_set('display_errors', 1);
 ?>
 
 
-<h3>Résultats de la recherche :</h3>
+<div class="container-list">
+    
+    <div class="list list-search">
+        
 
-<?php if (empty($results['films']) && empty($results['acteurs']) && empty($results['realisateurs']) && empty($results['genres']) && empty($results['roles'])) { ?>
-    <p>Aucun résultat trouvé.</p>
-<?php } else { ?>
+        <?php if (empty($results['films']) && empty($results['acteurs']) && empty($results['realisateurs']) && empty($results['genres']) && empty($results['roles'])) { ?>
+            <p>No result found. </p>
+        <?php } else { ?>
 
-    <?php if (!empty($results['films'])) { ?>
-        <h4>Films :</h4>
-        <ul>
-            <?php foreach ($results['films'] as $film) { ?>
-                <li>
-                    <span>Titre du film : <?= $film["movie_title"] ?></span>
-                  
-                </li>
-            <?php } ?>
-        </ul>
-    <?php } ?>
-
-    <?php if (!empty($results['acteurs'])) { ?>
-        <h4>Acteurs :</h4>
-        <ul>
-            <?php foreach ($results['acteurs'] as $acteur) { ?>
-                <li>
-                    <span>Nom de l'acteur : <?= $acteur["person_first_name"] ?> <?= $acteur["person_last_name"] ?></span>
-                    
-                </li>
-            <?php } ?>
-        </ul>
-    <?php } ?>
-
-    <?php if (!empty($results['realisateurs'])) { ?>
-        <h4>Réalisateurs :</h4>
-        <ul>
-            <?php foreach ($results['realisateurs'] as $realisateur) { ?>
-                <li>
-                    <span>Nom du réalisateur : <?= $realisateur["person_first_name"] ?> <?= $realisateur["person_last_name"] ?></span>
-                  
-                </li>
-            <?php } ?>
-        </ul>
-    <?php } ?>
-
-    <?php if (!empty($results['roles'])) { ?>
-        <h4>roles :</h4>
-        <ul>
-            <?php foreach ($results['roles'] as $role) { ?>
-                <li>
-                    <span>role : <?= $role["name_role"] ?></span>
-                   
-                </li>
-            <?php } ?>
-        </ul>
-    <?php } ?>
-
-
-
-    <?php if (!empty($results['genres'])) { ?>
-        <h4>Genres :</h4>
-        <ul>
-            <?php foreach ($results['genres'] as $genre) { ?>
-                <li>
-                    <span>Genre : <?= $genre["label_genre"] ?></span>
+            <?php if (!empty($results['films'])) { ?>
+                <div class="results-search">
                 
-                </li>
+                    <p><span class="title text-highlight">Movies :</span></p>
+                    
+                    <div class="result-ind">
+                        <?php foreach ($results['films'] as $film) { ?>
+                            <p>
+                                <a href="index.php?action=detailFilm&id=<?= $film["id_movie"]?>"><?= $film["movie_title"] ?></a> - 
+
+                                <a href="index.php?action=detailRealisateur&id=<?= $film["id_director"]?>"><?= $film["directorComplete"]?></a>
+
+                            </p>
+                            <p>
+                                <?= $film["movie_release_date"] ?>
+
+                            </p>
+                        <?php } ?>
+                    </div>
+                        
+                </div>
             <?php } ?>
-        </ul>
-    <?php } ?>
+
+            <?php if (!empty($results['acteurs'])) { ?>
+                <div class="results-search">
+                    
+                        <p><span class="title text-highlight">Actors :</span></p>
+                        
+                        <div class="result-ind">
+                            <?php foreach ($results['acteurs'] as $acteur) { ?>
+                                <p>
+                            
+                                <a href="index.php?action=detailActeur&id=<?= $acteur["id_actor"]?>"><?= $acteur["person_first_name"] ?> <?= $acteur["person_last_name"] ?></a>
+
+                                </p>
+
+                            <?php } ?>
+                        </div>
+                </div>
+            <?php } ?>
+
+
+            <?php if (!empty($results['realisateurs'])) { ?>
+                <div class="results-search">
+                    
+                        <p><span class="title text-highlight">Directors :</span></p>
+                        
+                        <div class="result-ind">
+                            <?php foreach ($results['realisateurs'] as $realisateur) { ?>
+                                <p>
+                            
+                                <a href="index.php?action=detailRealisateur&id=<?= $realisateur["id_director"]?>"><?= $realisateur["person_first_name"] ?> <?= $realisateur["person_last_name"] ?></a>
+
+                                </p>
+
+                            <?php } ?>
+                        </div>
+                </div>
+            <?php } ?>
+
+
+            <?php if (!empty($results['roles'])) { ?>
+                <div class="results-search">
+                    
+                        <p><span class="title text-highlight">Roles :</span></p>
+                        
+                        <div class="result-ind">
+                            <?php foreach ($results['roles'] as $role) { ?>
+                                <p>
+                                    <a href="index.php?action=detailRole&id=<?= $role["id_role"]?>"><?= $role["name_role"] ?></a> - <a href="index.php?action=detailActeur&id=<?= $role["id_actor"]?>"><?= $role["acteurComplete"] ?></a> 
+                                </p>
+
+                                <p>
+                                    <a href="index.php?action=detailFilm&id=<?= $role["id_movie"]?>"><?= $role["movie_title"] ?></a>
+                                </p>
+
+                            <?php } ?>
+                        </div>
+                </div>
+            <?php } ?>
+
+
+            <?php if (!empty($results['genres'])) { ?>
+                <div class="results-search">
+                    
+                        <p><span class="title text-highlight">Genres :</span></p>
+                        
+                        <div class="result-ind">
+                            <?php foreach ($results['genres'] as $genre) { ?>
+                                <p>
+                                    <a href="index.php?action=detailGenre&id=<?= $genre["id_genre"]?>"><?= $genre["label_genre"] ?></a>
+                                </p>
+
+                                <p>
+                                    <!-- <?= $genre["nb_movie"]?> movie/s -->
+                                </p>
+
+                            <?php } ?>
+                        </div>
+                </div>
+            <?php } ?>
 
 
 
 
+        <?php } ?>
 
 
+        
+    </div>
 
-<?php } ?>
+</div>
+
+<!-- <h3>Résultats de la recherche :</h3> -->
 
 
 
