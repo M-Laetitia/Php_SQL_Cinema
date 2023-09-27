@@ -26,6 +26,8 @@
 
 
     <title><?= $titre ?></title>
+    <meta name="description" content="<?= $meta_description ?>">
+
 </head>
 
 <body id="movie_background">
