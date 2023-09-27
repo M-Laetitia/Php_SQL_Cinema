@@ -20,7 +20,7 @@ $genre = $requeteGenre->fetch();?>
                     }
                     else{
                     // echo "<img src=". $genre["movie_image"] .">";
-                    echo '<a href="index.php?action=detailFilm&id=' . $genre["id_movie"] . '"><img src="' . $genre["movie_image"] . '"></a>';
+                    echo '<a href="index.php?action=detailFilm&id=' . $genre["id_movie"] . '"><img src="' . $genre["movie_image"] . '"  alt= "' . $genre["movie_alt_desc"] . '"  ></a>';
                     }
                     ?> 
                 </div>
@@ -35,7 +35,8 @@ $genre = $requeteGenre->fetch();?>
 </div>
 
 <?php
-$titre = "List Genre";
+$titre = $genre["label_genre"] .  " movies list";
+$meta_description = "Find out more about the genre :" .$genre["label_genre"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

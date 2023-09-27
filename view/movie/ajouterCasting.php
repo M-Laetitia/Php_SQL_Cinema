@@ -8,8 +8,8 @@ ob_start();
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Add a Casting</h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Add a Casting</h2>
             <div class="form_info">
 
                 <form action="index.php?action=ajouterCasting" enctype="multipart/form-data" method="POST">
@@ -57,6 +57,7 @@ ob_start();
 </div>
 
 <?php
-$titre = "Casting";
+$titre = "Castings";
+$meta_description = "Form to add a Casting and to expand the database";
 $contenu = ob_get_clean();
 require "view/template.php";

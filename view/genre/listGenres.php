@@ -1,5 +1,6 @@
 <?php ob_start(); ?>
 
+<h1 class="title_ref"> Genres List</h1>
 <div class="container-list">
     <!-- <div class="searchBar"></div> -->
     <div class="list">
@@ -11,9 +12,11 @@
             </div>
         <?php } ?>
     </div>
+</div>
 
 <?php
-$titre = "Genres List";
+$titre = "Genres";
+$meta_description = "Browse through the Genres list";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

@@ -7,8 +7,8 @@
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Add an Actor </h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Add an Actor </h2>
             <div class="form_info">
 
                 <!-- The enctype attribute specifies how the form-data should be encoded when submitting it to the server. 
@@ -29,13 +29,13 @@
 
                         <div class="form-input">
                             <label for="person_sexe">Gender* :</label>
-                            M:<input type="radio" name="person_sexe" class="radio" value="male" required >
-                            F:<input type="radio" name="person_sexe" class="radio" value="female" >
+                            M:<input type="radio" name="person_sexe" class="radio" value="male" id="person_sexe" required >
+                            F:<input type="radio" name="person_sexe" class="radio" value="female" required >
                         </div>
 
                         <div class="form-input">
                             <label for="person_birthday"></label>
-                            <input type="date" placeholder="Date of birth*" name="person_birthday" id="person_birthday" required>
+                            <input type="date" name="person_birthday" id="person_birthday" required>
                         </div>
 
                         <div class="form-input">
@@ -48,7 +48,7 @@
                     <div class="input_image">
                             <!-- label est associé a un input ce qu'on met dans le for va correspondre au name du chemin input que l'on veut associé -->
                             <label for="actor_image">Let's add a picture :</label>
-                            <input type="file"  name="actor_image" >
+                            <input type="file"  name="actor_image" id="actor_image" >
                             <!-- <button type="submit"> Send</button> -->
                             <p id="autorised-format">Autorised format : jpg, jpeg, png, WebP</p>
                     </div>
@@ -63,8 +63,8 @@
 </div>
 <?php
 
-$titre = "Actor";
-$titre_secondaire = "Add actor";
+$titre = "Add an Actor";
+$meta_description = "form to add an actor and to expand the database";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

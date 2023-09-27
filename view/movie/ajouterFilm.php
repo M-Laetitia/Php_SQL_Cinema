@@ -7,8 +7,8 @@
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Add a Movie </h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Add a Movie </h2>
             <div class="form_info">
 
                 <form enctype="multipart/form-data" action="index.php?action=ajouterFilm" method="post">
@@ -85,7 +85,8 @@
 </div>
 
 <?php
-$titre = "Movie";
+$titre = "Add a Movie";
+$meta_description = "Form to add a Movie to the database";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

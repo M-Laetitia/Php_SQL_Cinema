@@ -26,14 +26,12 @@ $role = $requeteDetailRole->fetch();?>
                 <div class="info">
                     <?php if ($role["id_actor"]) { ?>
                         <p><a href="index.php?action=detailActeur&id=<?= $role["id_actor"] ?>"><?= $role["actorComplete"] ?></a></p>
-                    <?php } else { ?>
-                        <p>Pas d'acteur attribué</p>
+                    
                     <?php } ?>
 
                     <?php if ($role["id_movie"]) { ?>
                         <p><a href="index.php?action=detailFilm&id=<?= $role["id_movie"]?>"><?= $role["movie_title"]?></a></p>
-                    <?php } else { ?>
-                        <p>Pas de film attribué</p>
+              
                     <?php } ?>
                 </div>
                 
@@ -43,7 +41,8 @@ $role = $requeteDetailRole->fetch();?>
 </div>
 
 <?php
-$titre = "Role";
+$titre = "More about ". $role["name_role"];
+$meta_description = "Find out more about the role :" .$role["name_role"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

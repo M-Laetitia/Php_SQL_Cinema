@@ -7,8 +7,8 @@
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Add a Genre</h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Add a Genre</h2>
             <div class="form_info">
                 <form enctype="multipart/form-data" action="index.php?action=ajouterGenre" method="post">
 
@@ -31,8 +31,8 @@
 </div>
 <?php
 
-$titre = "Genre";
-$titre_secondaire = "Add genre";
+$titre = "Add a Genre";
+$meta_description = "form to add a genre and to expand the database";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

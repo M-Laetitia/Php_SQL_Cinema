@@ -5,6 +5,7 @@ pour stocker le contenu dans une variable $contenu -->
 
 <?php ob_start(); ?>
 
+<h1 class="title_ref"> Movies List</h1>
     <div class="container-list-movie">
         <div class="searchBar"></div>
         <div class="list-movie">
@@ -18,7 +19,9 @@ pour stocker le contenu dans une variable $contenu -->
                             }
                             else{
                                 // echo "<img src=". $movie["movie_image"] .">";
-                                echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="' . $movie["movie_image"] . '"></a>';
+                                echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="' . $movie["movie_image"] . '"  alt= "' . $movie["movie_alt_desc"] . '" ></a>';
+
+                                
                             }
                         ?> 
                     </div>
@@ -30,6 +33,7 @@ pour stocker le contenu dans une variable $contenu -->
                         </div>
 
                         <div class="secondary">
+                            
                             <p>Run Time : <?= $movie["formatted_duration"]?></p>
                             <p>Release : <?= $movie["movie_release_date"]?></p>
                             <p class="director">Director : <a href="index.php?action=detailRealisateur&id=<?= $movie["id_director"]?>"><?= $movie["realComplete"]?></a></p>
@@ -43,8 +47,9 @@ pour stocker le contenu dans une variable $contenu -->
     </div>
 <?php
 
-$titre = "List movies";
+$titre = "Movies";
 $contenu = ob_get_clean();
+$meta_description = "Browse through the movies list";
 // Le require de fin permet d'injecter le contenu dans le template "squelette" > template.php
 require "view/template.php";
 // Du coup dans notre "template.php" on aura des variables qui vont accueillir les éléments

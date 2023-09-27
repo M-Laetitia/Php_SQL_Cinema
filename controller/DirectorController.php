@@ -8,7 +8,7 @@ class DirectorController {
     public function listRealisateurs() {
         $pdo = Connect::seConnecter();
         $requete = $pdo->query("SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, person.person_nationality,  DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
-        (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_image
+        (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_image, person.person_alt_desc
         FROM person
         INNER JOIN director ON person.id_person = director.id_person
         ");
@@ -19,7 +19,7 @@ class DirectorController {
     // ^ Afficher détails réalisateur
     public function detailRealisateur($id) {
         $pdo = Connect::seConnecter();
-        $requetedetailRealisateur = $pdo->prepare("SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe, person.person_nationality, person.person_image
+        $requetedetailRealisateur = $pdo->prepare("SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe, person.person_nationality, person.person_image, person.person_alt_desc
         FROM person
         INNER JOIN director ON person.id_person = director.id_person
         WHERE id_director = :id"
@@ -89,10 +89,13 @@ class DirectorController {
             $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($person_first_name && $person_last_name && $person_sexe && $person_birthday){
+
+                $imageAlt = "Portrait of " . $person_first_name . ' ' . $person_last_name;
+
                 
                 $requeteAjouterPersonne = $pdo->prepare(" 
-                    INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image) 
-                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin)
+                    INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image, person_alt_desc) 
+                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin, :imageAlt)
                     ");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
@@ -101,6 +104,7 @@ class DirectorController {
                     "person_birthday" => $person_birthday,
                     "person_nationality" => $person_nationality,
                     "movieImageChemin" => $movieImageChemin,
+                    "imageAlt" => $imageAlt,
                 ]);
                 $id_realisateur = $pdo->lastInsertID();
                 $requeteAjouterRealisateur = $pdo->prepare("

@@ -9,8 +9,8 @@ $role = $requeteRole->fetch(); ?>
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Update : <?=$role["name_role"]?></h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Update : <?=$role["name_role"]?></h2>
             <div class="form_info">
 
                 <form enctype="multipart/form-data" action="index.php?action=updateRole&id=<?=$role["id_role"]?>" method="post">
@@ -32,8 +32,8 @@ $role = $requeteRole->fetch(); ?>
 </div>
 
 <?php
-$titre = "Role";
-$titre_secondaire = "update Role" ;
+$titre = "Update " . $role["name_role"];
+$meta_description = "Update the informations about " . $role["name_role"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

@@ -1,5 +1,6 @@
 <?php ob_start(); ?>
 
+<h1 class="title_ref"> Actors List</h1>
 <div class="container-list-person">
     <div class="searchBar"></div>
     <div class="list-person">
@@ -13,7 +14,7 @@
                             echo '<a href="index.php?action=detailActeur&id=' . $person["id_actor"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
                         }
                         else{
-                            echo '<a href="index.php?action=detailActeur&id=' . $person["id_actor"] . '"><img src="' . $person["person_image"] . '"></a>';
+                            echo '<a href="index.php?action=detailActeur&id=' . $person["id_actor"] . '"><img src="' . $person["person_image"] . '" alt= "' . $person["person_alt_desc"] . '" ></a>';
 
                             // Another ways to make the redirection with the hyperlink by clicking on the picture
 
@@ -38,7 +39,8 @@
 
 <?php
 
-$titre = "Actors List";
+$titre = "Actors";
+$meta_description = "Browse through the actors list";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

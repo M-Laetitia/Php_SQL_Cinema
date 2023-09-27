@@ -9,8 +9,8 @@ $movie = $requeteUpdateFilm->fetch(); ?>
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Update : <?= $movie["movie_title"]?> </h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Update : <?= $movie["movie_title"]?> </h2>
             <div class="form_info">
 
             <form enctype="multipart/form-data" action="index.php?action=updateFilm&id=<?= $movie["id_movie"]?>" method="POST">
@@ -95,11 +95,11 @@ $movie = $requeteUpdateFilm->fetch(); ?>
             </div>
         </div>
     </div>
-<div>
+</div>
 
 <?php
-$titre = "movie";
-$titre_secondaire = "update movie" ;
+$titre = "Update ". $movie["movie_title"];
+$meta_description = "Update the informations about " .$movie["movie_title"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

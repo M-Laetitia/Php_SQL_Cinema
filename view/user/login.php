@@ -45,7 +45,7 @@
 
 <?php
 
-$titre = "login";
+$titre = "Login";
 $contenu = ob_get_clean();
 require "view/template.php";
 

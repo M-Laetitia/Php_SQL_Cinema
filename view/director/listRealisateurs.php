@@ -1,5 +1,6 @@
 <?php ob_start(); ?>
 
+<h1 class="title_ref"> Directors List</h1>
 <div class="container-list-person">
     <div class="searchBar"></div>
     <div class="list-person">
@@ -12,7 +13,7 @@
                             echo '<a href="index.php?action=detailRealisateur&id=' . $person["id_director"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
                         }
                         else{
-                            echo '<a href="index.php?action=detailRealisateur&id=' . $person["id_director"] . '"><img src="' . $person["person_image"] . '"></a>';
+                            echo '<a href="index.php?action=detailRealisateur&id=' . $person["id_director"] . '"><img src="' . $person["person_image"] . '" alt= "' . $person["person_alt_desc"] . '" ></a>';
                         }
                     ?>  
                 </div>
@@ -27,7 +28,8 @@
     </div>
 <?php
 
-$titre = " List Director";
+$titre = " Directors";
+$meta_description = "Browse through the directors list";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

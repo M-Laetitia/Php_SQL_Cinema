@@ -3,7 +3,7 @@ $person = $requetedetailActeur->fetch();
 ?>
 
 <div class="container_detail container_actor">
-    <h2> <?= $person["acteurComplete"] ?> </h2>
+    <h1 id="name"> <?= $person["acteurComplete"] ?> </h1>
     <div class="detail">
         <div class="image">
             <figure>
@@ -12,7 +12,7 @@ $person = $requetedetailActeur->fetch();
                             echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
                         }
                         else{
-                        echo "<img src=". $person["person_image"] .">";
+                        echo "<img src=". $person["person_image"] ." alt= '" . $person["person_alt_desc"]. "'>";
                         }
                     ?>
             </figure>
@@ -75,7 +75,8 @@ $person = $requetedetailActeur->fetch();
 </div>
 
 <?php
-$titre = "Detail Actor";
+$titre = "More about " .$person["acteurComplete"] ;
+$meta_description = "Find out more about the actor :" .$person["acteurComplete"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

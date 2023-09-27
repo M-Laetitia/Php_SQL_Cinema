@@ -9,8 +9,8 @@ $actor = $requeteUpdateActeur->fetch();
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Update : <?= $actor["acteurComplete"] ?>  </h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Update : <?= $actor["acteurComplete"] ?>  </h2>
             <div class="form_info">
 
                 <form enctype="multipart/form-data" action="index.php?action=updateActeur&id=<?= $actor["id_actor"]?>" method="post">
@@ -62,8 +62,8 @@ $actor = $requeteUpdateActeur->fetch();
 </div>
 
 <?php
-$titre = "actor";
-$titre_secondaire = "update actor" ;
+$titre = "Update " . $actor["acteurComplete"] . "infos";
+$meta_description = "Update the informations about " . $actor["acteurComplete"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

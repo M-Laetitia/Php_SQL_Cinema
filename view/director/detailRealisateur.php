@@ -3,7 +3,7 @@ $person = $requetedetailRealisateur->fetch();
 ?>
 
 <div class="container_detail container_director">
-    <h2> <?= $person["realComplete"]?> </h2>
+    <h1 id="name"> <?= $person["realComplete"]?> </h1>
     <div class="detail">
         <div class="image">
             <figure>
@@ -12,7 +12,7 @@ $person = $requetedetailRealisateur->fetch();
                         echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
                     }
                     else{
-                    echo "<img src=". $person["person_image"] .">";
+                    echo "<img src=". $person["person_image"] ." alt= '" . $person["person_alt_desc"]. "' >";
                     }
                 ?>
             </figure>
@@ -57,7 +57,8 @@ $person = $requetedetailRealisateur->fetch();
 
 <?php
 
-$titre = "Détail d'un réalisateur";
+$titre = "More about " . $person["realComplete"];
+$meta_description = "Find out more about the director :" . $person["realComplete"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

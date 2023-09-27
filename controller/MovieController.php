@@ -25,7 +25,7 @@ class MovieController {
         $pdo = Connect::seConnecter();
         // On exécute la requête de notre choix
         $requete = $pdo->query("
-        SELECT movie.id_movie,  director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, movie.movie_rating, movie.movie_image
+        SELECT movie.id_movie,  director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, movie.movie_rating, movie.movie_image, movie.movie_alt_desc
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -40,7 +40,7 @@ class MovieController {
 
         $requetedetailFilm = $pdo->prepare("
         SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration,
-        movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres, movie.movie_image, movie.movie_synopsys, movie.movie_country
+        movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres, movie.movie_image, movie.movie_synopsys, movie.movie_country, movie.movie_alt_desc
         FROM movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
@@ -128,7 +128,6 @@ class MovieController {
                     /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }
-            
 
                 $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
                 $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -141,10 +140,11 @@ class MovieController {
 
                 // ajouter vérif pour bien que l'user rentre une année à 4 chiffres
                 if($movie_title !== false && $movie_duration !== false && $movie_release_date !== false && strlen($movie_release_date) === 4 && $movie_synopsys && $movie_rating && $director && $movie_country) {
+
+                $imageAlt = "Poster of " .$movie_title ;
                     
-                $requeteAjouterFilm = $pdo->prepare("
-                    INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director, movie.movie_image, movie_country)
-                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director, :movieImageChemin, :movie_country)
+                $requeteAjouterFilm = $pdo->prepare("INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director, movie.movie_image, movie_country, movie_alt_desc)
+                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director, :movieImageChemin, :movie_country, :imageAlt)
                 ");
 
                 $requeteAjouterFilm ->execute([
@@ -156,6 +156,7 @@ class MovieController {
                     "director" => $director,
                     "movieImageChemin" =>$movieImageChemin,
                     "movie_country" =>$movie_country,
+                    "imageAlt" => $imageAlt,
                 ]);
 
                 $requeteGenre = $pdo->query("SELECT id_genre, label_genre FROM genre");

@@ -8,8 +8,8 @@ $genre = $requeteGenre->fetch(); ?>
     </div>
 
     <div class="form_section">
-        <h2>Share Your Movie Wisdom</h2>
-        <h3>Update : <?=$genre["label_genre"]?> </h3>
+        <p>Share Your Movie Wisdom</p>
+        <h2>Update : <?=$genre["label_genre"]?> </h2>
         <div class="form_info">
 
             <form action="index.php?action=updateGenre&id=<?=$genre["id_genre"]?>" method="POST">
@@ -28,11 +28,11 @@ $genre = $requeteGenre->fetch(); ?>
             </form>
         </div>
     </div>
-<div>
+</div>
 
 <?php
-$titre = "genre";
-$titre_secondaire = "update genre" ;
+$titre = "Update " .$genre["label_genre"] ;
+$meta_description = "Update the informations about " .$genre["label_genre"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

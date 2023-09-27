@@ -13,7 +13,7 @@
     ?>
 
     <div class="container_detail container_movie">
-        <h2> <?= $movie["movie_title"]?> </h2>
+        <h1 id="name"> <?= $movie["movie_title"]?> </h1>
         <div class="detail">
 
             <div class="image">
@@ -22,7 +22,8 @@
                             echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
                         }
                         else {
-                        echo "<img src=". $movie["movie_image"] ." width='300'>";
+                        echo "<img    src=". $movie["movie_image"] ." alt= '" . $movie["movie_alt_desc"]. "' >";
+  
                         } ?>
                 </figure>
             </div>
@@ -64,9 +65,11 @@
 
         </div>
     </div>
+</div>
 <?php
 
-$titre = "Detail Movie";
+$titre = "More about " .$movie["movie_title"];
+$meta_description = "Browse through the movies catalogue";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

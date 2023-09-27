@@ -7,8 +7,8 @@
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Add a Director </h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Add a Director </h2>
             <div class="form_info">
 
                 <form enctype="multipart/form-data" action="index.php?action=ajouterRealisateur" method="post">
@@ -25,13 +25,13 @@
 
                         <div class="form-input">
                             <label for="person_sexe">Gender* :</label>
-                                M:<input type="radio" name="person_sexe" class="radio" value="male" required >
-                                F:<input type="radio" name="person_sexe" class="radio" value="female" >
+                                M:<input type="radio" name="person_sexe" class="radio" value="male" id="person_sexe" required >
+                                F:<input type="radio" name="person_sexe" class="radio" value="female" required>
                         </div>
 
                         <div class="form-input">
                             <label for="person_birthday"></label>
-                            <input type="date" placeholder="Date of birth*" name="person_birthday" id="person_birthday" required>
+                            <input type="date" name="person_birthday" id="person_birthday" required>
                         </div>
 
                         <div class="form-input">
@@ -42,7 +42,7 @@
 
                     <div class="input_image">
                         <label for="actor_image">Let's add a picture :</label>
-                        <input type="file"  name="director_image" >
+                        <input type="file"  name="director_image" id="actor_image" >
                         <p id="autorised-format">Autorised format : jpg, jpeg, png, WebP</p>
                     </div>
 
@@ -57,8 +57,8 @@
 </div>
 
 <?php
-$titre = "Director";
-$titre_secondaire = "Add Director";
+$titre = "Add a Director";
+$meta_description = " form to add a Director and to expand the database";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

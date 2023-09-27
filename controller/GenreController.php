@@ -26,7 +26,7 @@ class GenreController {
         ");
         $requeteGenre->execute(["id" => $id]);
 
-        $requeteDetailGenre = $pdo->prepare("SELECT genre.label_genre, movie.movie_title, movie.id_movie, genre.id_genre, CONCAT (person.person_first_name, ' ', person.person_last_name) AS directorComplete, director.id_director, movie.movie_image
+        $requeteDetailGenre = $pdo->prepare("SELECT genre.label_genre, movie.movie_title, movie.id_movie, genre.id_genre, CONCAT (person.person_first_name, ' ', person.person_last_name) AS directorComplete, director.id_director, movie.movie_image, movie.movie_alt_desc
         FROM genre
         INNER JOIN categorise ON categorise.id_genre = genre.id_genre
         INNER JOIN movie ON categorise.id_movie = movie.id_movie

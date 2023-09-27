@@ -131,7 +131,7 @@ ini_set('display_errors', 1);
 
 
 <?php
-$titre = "Result";
+$titre = "Search Result/s";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

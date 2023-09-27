@@ -1,6 +1,7 @@
 
 <?php ob_start(); ?>
 
+<h1 class="title_ref"> Roles List</h1>
 <div class="container-list">
     <!-- <div class="searchBar"></div> -->
     <div class="list">
@@ -27,8 +28,8 @@
 </div>
 
 <?php
-$titre = "Role";
-$titre_secondaire = "Roles List";
+$titre = "Roles";
+$meta_description = "Browse through the Roles list";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

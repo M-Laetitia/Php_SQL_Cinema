@@ -19,7 +19,7 @@
             <input type="text" name="pseudo" id="pseudo">
 
             <label for="Mail">Email : </label>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="Mail">
 
             <label for="pass1">Password : </label>
             <input type="password" name="pass1" id="pass1">
@@ -57,7 +57,7 @@
 
 <?php
 
-$titre = "register";
+$titre = "Register";
 $contenu = ob_get_clean();
 require "view/template.php";
 

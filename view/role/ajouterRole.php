@@ -7,8 +7,8 @@
         </div>
 
         <div class="form_section">
-            <h2>Share Your Movie Wisdom</h2>
-            <h3>Add a Role</h3>
+            <p>Share Your Movie Wisdom</p>
+            <h2>Add a Role</h2>
             <div class="form_info">
                 <form enctype="multipart/form-data" action="index.php?action=ajouterRole" method="post">
                 
@@ -30,8 +30,8 @@
 </div>
 
 <?php
-$titre = "Role";
-$titre_secondaire = "Add role";
+$titre = "Add a Role";
+$meta_description = "form to add a Role and to expand the database";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>

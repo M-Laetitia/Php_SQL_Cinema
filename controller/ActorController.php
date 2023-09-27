@@ -8,7 +8,7 @@ class ActorController {
     public function listActeurs() {
         $pdo = Connect::seConnecter();
         $requete = $pdo->query(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
-        (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_nationality, person.person_image
+        (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_nationality, person.person_image, person.person_alt_desc
         FROM person
         INNER JOIN actor ON person.id_person = actor.id_person
         ");
@@ -19,7 +19,7 @@ class ActorController {
     // ^ Afficher le détail d'un acteur
     public function detailActeur($id) {
         $pdo = Connect::seConnecter();
-        $requetedetailActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person_nationality, person.person_image
+        $requetedetailActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS acteurComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person_nationality, person.person_image, person.person_alt_desc
         FROM person
         INNER JOIN actor ON person.id_person = actor.id_person
         WHERE id_actor = :id"
@@ -107,8 +107,11 @@ class ActorController {
             // The INSERT INTO statement is used to insert new records in a table.*
             if($person_first_name && $person_last_name && $person_sexe && $person_birthday && $person_nationality){
                 $pdo = Connect::seConnecter();
-                $requeteAjouterPersonne = $pdo->prepare(" INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image ) 
-                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin)
+
+                $imageAlt = "Portrait of " . $person_first_name . ' ' . $person_last_name;
+
+                $requeteAjouterPersonne = $pdo->prepare(" INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image, person_alt_desc ) 
+                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin, :imageAlt)
                     ");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
@@ -117,6 +120,7 @@ class ActorController {
                     "person_birthday" => $person_birthday,
                     "person_nationality" => $person_nationality,
                     "movieImageChemin" => $movieImageChemin,
+                    "imageAlt" => $imageAlt,
                 ]);
                 // The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
                 // The INSERT INTO SELECT statement requires that the data types in source and target tables match.

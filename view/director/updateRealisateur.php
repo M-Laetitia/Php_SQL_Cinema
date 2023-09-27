@@ -8,8 +8,8 @@ $director = $requeteUpdateRealisateur->fetch(); ?>
     </div>
 
     <div class="form_section">
-        <h2>Share Your Movie Wisdom</h2>
-        <h3>Update: <?= $director["directorComplete"] ?> </h3>
+        <p>Share Your Movie Wisdom</p>
+        <h2>Update: <?= $director["directorComplete"] ?> </h2>
         <div class="form_info">
 
             <form enctype="multipart/form-data" action="index.php?action=updateRealisateur&id=<?= $director["id_director"]?>" method="post">
@@ -60,8 +60,8 @@ $director = $requeteUpdateRealisateur->fetch(); ?>
 </div>
 
 <?php
-$titre = "actor";
-$titre_secondaire = "update actor" ;
+$titre = "Update " . $director["directorComplete"];
+$meta_description = "Update the informations about " . $director["directorComplete"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>
