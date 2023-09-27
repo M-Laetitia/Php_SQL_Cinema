@@ -60,7 +60,7 @@ picture {
     margin: 0;
 }
 
-h1,
+/* h1,
 h2,
 h3,
 h4,
@@ -68,7 +68,7 @@ h5,
 h6,
 p {
     font-weight: 400;
-}
+} */
 
 input,
 button,
@@ -116,7 +116,7 @@ select {
 
 .container-genre .card {
     /* width: 200px; */
-    height: 22rem;
+    /* height: 22rem; */
     /* background-color: #E03058; */
     border-radius: 1rem;
    
@@ -231,8 +231,10 @@ select {
     flex-direction: column;
 }
 
-.container_detail h2 {
+.container_detail #name  {
     font-size: var(--fs-900);
+    font-weight: 500;
+
 }
 
 .detail {
@@ -244,7 +246,7 @@ select {
     "img info "
     "description description ";
     grid-template-rows: 75% 1fr 25%;
-    grid-template-columns: 43% 1fr;
+    grid-template-columns: 30% 1fr;
 }
 
 .detail .image{

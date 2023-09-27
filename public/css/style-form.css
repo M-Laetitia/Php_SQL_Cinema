@@ -59,7 +59,7 @@ picture {
     margin: 0;
 }
 
-h1,
+/* h1,
 h2,
 h3,
 h4,
@@ -67,7 +67,7 @@ h5,
 h6,
 p {
     font-weight: 400;
-}
+} */
 
 input,
 button,
@@ -143,14 +143,15 @@ select {
 
 }
 
-.form_section h2 {
+.form_section p {
     font-size: var(--fs-800);
     margin-top: 2rem;
 }
 
-.form_section h3 {
+.form_section h2 {
     font-size: var(--fs-600);
     color : var(--clr-pink);
+    font-weight: 500;
   
 }
 
@@ -341,7 +342,7 @@ textarea {
         text-align: center;
     }
 
-    .form_section h2 {
+    .form_section p {
         font-size: var(--fs-800);
         margin-top: 1rem;
         font-size: 1.5rem;
