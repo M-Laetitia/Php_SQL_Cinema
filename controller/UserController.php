@@ -45,29 +45,18 @@ class UserController {
                                 
                             ]);
                             header ("Location: index.php?action=landingPage"); exit;
-
-                            
                         } else {
                             $_SESSION["message"] = "The password is not strong enough. It must contain at least one capital letter, one number, one special character and be between 8 and 20 characters long.";
                         }
-
-           
                     } else {
-                        
                         $_SESSION["message"] = "The passwords are different";
                     }
                 }
-
             } else {
                 $_SESSION["message"] = "A problem has occurred. Please fill in all fields correctly.";
             }
-
         }
         require("view/user/register.php");
-       
-        // par défaut j'affiche le formulaire d'inscription
-        // header ("Location: register.php"); exit;
-        
     }
 
     // ^ Login
@@ -83,7 +72,6 @@ class UserController {
                 $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email ");
                 $requete->execute(["email" => $email]);
                 $user = $requete->fetch();
-
                 // var_dump($user);die;
 
                 if($user) {
@@ -110,16 +98,12 @@ class UserController {
     }
 
     // ^ Log out
-
     public function logout() {
         unset($_SESSION["user"]);
         // session_unset();
         echo "You had been disconnected";
         header("Location: index.php?action=landingPage"); exit;
     }
-
-
-
 
 
     // ^ Profile
@@ -132,14 +116,12 @@ class UserController {
             // echo "pas d'user connecté";
             header ("Location: index.php?action=landingPage"); exit;
         }
-        
     }
 
     // ^ Supprimer compte user
     public function deleteAccount() {
 
         $pdo = Connect::seConnecter();
-
         // supprimer user de la table user
         if($_SESSION["user"]) {
             $user= $_SESSION["user"]["id_user"]; // obtenir l'identifisant de l'user connecté
@@ -154,11 +136,8 @@ class UserController {
             echo "pas d'user connecté";
             header ("Location: index.php?action=landingPage"); exit;
         }
-
     }
-
-    
-     
+  
 }
 ?>
 

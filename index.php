@@ -3,6 +3,7 @@
 //localhost/molin/Php_SQL_Cinema/index.php?action=listActeurs
 //localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailActeur&id=1
 //localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailRole&id=2
+// view-source:localhost/molin/Php_SQL_Cinema/index.php?action=listRealisateurs
 
 // On "use" le controller Cinema
 use Controller\MovieController;
@@ -38,17 +39,11 @@ if(isset($_GET["action"])) {
     switch ($_GET["action"]) {
 
         // USER 
-
-
-        // page pour être redirigé vers inscription ou connexion
-
         case "register" : $ctrlUser->register(); break;
         case "login" : $ctrlUser->login(); break;
-
         case "logout" : $ctrlUser->logout(); break;
         case "profile" : $ctrlUser->profile(); break;
         case "deleteAccount": $ctrlUser->deleteAccount(); break;
-
 
         // SEARCH
         case "search" : $ctrlSearch->search(); break;
@@ -64,9 +59,7 @@ if(isset($_GET["action"])) {
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
-        // case "searching" : $ctrlMovie->searching(); break;
-        
- 
+
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
         case "detailActeur" : $ctrlActor->detailActeur($id); break;

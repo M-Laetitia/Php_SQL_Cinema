@@ -26,6 +26,7 @@
             
         <?php } ?>     
     </div>
+</div>
 <?php
 
 $titre = " Directors";

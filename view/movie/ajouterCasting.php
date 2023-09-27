@@ -18,6 +18,7 @@ ob_start();
                         <div class="selection-info">
                             <label for="movie"></label>
                             <select name="movie" id="movie" required>
+                            <!-- The first child option element of a select element with a required attribute, and without a multiple attribute, and without a size attribute whose value is greater than 1, must have either an empty value attribute, or must have no text content. Consider either adding a placeholder option label, or adding a size attribute with a value equal to the number of option elements. -->
                                 <option disabled selected>Select a Movie</option>
                                     <?php foreach($requeteFilm->fetchAll() as $movie){ ?>
                                     <option value="<?= $movie["id_movie"] ?>"><?= $movie["movie_title"]?></option>

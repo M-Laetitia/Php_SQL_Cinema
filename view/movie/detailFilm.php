@@ -23,7 +23,6 @@
                         }
                         else {
                         echo "<img    src=". $movie["movie_image"] ." alt= '" . $movie["movie_alt_desc"]. "' >";
-  
                         } ?>
                 </figure>
             </div>
@@ -36,7 +35,6 @@
                         <li>Run Time : <?= $movie["formatted_duration"] ?></li>
                         <li>Country : <span class="text-highlight"><?= $movie["movie_country"] ?></span></li>
                         <li>Release : <?= $movie["movie_release_date"] ?></li>
-                        
                     </ul>
                 </div>
 
@@ -55,14 +53,12 @@
                         <div><a href="index.php?action=updateFilm&id=<?=$movie["id_movie"]?>"> <i class="fa-solid fa-file-pen"></i></a>   </div> 
                     </div>
                 </div>
-
             </div>
 
             <div class="storyline">
                 <p><span class="text-highlight">Storyline : </span></p>
                 <textarea readonly> <?= $movie["movie_synopsys"]?></textarea>
             </div>
-
         </div>
     </div>
 </div>

@@ -66,7 +66,6 @@
                         <label for="movie_synopsys"></label>
                         <textarea  placeholder="Synopsys" name="movie_synopsys" id="movie_synopsys"></textarea>
                     </div>
-            
 
                     <div class="input_image">
                         <label for="movie_image">Let's add a picture :</label>

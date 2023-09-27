@@ -20,8 +20,6 @@ pour stocker le contenu dans une variable $contenu -->
                             else{
                                 // echo "<img src=". $movie["movie_image"] .">";
                                 echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="' . $movie["movie_image"] . '"  alt= "' . $movie["movie_alt_desc"] . '" ></a>';
-
-                                
                             }
                         ?> 
                     </div>
@@ -48,8 +46,8 @@ pour stocker le contenu dans une variable $contenu -->
 <?php
 
 $titre = "Movies";
-$contenu = ob_get_clean();
 $meta_description = "Browse through the movies list";
+$contenu = ob_get_clean();
 // Le require de fin permet d'injecter le contenu dans le template "squelette" > template.php
 require "view/template.php";
 // Du coup dans notre "template.php" on aura des variables qui vont accueillir les éléments
