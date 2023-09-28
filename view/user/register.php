@@ -58,6 +58,7 @@
 <?php
 
 $titre = "Register";
+$meta_description = "";
 $contenu = ob_get_clean();
 require "view/template.php";
 

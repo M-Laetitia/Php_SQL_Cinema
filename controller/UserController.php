@@ -137,6 +137,9 @@ class UserController {
             header ("Location: index.php?action=landingPage"); exit;
         }
     }
+
+
+     // ^ dDéfinir préférence theme (light/dark)
   
 }
 ?>

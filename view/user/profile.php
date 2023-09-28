@@ -25,13 +25,25 @@ ob_start();
         
         </div>
 
+
+        <div class="theme-pref">
+        <form action="">
+            <div class="">
+                <label for="theme">Theme preference :</label>
+                    Dark:<input type="radio" name="theme" class="radio" value="dark"  required >
+                    Light:<input type="radio" name="theme" class="radio" value="light" required>
+            </div>
+        </form>
+
+        </div>
+
         <div id="logoutDelete">
             <p><a href="index.php?action=logout"> <span class="text-highlight"><i class="fa-solid fa-power-off"></i></span> Log out</a></p>
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
         </div>
         
 
-            
+        
 
            
 
@@ -57,6 +69,7 @@ ob_start();
 <?php
 
 $titre = "Profile";
+$meta_description = "";
 $contenu = ob_get_clean();
 require "view/template.php";
 

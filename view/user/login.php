@@ -46,9 +46,12 @@
 <?php
 
 $titre = "Login";
+$meta_description = "";
 $contenu = ob_get_clean();
 require "view/template.php";
 
 ?>
 
-
+<!-- test06
+test06@exemple.com
+123456AB!65 -->
