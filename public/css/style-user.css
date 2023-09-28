@@ -4,14 +4,6 @@
 /* ---------------------------------- */
 
 :root {
-    /* colors */
-    --clr-white : #dad8d8;
-    --clr-grey-light : #4c4a60;
-    --clr-grey-medium : #282737;
-    --clr-grey-dark: #201F2C;
-    --clr-grey-black: #18181E;
-    --clr-pink: #E03058;
-    --clr-orange : #EF832C;
 
     /* font-sizes */
     --fs-big: 8rem;
@@ -225,6 +217,8 @@ select {
 /* background-color: var(--clr-grey-medium); */
 /* border-bottom: 1px solid var(--clr-grey-light); */
 
+
+
 #sign-up {
     margin: 1rem 0; 
 }
@@ -241,3 +235,4 @@ select {
 #sign-up a {
     text-decoration: none;
 }
+

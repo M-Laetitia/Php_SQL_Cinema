@@ -5,14 +5,24 @@
 /* ---------------------------------- */
 
 :root {
-    /* colors */
-    --clr-white : #dad8d8;
+    /* colors dark */
+    /* --clr-white : #dad8d8;
     --clr-grey-light : #4c4a60;
     --clr-grey-medium : #282737;
     --clr-grey-dark: #201F2C;
     --clr-grey-black: #18181E;
     --clr-pink: #E03058;
-    --clr-orange : #EF832C;
+    --clr-orange : #EF832C; */
+
+     /* colors light*/
+    /* --clr-white : #1c1c24;
+    --clr-grey-light : #f9f9f9;
+    --clr-grey-medium : #efefef;
+    --clr-grey-dark: #d8dbdd;
+    --clr-grey-black: #848495;
+    --clr-pink: #c03f5d;
+    --clr-orange : #EF832C; */
+
 
     /* font-sizes */
     --fs-big: 8rem;
@@ -29,11 +39,63 @@
     --ff-quickSand: 'Quicksand', sans-serif;
 }
 
-@media (min-width: 35em) { /*560px*/
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* colors dark */
+        --clr-white : #dad8d8;
+        --clr-grey-light : #4c4a60;
+        --clr-grey-medium : #282737;
+        --clr-grey-dark: #201F2C;
+        --clr-grey-black: #18181E;
+        --clr-pink: #E03058;
+        --clr-orange : #EF832C;
+    
+    }
 }
+  
 
-@media (min-width: 45em) { /*720px*/
-}
+@media (prefers-color-scheme: light) {
+    :root {
+    
+         /* colors light*/
+        --clr-white : #1c1c24;
+        --clr-grey-light : #f9f9f9;
+        --clr-grey-medium : #efefef;
+        --clr-grey-dark: #d8dbdd;
+        --clr-grey-black: #848495;
+        --clr-pink: #c03f5d;
+        --clr-orange : #EF832C;
+
+    }
+  }
+
+  :root.dark {
+    /* colors dark */
+    --clr-white : #dad8d8;
+    --clr-grey-light : #4c4a60;
+    --clr-grey-medium : #282737;
+    --clr-grey-dark: #201F2C;
+    --clr-grey-black: #18181E;
+    --clr-pink: #E03058;
+    --clr-orange : #EF832C;
+  }
+
+  :root.light {
+
+     /* colors light*/
+    --clr-white : #1c1c24;
+    --clr-grey-light : #f9f9f9;
+    --clr-grey-medium : #efefef;
+    --clr-grey-dark: #d8dbdd;
+    --clr-grey-black: #848495;
+    --clr-pink: #c03f5d;
+    --clr-orange : #EF832C;
+
+  }
+
+
+
+
 
 /* ---------------------------------- */
 /* Reset                              */
@@ -384,7 +446,13 @@ nav .add_entity {
     color: var(--clr-white);
 }
 
+/* ~ & Header / Nav ------------------ */
 
+.switchTheme {
+   color: var(--clr-white);
+   cursor: pointer;
+
+}
 
 
 /* ~ & Footer ----------------- */
