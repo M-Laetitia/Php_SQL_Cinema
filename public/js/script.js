@@ -65,6 +65,12 @@ function toggleTheme() {
   root.classList.remove(theme);
   theme = (theme === 'dark') ? 'light' : 'dark';
   root.classList.add(theme);
+    if (theme === 'dark') {
+        localStorage.setItem('theme', 'dark' )
+    } else {
+        localStorage.setItem('theme', 'light')
+    }
+  
 }
 
 // https://stackoverflow.com/questions/70845195/define-dark-mode-for-both-a-class-and-a-media-query-without-repeat-css-custom-p
@@ -72,3 +78,25 @@ function toggleTheme() {
 
 //& storing  a user's preference
 
+// Select the button
+const toggleBtn = document.getElementById("toggle-btn")
+
+// Select the theme preference from localStorage
+const currentTheme = localStorage.getItem("theme")
+console.log(currentTheme);
+
+// function keepTheme () {
+//     const theme = localStorage.getItem('theme')
+//         console.log(theme)
+// }
+
+
+    if (currentTheme == "dark") {
+        root.classList.remove(theme);
+        root.classList.add("dark");
+    } else {
+        root.classList.remove(theme);
+        root.classList.add("light");
+    }
+
+    
