@@ -44,3 +44,31 @@ menuBurger.addEventListener('click', () => {
 
 
 
+//& dark/light mode
+//& enable the switch between dark and light mode
+
+// const toggleBtn = document.getElementById("light-mode-toggle")
+// const darkScheme = window.matchMedia("(prefers-color-scheme: dark)")
+// const lightScheme = window.matchMedia("(prefers-color-scheme: light)")
+
+// operator ternaire
+// let result = condition ? value1 : value 2
+let root = document.documentElement, theme = window.getComputedStyle(root)
+.getPropertyValue('--light') === ' ' ? 'dark' : 'light';
+
+
+
+document.getElementById('toggle-btn')
+  .addEventListener('click', toggleTheme);
+
+function toggleTheme() {
+  root.classList.remove(theme);
+  theme = (theme === 'dark') ? 'light' : 'dark';
+  root.classList.add(theme);
+}
+
+// https://stackoverflow.com/questions/70845195/define-dark-mode-for-both-a-class-and-a-media-query-without-repeat-css-custom-p
+
+
+//& storing  a user's preference
+
