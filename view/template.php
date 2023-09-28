@@ -40,6 +40,11 @@
         </a>
         
         <nav>
+            <div class="switchTheme">
+            <button id="toggle-btn">Toggle dark mode</button>
+            </div>
+
+
             <div class="primary-navigation">
                 <ul>
                     <li><a href="index.php?action=listFilms"> Movie</a></li>
