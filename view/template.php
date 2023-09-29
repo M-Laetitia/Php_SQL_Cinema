@@ -134,6 +134,8 @@
     <main>
         
         <?= $contenu ?> 
+
+        <button id="scrollToTopButton"></button> 
     </main>
 
 

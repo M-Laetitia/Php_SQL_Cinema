@@ -100,3 +100,32 @@ console.log(currentTheme);
     }
 
     
+
+//& scroll to top Button
+
+// Fonction pour faire défiler vers le haut
+
+const scrollToTopButton = document.getElementById('scrollToTopButton');  
+
+function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Option pour un défilement fluide
+    });
+  }
+
+  scrollToTopButton.addEventListener('click', scrollToTop);
+  
+  // Afficher ou masquer le bouton en fonction de la position de défilement - ici réglé à 50px.
+  window.onscroll = function() {
+    //document.body.scrollTop = fait référence à la position de défilement verticale de la partie <body> de la page.
+    // document.documentElement.scrollTop =  fait référence à la position de défilement verticale de l'élément <html> de la page.
+    // La différence entre document.body.scrollTop et document.documentElement.scrollTop réside dans la manière dont les navigateurs gèrent la position de défilement verticale sur différentes versions et configurations.
+
+    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+      document.getElementById('scrollToTopButton').classList.add('show');
+    } else {
+      document.getElementById('scrollToTopButton').classList.remove('show');
+    }
+  };
+  

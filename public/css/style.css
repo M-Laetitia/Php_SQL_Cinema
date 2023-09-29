@@ -455,6 +455,52 @@ nav .add_entity {
 }
 
 
+/* ~ & Header / Nav ------------------ */
+
+#scrollToTopButton {
+    /* display: none; */
+    display: inline-block;
+    position: fixed;
+    background-color: var(--clr-pink);
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 10px;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color .3s, 
+    opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    
+  }
+
+  #scrollToTopButton::after {
+    content: "\f077";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 2em;
+    line-height: 50px;
+    color: var(--clr-white);
+  }
+
+
+  #scrollToTopButton:hover {
+    background-color: var(--clr-grey-light);
+    cursor: pointer;
+  }
+
+  #scrollToTopButton:active {
+    background-color: #555;
+  }
+  #scrollToTopButton.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+
 /* ~ & Footer ----------------- */
 
 /* footer {
