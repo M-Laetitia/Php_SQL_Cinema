@@ -60,6 +60,24 @@
                 <textarea readonly> <?= $movie["movie_synopsys"]?></textarea>
             </div>
         </div>
+
+        <div id="add-rating-button">+</div>
+
+        <div class="popUpRating" >
+
+            <form id="rating-form" action="index.php?action=addRating" enctype="multipart/form-data" method="POST">
+                
+                <p>want to share your own rating?</p>
+
+                <input type="number" name="user_rating" min="1" max="5">
+                <button id="submitForm" type="submit">Submit</button>
+            </form>
+
+            
+            <div id="closePopUp"> X </div>
+
+        </div>
+
     </div>
 </div>
 <?php
