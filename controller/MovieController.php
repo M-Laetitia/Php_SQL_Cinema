@@ -3,6 +3,7 @@
 // namespace "Model"
 namespace Controller;
 use Model\Connect;
+session_start();
 
 // Ajoutez ces lignes pour activer l'affichage des erreurs
 // ini_set('display_errors', 1);
@@ -159,6 +160,27 @@ class MovieController {
                     "imageAlt" => $imageAlt,
                 ]);
 
+                // Ajout de la note soumise dans le formulaire dans la table rating
+                // récupérer l'id du dernier film ajouté
+
+
+               
+                $id_movie = $pdo->lastInsertId();
+                
+
+                //insertion de la table "rating"
+                $id_user = $_SESSION['user']['id_user'];
+                $requeteAjouterNote = $pdo->prepare("INSERT INTO rating (id_movie, id_user, note)
+                VALUES (:id_movie, :id_user, :movie_rating)
+                "); 
+                $requeteAjouterNote->execute([
+                    "id_movie" => $id_movie,
+                    "id_user" => $id_user,
+                    "movie_rating" => $movie_rating,
+
+                ]);
+    
+
                 $requeteGenre = $pdo->query("SELECT id_genre, label_genre FROM genre");
                 $requeteGenre-> execute();
                 
@@ -166,8 +188,9 @@ class MovieController {
 
                 foreach ($genresChecked as $genre) {
                     $requeteAjoutGenre = $pdo->prepare("INSERT INTO categorise (id_movie, id_genre)
-                    VALUES (LAST_INSERT_ID(), :id_genre)");
+                    VALUES (:id_movie, :id_genre)");
                     $requeteAjoutGenre->execute([
+                        "id_movie" => $id_movie,
                         "id_genre" => $genre
                     ]);
                 }
@@ -350,6 +373,28 @@ class MovieController {
         }
         require("view/movie/updateFilm.php");
     }
+
+
+    // ^ Calculer moyenne des notes données par les utilisateurs
+
+    public function ratingAverage ($id) {
+        $pdo = Connect::seConnecter();
+        $requete = $pdo->prepare("SELECT note FROM rating WHERE id_movie = :id");
+        $requete->execute(["id" => $id]);
+
+        $notes = $requete->fetchAll();
+
+        $noteMoyenne = 0;
+
+        if(!empty($notes)) {
+            $noteMoyenne = array_sum($notes) / count($notes);
+        }
+
+    }
+
+
+    // ^ ajout de note par les utilisateurs
+     
 
 }
 
