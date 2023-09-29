@@ -528,6 +528,19 @@ textarea::-webkit-scrollbar-thumb {
 
 }
 
+#add-rating-button {
+    cursor: pointer;
+    font-size: var(--fs-900);
+}
+
+.popUpRating {
+    background-color: var(--clr-grey-light);
+    width: 450px;
+    height: 150px;
+    border-radius: 10px;
+    display: none;
+}
+
 
 /* ~ MEDIA QUERY ------------------------- */
 
