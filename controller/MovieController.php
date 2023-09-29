@@ -395,6 +395,41 @@ class MovieController {
 
     // ^ ajout de note par les utilisateurs
      
+    public function addRating ($id) {
+
+        if(isset($_POST["user_rating"])) {
+            // vérifier si user est connecté
+            if(isset($_SESSION['user']['id_user'])) {
+                $userId = $_SESSION['user']['id_user'];
+                var_dump($_SESSION['user']['id_user']); die;
+
+            $user_rating = filter_input(INPUT_POST, "user_rating", FILTER_SANITIZE_NUMBER_INT);
+
+                if($user_rating !== false) {
+                    $pdo = Connect::seConnecter();
+
+                    $requete = $pdo->prepare("INSERT INTO rating (id_movie, id_user, note) 
+                    VALUES (:id_movie, :id_user, :note)
+                    ");
+                    $requete->execute ([
+                        "id_movie" => $id,
+                        "id_user" => $userId,
+                        "note" => $user_rating
+                    ]);
+                } else {
+                    // note pas valide
+                } 
+                } else {
+                    // user non connecté.
+            } 
+        }
+    }
+
+    // récup note
+    //filtrer 
+    // soit nvelle entrée, soit éditer celle présente ne pas permettre de rentrer plusieurs notes par le même user
+    //envoyer à la table rating
+
 
 }
 
