@@ -5,6 +5,7 @@
 //localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailRole&id=2
 // view-source:localhost/molin/Php_SQL_Cinema/index.php?action=listRealisateurs
 
+
 // On "use" le controller Cinema
 use Controller\MovieController;
 use Controller\ActorController;
@@ -44,6 +45,9 @@ if(isset($_GET["action"])) {
         case "logout" : $ctrlUser->logout(); break;
         case "profile" : $ctrlUser->profile(); break;
         case "deleteAccount": $ctrlUser->deleteAccount(); break;
+
+        case "themePreference" : $ctrlUser->themePreference(); break;
+        
 
         // SEARCH
         case "search" : $ctrlSearch->search(); break;

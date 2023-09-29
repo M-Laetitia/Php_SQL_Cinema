@@ -16,6 +16,13 @@
     <!-- Google icon -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" >
 
+    <?php
+    $user_theme = $_SESSION['user_theme'] ?? 'light';
+    echo '<link rel="stylesheet" href="' . $user_theme . '.css">';
+    ?>
+
+
+
     <link rel="stylesheet" href="./public/css/style.css">
     <link rel="stylesheet" href="./public/css/style-form.css">
     <link rel="stylesheet" href="./public/css/style-listing.css">

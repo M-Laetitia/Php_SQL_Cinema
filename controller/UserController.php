@@ -80,6 +80,22 @@ class UserController {
                         $_SESSION["user"] = $user;
                         //var_dump($_SESSION["user"]);die;
 
+                    // Récupérer la préférence de l'user concernant le thème
+                    $id_user = $user["id_user"];
+                    $requete = $pdo->prepare('SELECT preference FROM user WHERE id_user = :id_user');
+                    $requete->execute(array(":id_user" => $user_id));
+                    $user_preference = $requete->fetch();
+
+                    if ($user_preference) {
+                        $_SESSION["user_theme"] = json_decode($user_preference, true)['theme'];
+                        var_dump($_SESSION["user_theme"]); die;
+                    } else {
+                        // Par défaut, utiliser un thème (ici, "light") si l'user n'a pas de préférence enregistrée
+                        $_SESSION["user_theme"] = "light";
+                    }
+
+
+
                         // rediriger vers page d'accueil
                         echo "<p> Connexion réussie </p>";
                         header("Location: index.php?action=landingPage");   exit;
@@ -139,8 +155,28 @@ class UserController {
     }
 
 
-     // ^ dDéfinir préférence theme (light/dark)
-  
+     // ^ dDéfinir préférence theme (light/dark) ajout + update
+
+     public function themePreference() {
+
+        // récupérer l'id de l'user connecté à partir de la session
+        $id_user = $_SESSION['user']['id_user'];
+
+        if(ISSET($_POST['theme'])) {
+            $newTheme = array('theme' => $_POST['theme']); // Créez un tableau associatif 
+            $jsonTheme = json_encode($newTheme); 
+
+            $pdo = Connect::seConnecter();
+
+            $requete = $pdo->prepare('UPDATE user SET preference = :preference WHERE id_user = :id_user');
+            $requete-> execute(array(':preference' => $jsonTheme, ':id_user' => $id_user));
+          
+            
+            header("Location: index.php?action=landingPage");
+            exit();
+          }
+          require("view/user/profile.php");
+        }
 }
 ?>
 

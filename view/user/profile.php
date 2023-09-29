@@ -25,16 +25,18 @@ ob_start();
         
         </div>
 
+*
 
         <div class="theme-pref">
-        <form action="">
-            <div class="">
-                <label for="theme">Theme preference :</label>
-                    Dark:<input type="radio" name="theme" class="radio" value="dark"  required >
-                    Light:<input type="radio" name="theme" class="radio" value="light" required>
-            </div>
-        </form>
-
+            <form enctype="multipart/form-data" action="index.php?action=themePreference" method="POST">
+                <label for="lightTheme">Light Theme</label>
+                <input type="radio" id="lightTheme" name="theme" value="light">
+                
+                <label for="darkTheme">Dark Theme</label>
+                <input type="radio" id="darkTheme" name="theme" value="dark">
+                
+                <input type="submit" class="submit" name="submitTheme" id="submitRole" value="Update">
+            </form>
         </div>
 
         <div id="logoutDelete">
@@ -42,10 +44,6 @@ ob_start();
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
         </div>
         
-
-        
-
-           
 
     </div>
 
