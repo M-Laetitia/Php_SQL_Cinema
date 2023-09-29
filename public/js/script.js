@@ -129,3 +129,33 @@ function scrollToTop() {
     }
   };
   
+
+  //& pop up pour rajouter note à un film 
+
+  const ratingBtn = document.getElementById('add-rating-button')
+  const popUpDiv= document.querySelector('.popUpRating');
+
+  ratingBtn.addEventListener('click', (e) => {
+    e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
+    popUpDiv.style.display = 'block';
+  })
+
+  const submitForm = document.getElementById('submitForm')
+
+  submitForm.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    popUpDiv.style.display = 'none';
+  })
+
+  const closePopUp = document.getElementById('closePopUp')
+
+  closePopUp.addEventListener("mouseover", (e) => {
+    e.preventDefault();
+    closePopUp.style.cursor = "pointer";
+});
+
+  closePopUp.addEventListener('click', (e) => {
+    e.preventDefault();
+    popUpDiv.style.display = 'none';
+  }) 
