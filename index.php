@@ -62,6 +62,8 @@ if(isset($_GET["action"])) {
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
 
+        case "addRating" : $ctrlMovie->addRating($id); break;
+
         case "landingPage" : $ctrlMovie->landingPage(); break;
 
         // ACTOR
