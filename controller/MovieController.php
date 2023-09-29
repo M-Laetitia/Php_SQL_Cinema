@@ -415,14 +415,33 @@ class MovieController {
                 if($user_rating !== false) {
                     $pdo = Connect::seConnecter();
 
-                    $requete = $pdo->prepare("INSERT INTO rating (id_movie, id_user, note) 
-                    VALUES (:id_movie, :id_user, :note)
-                    ");
+                    //vérifier si une note a déjà été rentrée par cet user pour ce film
+                    $requete = $pdo->prepare("SELECT * FROM rating WHERE id_movie = :id_movie AND id_user = :id_user");
                     $requete->execute ([
                         "id_movie" => $filmId,
+                        "id_user" => $userId
+                    ]);
+
+
+                    $existingRating = $requete->fetch();
+
+                    if($existingRating) {
+                        //si une note existe, la mettre à jour
+                        $requeteUpdate= $pdo->prepare("UPDATE rating SET note = :note WHERE id_rating = :id_rating" );
+                        $requeteUpdate->execute([
+                            "id_rating" => $existingRating['id_rating'],
+                            "note" => $user_rating
+                        ]);
+                    } else {
+                        //sinon, insérez une nouvelle note
+                        $requeteAjout = $pdo->prepare("INSERT INTO rating (id_movie, id_user, note)
+                        VALUES (:id_movie, :id_user, :note)");
+                        $requeteAjout->execute([
+                         "id_movie" => $filmId,
                         "id_user" => $userId,
                         "note" => $user_rating
-                    ]);
+                        ]);
+                    }
 
                 } else {
                     // Note invalide
@@ -433,12 +452,6 @@ class MovieController {
             header("Location: index.php?action=listFilms");
     }
      
-    
-    // récup note
-    //filtrer 
-    // soit nvelle entrée, soit éditer celle présente ne pas permettre de rentrer plusieurs notes par le même user
-    //envoyer à la table rating
-
 
 }
 
