@@ -61,22 +61,31 @@
             </div>
         </div>
 
-        <div id="add-rating-button">+</div>
+        <?php 
+        if(isset($_SESSION["user"])) { ?>
+            <div id="add-rating-button">+</div>
 
-        <div class="popUpRating" >
+            <div class="popUpRating" >
 
-            <form id="rating-form" action="index.php?action=addRating" enctype="multipart/form-data" method="POST">
+                <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
+
+                    
+                    <p>want to share your own rating?</p>
+
+                    <input type="number" name="user_rating" min="1" max="5">
+                    <button id="submitForm" type="submit">Submit</button>
+                </form>
+
                 
-                <p>want to share your own rating?</p>
+                <div id="closePopUp"> X </div>
 
-                <input type="number" name="user_rating" min="1" max="5">
-                <button id="submitForm" type="submit">Submit</button>
-            </form>
+            </div>
 
-            
-            <div id="closePopUp"> X </div>
+        <?php } ?>
 
-        </div>
+        
+
+        
 
     </div>
 </div>
