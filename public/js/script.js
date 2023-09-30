@@ -164,13 +164,20 @@ function scrollToTop() {
 // & add image background dynamically to certain pages.
 
 //récupérer url actuelle
-const url= window.location.href;
-// console.log(url);
+// const url= window.location.href;
+// // console.log(url);
 
-// vérifiez si l'url contient "action=detailFilm"
+// // vérifiez si l'url contient "action=detailFilm"
 
-if (url.includes("action=detailFilm")) {
-  const body = document.querySelector('main');
-  // console.log(body);
-  body.classList.add('custom-background');
-}
+// if (url.includes("action=detailFilm")) {
+//   const main = document.querySelector('main');
+//   // console.log(body);
+//   main.classList.add('custom-background');
+//   // document.main.style.backgroundImage = 'url(' + backgroundPath + ')';
+//   main.style.backgroundImage = `url('${backgroundPath}')`;
+
+//   console.log('Chemin de l\'image de fond :', backgroundPath);
+
+// }
+
+ 
