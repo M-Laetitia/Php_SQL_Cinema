@@ -132,33 +132,33 @@ function scrollToTop() {
 
   //& pop up pour rajouter note à un film 
 
-//   const ratingBtn = document.getElementById('add-rating-button')
-//   const popUpDiv= document.querySelector('.popUpRating');
+  const ratingBtn = document.getElementById('add-rating-button')
+  const popUpDiv= document.querySelector('.popUpRating');
 
-//   ratingBtn.addEventListener('click', (e) => {
-//     e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
-//     popUpDiv.style.display = 'block';
-//   })
+  ratingBtn.addEventListener('click', (e) => {
+    e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
+    popUpDiv.style.display = 'block';
+  })
 
-//   const submitForm = document.getElementById('submitForm')
+  const ratingForm = document.getElementById('rating-form');
+ratingForm.addEventListener('submit', (e) => {
+    // Vous n'avez pas besoin d'appeler e.preventDefault() ici
 
-//   submitForm.addEventListener('click', (e) => {
-//     e.preventDefault();
+    // Après la soumission, vous pouvez masquer le pop-up
+    popUpDiv.style.display = 'none';
+});
 
-//     popUpDiv.style.display = 'none';
-//   })
+  const closePopUp = document.getElementById('closePopUp')
 
-//   const closePopUp = document.getElementById('closePopUp')
+  closePopUp.addEventListener("mouseover", (e) => {
+    e.preventDefault();
+    closePopUp.style.cursor = "pointer";
+});
 
-//   closePopUp.addEventListener("mouseover", (e) => {
-//     e.preventDefault();
-//     closePopUp.style.cursor = "pointer";
-// });
-
-//   closePopUp.addEventListener('click', (e) => {
-//     e.preventDefault();
-//     popUpDiv.style.display = 'none';
-//   }) 
+  closePopUp.addEventListener('click', (e) => {
+    e.preventDefault();
+    popUpDiv.style.display = 'none';
+  }) 
 
 
 // & add image background dynamically to certain pages.
