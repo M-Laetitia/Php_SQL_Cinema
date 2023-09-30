@@ -79,7 +79,7 @@ class MovieController {
         $requeteCastingFilm->execute(["id" => $id]);
         
 
-        $requeteNoteMoyenne = $pdo->prepare("SELECT movie.id_movie, movie.movie_title, AVG(rating.note) AS noteMoyenne
+        $requeteNoteMoyenne = $pdo->prepare("SELECT movie.id_movie, movie.movie_title, ROUND(AVG(rating.note), 0) AS noteMoyenne
         FROM movie
         INNER JOIN rating ON rating.id_movie = movie.id_movie
         WHERE movie.id_movie = :id");
@@ -458,6 +458,7 @@ class MovieController {
 
 
                     $existingRating = $requete->fetch();
+                    
 
                     if($existingRating) {
                         //si une note existe, la mettre à jour
