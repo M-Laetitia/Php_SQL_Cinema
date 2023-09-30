@@ -1,5 +1,30 @@
 <?php ob_start(); ?>
 
+<style>
+main.custom-background {
+    /* background-color: #c03f5d; */
+  /* background-image: url('public/Images/bg.jpg'); */
+  background-image: url('<?php echo $filmBackgroundPath; ?>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  z-index: 1;
+}
+
+main.custom-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(40, 39, 55, 0.7), rgba(32, 31, 44, 0.7));
+    z-index: -1; 
+  }
+
+</style>
+
 <div>
     <?php 
     // initialiser un tableau pour stocker les genres
@@ -83,12 +108,37 @@
 
         <?php } ?>
 
+        <?php
         
+        echo "Note moyenne : " .$notes["noteMoyenne"];
+        ?>
 
         
 
     </div>
+    
+    <script>
+
+       const url = window.location.href;
+       let backgroundPath = ''; // Déclarez la variable JavaScript
+
+       <?php
+       // Injectez le chemin de l'image PHP dans la variable JavaScript
+       echo "backgroundPath = '" . $filmBackgroundPath . "';";
+       ?>
+
+       if (url.includes("action=detailFilm")) {
+           const main = document.querySelector('main');
+           main.classList.add('custom-background');
+
+       }
+
+    </script>
+
+
 </div>
+
+
 <?php
 
 $titre = "More about " .$movie["movie_title"];
