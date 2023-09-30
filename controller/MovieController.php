@@ -6,12 +6,15 @@ use Model\Connect;
 // session_start();
 // var_dump($_SESSION); die;
 
-// Ajoutez ces lignes pour activer l'affichage des erreurs
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// ini_set('file_uploads', 'On');
+// Ajoutez ces lignes pour activer l'affichage des erreurs
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+ini_set('file_uploads', 'On');
 
 class MovieController {
 
@@ -51,6 +54,7 @@ class MovieController {
         WHERE movie.id_movie = :id"
         );
         $requetedetailFilm->execute (["id" => $id]);
+        
 
         $requeteGenres = $pdo->prepare("
         SELECT  movie.movie_title, label_genre AS genres, genre.id_genre, movie.id_movie
@@ -73,7 +77,33 @@ class MovieController {
         WHERE movie.id_movie = :id
         ");
         $requeteCastingFilm->execute(["id" => $id]);
+        
 
+        $requeteNoteMoyenne = $pdo->prepare("SELECT movie.id_movie, movie.movie_title, AVG(rating.note) AS noteMoyenne
+        FROM movie
+        INNER JOIN rating ON rating.id_movie = movie.id_movie
+        WHERE movie.id_movie = :id");
+
+        $requeteNoteMoyenne->execute(["id" => $id]);
+        $notes = $requeteNoteMoyenne->fetch();
+
+
+
+        $requeteBackground = $pdo->prepare("SELECT  movie.movie_background
+        FROM movie WHERE movie.id_movie = :id"
+        );
+        $requeteBackground->execute(["id" => $id]);
+        $backgroundData = $requeteBackground->fetch();
+        $filmBackgroundPath = $backgroundData['movie_background'];
+        // var_dump($filmBackgroundPath); die; 
+        $backgroundDataForJS = [
+            'backgroundPath' => $filmBackgroundPath, // Chemin de l'image de fond 
+        ];
+        
+        $backgroundDataJSON = json_encode($backgroundDataForJS);
+        // var_dump($backgroundDataJSON);die;
+
+        
         require "view/movie/detailFilm.php";
     }
 
@@ -360,6 +390,7 @@ class MovieController {
                 // Supprimer les genres précédents
                 $requeteSuprGenres = $pdo->prepare("DELETE FROM categorise WHERE id_movie = :id");
                 $requeteSuprGenres->execute(["id" => $id]);
+                
 
                 //Update genre
                 $NewSelectedGenres = $_POST["genre"];
@@ -373,27 +404,29 @@ class MovieController {
             header("Location: index.php?action=listFilms");
         }
         require("view/movie/updateFilm.php");
+       
     }
 
-
+   
     // ^ Calculer moyenne des notes données par les utilisateurs
 
-    public function ratingAverage ($id) {
+    // public function ratingAverage($id) {
+    //     var_dump($id); die;
         
+    //     $pdo = Connect::seConnecter();
+        
+    //     $requete = $pdo->prepare("SELECT movie.id_movie, movie.movie_title, AVG(rating.note) AS noteMoyenne
+    //     FROM movie
+    //     INNER JOIN rating ON rating.id_movie = movie.id_movie
+    //     WHERE movie.id_movie = :id");
 
-        $pdo = Connect::seConnecter();
-        $requete = $pdo->prepare("SELECT note FROM rating WHERE id_movie = :id");
-        $requete->execute(["id" => $id]);
+    //     $requete->execute(["id" => $id]);
+        
+    //     $notes = $requeteNoteMoyenne->fetch();
+    //     var_dump($notes); die;
 
-        $notes = $requete->fetchAll();
-
-        $noteMoyenne = 0;
-
-        if(!empty($notes)) {
-            $noteMoyenne = array_sum($notes) / count($notes);
-        }
-
-    }
+    //     require("view/movie/detailFilm.php");
+    // }
 
     
 
@@ -403,6 +436,7 @@ class MovieController {
 
         $userId = $_SESSION['user']['id_user'];
         // var_dump($_SESSION['user']);die;
+    
         $filmId = $_GET['id'];
         // var_dump($_GET['id']);die;
 
@@ -453,6 +487,9 @@ class MovieController {
     }
      
 
+    
+
+  
 }
 
 ?>
