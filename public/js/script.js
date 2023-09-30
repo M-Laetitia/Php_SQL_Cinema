@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Menu burger
+// &&Menu burger
 
 const menuBurger = document.querySelector('.menu-burger');
 console.log(menuBurger);
@@ -58,7 +58,7 @@ let root = document.documentElement, theme = window.getComputedStyle(root)
 
 
 
-document.getElementById('toggle-btn')
+document.getElementById('checkbox')
   .addEventListener('click', toggleTheme);
 
 function toggleTheme() {
@@ -132,30 +132,45 @@ function scrollToTop() {
 
   //& pop up pour rajouter note à un film 
 
-  const ratingBtn = document.getElementById('add-rating-button')
-  const popUpDiv= document.querySelector('.popUpRating');
+//   const ratingBtn = document.getElementById('add-rating-button')
+//   const popUpDiv= document.querySelector('.popUpRating');
 
-  ratingBtn.addEventListener('click', (e) => {
-    e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
-    popUpDiv.style.display = 'block';
-  })
+//   ratingBtn.addEventListener('click', (e) => {
+//     e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
+//     popUpDiv.style.display = 'block';
+//   })
 
-  const submitForm = document.getElementById('submitForm')
+//   const submitForm = document.getElementById('submitForm')
 
-  submitForm.addEventListener('click', (e) => {
-    e.preventDefault();
+//   submitForm.addEventListener('click', (e) => {
+//     e.preventDefault();
 
-    popUpDiv.style.display = 'none';
-  })
+//     popUpDiv.style.display = 'none';
+//   })
 
-  const closePopUp = document.getElementById('closePopUp')
+//   const closePopUp = document.getElementById('closePopUp')
 
-  closePopUp.addEventListener("mouseover", (e) => {
-    e.preventDefault();
-    closePopUp.style.cursor = "pointer";
-});
+//   closePopUp.addEventListener("mouseover", (e) => {
+//     e.preventDefault();
+//     closePopUp.style.cursor = "pointer";
+// });
 
-  closePopUp.addEventListener('click', (e) => {
-    e.preventDefault();
-    popUpDiv.style.display = 'none';
-  }) 
+//   closePopUp.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     popUpDiv.style.display = 'none';
+//   }) 
+
+
+// & add image background dynamically to certain pages.
+
+//récupérer url actuelle
+const url= window.location.href;
+// console.log(url);
+
+// vérifiez si l'url contient "action=detailFilm"
+
+if (url.includes("action=detailFilm")) {
+  const body = document.querySelector('main');
+  // console.log(body);
+  body.classList.add('custom-background');
+}
