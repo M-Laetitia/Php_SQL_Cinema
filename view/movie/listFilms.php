@@ -13,6 +13,9 @@ pour stocker le contenu dans une variable $contenu -->
             <?php foreach($requete->fetchAll() as $movie) { ?>
                 <div class="movie-card">
 
+                
+
+
                     <div class="poster">
                         <?php if($movie["movie_image"] == NULL) {
                                 echo '<a href="index.php?action=detailFilm&id=' . $movie["id_movie"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
@@ -27,7 +30,8 @@ pour stocker le contenu dans une variable $contenu -->
                     <div class="info">
                         <div class="primary">
                             <p class="title"><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a><p>
-                            <p><span class="text-colored">★</span> <?= $movie["movie_rating"] ?></p>
+                            <p> <span class="text-highlight ">★</span> <?= $movie["noteMoyenne"] ?></p>
+
                         </div>
 
                         <div class="secondary">

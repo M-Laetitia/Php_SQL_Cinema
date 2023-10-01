@@ -29,12 +29,24 @@ class MovieController {
         // On se connecte
         $pdo = Connect::seConnecter();
         // On exécute la requête de notre choix
-        $requete = $pdo->query("
-        SELECT movie.id_movie,  director.id_director, movie.id_director, movie_title, movie_release_date, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, movie.id_movie, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration, movie.movie_rating, movie.movie_image, movie.movie_alt_desc
-        FROM movie
+        $requete = $pdo->query(" SELECT
+        movie.id_movie,
+        director.id_director,
+        movie.id_director,
+        movie_title,
+        movie_release_date,
+        CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete,
+        movie.id_movie,
+        DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration,
+        movie.movie_rating,
+        movie.movie_image,
+        movie.movie_alt_desc,
+        (SELECT ROUND(AVG(rating.note), 0) FROM rating WHERE rating.id_movie = movie.id_movie) AS noteMoyenne
+        FROM  movie
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
         ");
+
         // On relie par un "require" la vue qui nous intéresse (située dans le dossier "view")
         require "view/movie/listFilms.php";
     }
