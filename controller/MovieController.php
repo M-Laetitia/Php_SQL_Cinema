@@ -173,6 +173,44 @@ class MovieController {
                     $movieImageChemin = NULL;
                 }
 
+
+
+            //rajouter background
+            if(isset($_FILES["movie_background"])){  // name de l'input dans le formulaire de l'ajout du film
+                // voir upload-img_php pour détail du process
+                $tmpName = $_FILES["movie_background"]["tmp_name"];
+                $name = $_FILES["movie_background"]["name"];
+                $size = $_FILES["movie_background"]["size"];
+                $error = $_FILES["movie_background"]["error"];
+                $tabExtension = explode(".", $name); 
+                $extension = strtolower(end($tabExtension)); 
+                $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                $tailleMax = 5242880; // 5 Mo (en octets)
+            
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
+                    $uniqueName = uniqid('', true);
+                    $FileNameUnique = $uniqueName. '.' .$extension;
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieBackgroundChemin = './public/Images/upload/'.$FileNameUnique;
+                }
+
+                } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                    $movieBackgroundChemin = NULL;
+                }
+
+
+
+
+
+
                 $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
                 $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
                 $movie_release_date = filter_input(INPUT_POST, "movie_release_date", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -187,8 +225,8 @@ class MovieController {
 
                 $imageAlt = "Poster of " .$movie_title ;
                     
-                $requeteAjouterFilm = $pdo->prepare("INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director, movie.movie_image, movie_country, movie_alt_desc)
-                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director, :movieImageChemin, :movie_country, :imageAlt)
+                $requeteAjouterFilm = $pdo->prepare("INSERT INTO movie (movie_title, movie_duration, movie_release_date, movie_synopsys, movie_rating, id_director, movie.movie_image, movie_country, movie_alt_desc, movie.movie_background)
+                    VALUES (:movie_title, :movie_duration, :movie_release_date, :movie_synopsys, :movie_rating, :director, :movieImageChemin, :movie_country, :imageAlt, :movieBackgroundChemin)
                 ");
 
                 $requeteAjouterFilm ->execute([
@@ -199,6 +237,7 @@ class MovieController {
                     "movie_rating"=> $movie_rating,
                     "director" => $director,
                     "movieImageChemin" =>$movieImageChemin,
+                    "movieBackgroundChemin" =>$movieBackgroundChemin,
                     "movie_country" =>$movie_country,
                     "imageAlt" => $imageAlt,
                 ]);
@@ -374,6 +413,40 @@ class MovieController {
                     $movieImageChemin = NULL;
                 }
 
+            //rajouter background
+            if(isset($_FILES["movie_background"])){  // name de l'input dans le formulaire de l'ajout du film
+                // voir upload-img_php pour détail du process
+                $tmpName = $_FILES["movie_background"]["tmp_name"];
+                $name = $_FILES["movie_background"]["name"];
+                $size = $_FILES["movie_background"]["size"];
+                $error = $_FILES["movie_background"]["error"];
+                $tabExtension = explode(".", $name); 
+                $extension = strtolower(end($tabExtension)); 
+                $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
+                $tailleMax = 5242880; // 5 Mo (en octets)
+            
+                if ($error != 0) {
+                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                } elseif (!in_array($extension, $extensionsAutorisees)) {
+                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                } elseif ($size > $tailleMax) {
+                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                } else {
+                    // L'image est valide, on procède au traitement
+                    $uniqueName = uniqid('', true);
+                    $FileNameUnique = $uniqueName. '.' .$extension;
+                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                    $movieBackgroundChemin = './public/Images/upload/'.$FileNameUnique;
+                }
+
+                } else {
+                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
+                    $movieBackgroundChemin = NULL;
+                }
+
+
+
+
 
             $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $movie_duration = filter_input(INPUT_POST, "movie_duration", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -386,7 +459,7 @@ class MovieController {
             if($movie_title  && $movie_duration  && $movie_release_date  && strlen($movie_release_date) === 4 && $movie_rating && $director  && $movie_country &&  $movie_synopsys ) {
                 // var_dump("ok"); die;
                 //Update Film
-                $reqUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_country = :movie_country, movie_image = :movieImageChemin, id_director = :director WHERE id_movie= :id");
+                $reqUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_country = :movie_country, movie_image = :movieImageChemin, id_director = :director, movie_background = :movieBackgroundChemin WHERE id_movie= :id");
                 $reqUpdateFilm->execute([
                     "movie_title" => $movie_title,
                     "movie_release_date" => $movie_release_date,
@@ -396,6 +469,7 @@ class MovieController {
                     "director" => $director,
                     "movieImageChemin" => $movieImageChemin,
                     "movie_country" => $movie_country,
+                    "movieBackgroundChemin" => $movieBackgroundChemin,
                     "id" => $id
                 ]);
 
