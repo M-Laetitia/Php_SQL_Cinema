@@ -1,3 +1,4 @@
+
 <?php 
 ob_start(); 
 ?>
@@ -45,23 +46,25 @@ ob_start();
         </div>
         
 
-        <div class="liste-notes-film">
-            <p>My movies ratings:</p>
-            <?php 
-                $notes = $requete->fetchAll();
-                if (empty($notes)) {
-                    echo '<p>No rating here yet!</p>';
-                } else {
-                    foreach ($notes as $note) {
-                        ?>
-                        <p>
-                            <?= $note["note"] ." - ". $note["movie_title"]?>
-                            <a href="#">Éditer</a>
-                        </p>
-                        <?php
+        <div class="ratings-section">
+            <p>My movie ratings: <span id="toggle-list">▼</span></p>
+            <div class="liste-notes-film" id="ratings-list" style="display: none;">
+                <?php 
+                    $notes = $requete->fetchAll();
+                    if (empty($notes)) {
+                        echo '<p>No rating here yet!</p>';
+                    } else {
+                        foreach ($notes as $note) {
+                            ?>
+                            <p>
+                                <?= $note["note"] ." - ". $note["movie_title"]?>
+                                <a href="#">Éditer</a>
+                            </p>
+                            <?php
+                        }
                     }
-                }
-            ?>
+                ?>
+                </div>
         </div>
     </div>
 
@@ -79,8 +82,20 @@ ob_start();
 <!-- bouton delete de compte avec demande de confirmation -->
 <!-- bouton logout -->
 
+<script>
+     const toggleButton = document.getElementById('toggle-list');
+    const ratingsList = document.getElementById('ratings-list');
 
-
+    toggleButton.addEventListener('click', () => {
+        if (ratingsList.style.display === 'none' || ratingsList.style.display === '') {
+            ratingsList.style.display = 'block';
+            toggleButton.textContent = '▲'; // Flèche vers le haut
+        } else {
+            ratingsList.style.display = 'none';
+            toggleButton.textContent = '▼'; // Flèche vers le bas
+        }
+    });
+</script>
 
 <?php
 
