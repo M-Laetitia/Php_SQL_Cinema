@@ -70,6 +70,11 @@
                     <div class="input_image">
                         <label for="movie_image">Let's add a picture :</label>
                         <input type="file"  name="movie_image" >
+                    </div>
+
+                    <div class="input_image">
+                        <label for="movie_background">And what about a background?</label>
+                        <input type="file"  name="movie_background" >
                         <p id="autorised-format">Autorised format : jpg, jpeg, png, WebP</p>
                     </div>
 
