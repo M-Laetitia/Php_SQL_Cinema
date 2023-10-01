@@ -126,7 +126,19 @@ class UserController {
     public function profile() {
 
         if($_SESSION["user"]) {
+
+            $pdo = Connect::seConnecter();
+            $user = $_SESSION['user']['id_user'];
+            $requete = $pdo->prepare("SELECT rating.note, movie.movie_title
+            FROM rating 
+            INNER JOIN movie ON movie.id_movie = rating.id_movie
+            WHERE rating.id_user = :id
+            ORDER BY movie.movie_title 
+            ");
+            $requete->execute(["id" => $user]);
+            
             require("view/user/profile.php"); 
+
         } 
         else {
             // echo "pas d'user connecté";
@@ -155,15 +167,18 @@ class UserController {
     }
 
 
-     // ^ dDéfinir préférence theme (light/dark) ajout + update
+    
 
-     public function themePreference() {
+    public function themePreference() {
 
         // récupérer l'id de l'user connecté à partir de la session
         $id_user = $_SESSION['user']['id_user'];
 
+        // vérif si le formulaire a été soumis
         if(ISSET($_POST['theme'])) {
-            $newTheme = array('theme' => $_POST['theme']); // Créez un tableau associatif 
+            // Créer un tableau associatif ?
+            $newTheme = array('theme' => $_POST['theme']); 
+            // convertir le tableau associatif en JSON
             $jsonTheme = json_encode($newTheme); 
 
             $pdo = Connect::seConnecter();
@@ -172,11 +187,14 @@ class UserController {
             $requete-> execute(array(':preference' => $jsonTheme, ':id_user' => $id_user));
           
             
-            header("Location: index.php?action=landingPage");
-            exit();
+            header("Location: index.php?action=landingPage"); exit();
           }
-          require("view/user/profile.php");
-        }
+          
+    }
+
+     // ^ liste des films notés par l'utilisateur 
+
+    
 }
 ?>
 

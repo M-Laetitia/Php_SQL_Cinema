@@ -45,10 +45,28 @@ ob_start();
         </div>
         
 
+        <div class="liste-notes-film">
+            <p>My movies ratings:</p>
+            <?php 
+                $notes = $requete->fetchAll();
+                if (empty($notes)) {
+                    echo '<p>No rating here yet!</p>';
+                } else {
+                    foreach ($notes as $note) {
+                        ?>
+                        <p>
+                            <?= $note["note"] ." - ". $note["movie_title"]?>
+                            <a href="#">Éditer</a>
+                        </p>
+                        <?php
+                    }
+                }
+            ?>
+        </div>
     </div>
 
-    
-    
+
+
 
 
 </div>
