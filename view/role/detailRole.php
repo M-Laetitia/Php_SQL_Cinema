@@ -1,5 +1,6 @@
 <?php ob_start();
-$role = $requeteDetailRole->fetch();?>
+$role = $requeteDetailRole->fetch();
+// var_dump($role);die;?>
 
 <div class="container container-genre">
     <h1> <?= $role["name_role"]?></h1>
@@ -10,9 +11,9 @@ $role = $requeteDetailRole->fetch();?>
     </div>
 
     <div class="list">
-        <?php foreach($requeteDetailRole->fetchAll() as $role) { ?>
+        <?php $requeteDetailRole->fetch(); { ?>
             <div class="card">
-                <figure>
+                <div class="poster">
                     <?php
                     if($role["person_image"] == NULL){
                         echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
@@ -21,11 +22,12 @@ $role = $requeteDetailRole->fetch();?>
                     echo "<img src=". $role["person_image"] .">";
                     }
                     ?> 
-                </figure>
+                </div>
 
                 <div class="info">
                     <?php if ($role["id_actor"]) { ?>
                         <p><a href="index.php?action=detailActeur&id=<?= $role["id_actor"] ?>"><?= $role["actorComplete"] ?></a></p>
+                       
                     
                     <?php } ?>
 

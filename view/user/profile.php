@@ -1,18 +1,16 @@
-
 <?php 
 ob_start(); 
 ?>
 
 
+
+
 <div class="container-list register">
-
     <div class="list">
-
         <?php
             if(isset($_SESSION["user"])) {
                 $infoSession = $_SESSION["user"];
             } 
-
         ?>
 
         <div>
@@ -23,10 +21,7 @@ ob_start();
             <p><span>Username:</span> <?= $infoSession["pseudo"] ?></p>
             <p><span>Mail:</span> <?= $infoSession["email"] ?></p>
             <p><span>CineVault member since:</span> <?= date("d-m-Y", strtotime($infoSession["register_date"])) ?></p>
-        
         </div>
-
-
 
         <div class="theme-pref">
             <p id="title">Set preferred theme : </p>
@@ -36,7 +31,6 @@ ob_start();
                         <label for="lightTheme">Light:</label>
                         <input type="radio" id="lightTheme" name="theme" value="light">
                     </p>
-
                     <p>
                         <label for="darkTheme">Dark:</label>
                         <input type="radio" id="darkTheme" name="theme" value="dark">
@@ -46,10 +40,14 @@ ob_start();
             </form>
         </div>
 
+        <div>
+            <p></p>
+        </div>
+
         <div class="liste-notes">
             <p>My movie ratings: </p>
             <p><span class="text-highlight" id="toggle-list">▼</span></p>
-        </div>
+            </div>
                 <div class="ratings-section">
                     
                     <div class="liste-notes-film" id="ratings-list" style="display: none;">
@@ -60,43 +58,26 @@ ob_start();
                             } else {
                                 foreach ($notes as $note) {
                                     ?>
-                                    <p> <span class="text-highlight" >•</span>
-
-                                    <a href="index.php?action=detailFilm&id=<?= $note["id_movie"]?>"><?= $note["movie_title"] ?></a> : 
-
-                                    <?= $note["note"]?> /5
-
-
-                                    </p>
+                                        <p> <span class="text-highlight" >•</span>
+                                            <a href="index.php?action=detailFilm&id=<?= $note["id_movie"]?>"><?= $note["movie_title"] ?></a> : 
+                                            <?= $note["note"]?> /5
+                                        </p>
                                     <?php
                                 }
                             }
                         ?>
-                        </div>
-                </div>
-           
+                    </div>
+            </div>
 
         <div id="logoutDelete">
             <p><a href="index.php?action=logout"> <span class="text-highlight"><i class="fa-solid fa-power-off"></i></span> Log out</a></p>
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
         </div>
         
-
     </div>
-
-
-
-
 
 </div>
 
-<!-- <p><a href="index.php?action=logout"><i class="fa-solid fa-power-off"></i>
-</a></p>
-        
-    <i class="fa-regular fa-circle-xmark"></i> -->
-
-<!-- bouton delete de compte avec demande de confirmation -->
-<!-- bouton logout -->
 
 <script>
      const toggleButton = document.getElementById('toggle-list');

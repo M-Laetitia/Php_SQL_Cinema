@@ -12,6 +12,7 @@ class RoleController {
         INNER JOIN actor ON actor.id_actor = play.id_actor
         INNER JOIN person ON person.id_person = actor.id_person
         INNER JOIN movie ON movie.id_movie = play.id_movie
+        ORDER by role.name_role ASC
         ");
         require "view/role/listRoles.php";          
     }
@@ -19,15 +20,17 @@ class RoleController {
     // ^ Afficher détails rôle
     public function detailRole($id) {
         $pdo = Connect::seConnecter();
-        $requeteDetailRole = $pdo->prepare("SELECT role.id_role, role.name_role, movie.movie_title, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS actorComplete, movie.id_movie, person.person_image, actor.id_actor
+        $requeteDetailRole = $pdo->prepare("SELECT role.id_role, role.name_role, movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS actorComplete, movie.id_movie, person.person_image, actor.id_actor
         FROM role
         INNER JOIN play ON play.id_role = role.id_role
         INNER JOIN movie ON movie.id_movie = play.id_movie
         INNER JOIN actor ON actor.id_actor = play.id_actor
         INNER JOIN person ON person.id_person = actor.id_person
-        WHERE role.id_role = :id"
+        WHERE role.id_role = :id
+        "
         );
         $requeteDetailRole->execute (["id" => $id]);
+        // var_dump($requeteDetailRole); die;
         require "view/role/detailRole.php";
     }
 

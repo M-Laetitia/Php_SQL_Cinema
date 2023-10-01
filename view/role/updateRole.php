@@ -22,7 +22,7 @@ $role = $requeteRole->fetch(); ?>
                     </div>
 
                     <div class="btn-submit">
-                        <input type="submit" class="submit" name="updateRole" id="submitRole" value="Update">
+                        <input type="submit" class="submit" name="updateRole" id="updateRole" value="Update">
                     </div>
                 </form>
                 

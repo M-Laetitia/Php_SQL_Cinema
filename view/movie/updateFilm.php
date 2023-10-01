@@ -79,11 +79,12 @@ $movie = $requeteUpdateFilm->fetch(); ?>
                             <input type="file"  name="movie_image" >
                     </div>
 
-                    <!-- <div class="input_image">
-                        <label for="movie_bg">And what about a background? :</label>
-                        <input type="file"  name="movie_bg" >
+                    <div class="input_image">
+                        <label for="movie_background">And what about a background? :</label>
+                        <input type="file"  name="movie_background" >
                         <p id="autorised-format">Autorised format : jpg, jpeg, png, WebP</p>
-                    </div> -->
+                    </div>
+
                 </div>
 
                 <div class="btn-submit">

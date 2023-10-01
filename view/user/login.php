@@ -52,6 +52,6 @@ require "view/template.php";
 
 ?>
 
-<!-- test06
-test06@exemple.com
+<!-- John
+john@gmail.com
 123456AB!65 -->

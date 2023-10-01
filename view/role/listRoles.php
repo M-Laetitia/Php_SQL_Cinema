@@ -20,6 +20,8 @@
                         <td><a href="index.php?action=detailRole&id=<?= $play["id_role"] ?>"><?= $play["name_role"] ?></a></td>
                         <td><a href="index.php?action=detailActeur&id=<?= $play["id_actor"] ?>"><?= $play["actorComplete"] ?></a></td>
                         <td><a href="index.php?action=detailFilm&id=<?= $play["id_movie"]?>"><?= $play["movie_title"] ?></a></td>
+
+                        
                     </tr>
                 <?php  } ?>
             </tbody>
