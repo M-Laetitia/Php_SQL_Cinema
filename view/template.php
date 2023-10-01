@@ -37,7 +37,7 @@
 
 </head>
 
-<body id="movie_background">
+<body >
 
     <header>
         <a href="index.php?action=landingPage">
@@ -47,9 +47,8 @@
         </a>
         
         <nav>
-            <div class="switchTheme">
-            <button id="toggle-btn">Toggle dark mode</button>
-            </div>
+
+          
 
 
             <div class="primary-navigation">
@@ -82,11 +81,6 @@
                 <div class="bar"></div>
             </div>
 
-            <!-- <div class="nav-search">
-                <p>Search</p>
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div> -->
-
             
             <form enctype="multipart/form-data" method="POST" action="index.php?action=search" class="search-feature">
                 <input type="text" name="search" placeholder="I'm looking for...">
@@ -111,6 +105,16 @@
                     </div>     
 
             <?php } ?>
+
+            <div>
+                <input type="checkbox" class="checkbox" id="checkbox">
+                <label for="checkbox" class="checkbox-label">
+                    
+                    <i class="fa-solid fa-sun fa-xs"></i>
+                    <i class="fa-solid fa-moon fa-xs"></i>
+                    <span class="ball"></span>
+                </label>
+            </div>
             
         </nav>
 
@@ -145,7 +149,9 @@
         </div>
     </footer> -->
 
-    <script src="./public/js/script.js"></script>
+
+
+    <script src="public/js/script.js"></script>
 
 </body>
 
