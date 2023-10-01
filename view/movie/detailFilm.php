@@ -55,7 +55,34 @@ main.custom-background::before {
             <div class="info">
                 <div class="description">
                     <ul>
-                        <li> <span class="text-highlight ">★</span> <?= $movie["movie_rating"] ?></li>
+                        <li> <span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?></li>
+
+                        <?php 
+                            if(isset($_SESSION["user"])) { ?>
+                            <div id="add-rating-button">Add a rating + </div>
+
+                            <div class="popUpRating" >
+
+                                <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
+
+                                    
+                                    
+                                <div>
+                                    <input type="number" name="user_rating" min="1" max="5">
+                                    <button id="submitForm" type="submit"><i class="fa-solid fa-check"></i></button>
+                                </div>
+                                    <p><span id="closePopUp"> <i class="fa-regular fa-circle-xmark"></i> </span></p>
+
+
+                                </form>
+                            </div>
+
+                        <?php } ?>
+
+
+
+
+
                         <li>Genre : <span class="text-highlight genre"><?= $genresConcatenated ?></span> </li>
                         <li>Run Time : <?= $movie["formatted_duration"] ?></li>
                         <li>Country : <span class="text-highlight"><?= $movie["movie_country"] ?></span></li>
@@ -86,34 +113,11 @@ main.custom-background::before {
             </div>
         </div>
 
-        <?php 
-        if(isset($_SESSION["user"])) { ?>
-            <div id="add-rating-button">+</div>
 
-            <div class="popUpRating" >
-
-                <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
-
-                    
-                    <p>want to share your own rating?</p>
-
-                    <input type="number" name="user_rating" min="1" max="5">
-                    <button id="submitForm" type="submit">Submit</button>
-                </form>
-
-                
-                <div id="closePopUp"> X </div>
-
-            </div>
-
-        <?php } ?>
-
-        <?php
-        
-        echo "Note moyenne : " .$notes["noteMoyenne"];
-        ?>
 
         
+        
+
 
     </div>
     

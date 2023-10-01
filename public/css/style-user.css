@@ -52,15 +52,6 @@ picture {
     margin: 0;
 }
 
-/* h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-    font-weight: 400;
-} */
 
 input,
 button,
@@ -79,12 +70,6 @@ select {
       scroll-behavior: auto !important;
     }
 }
-
-
-
-
-
-
 
 
 
@@ -236,3 +221,74 @@ select {
     text-decoration: none;
 }
 
+.theme-pref {
+
+    display: flex;
+    flex-direction: column;
+    width: 37%;
+    margin-top: 1rem;
+    
+
+}
+
+.theme-pref #title {
+    padding: 0.3rem;
+    border-bottom: 1px solid var(--clr-grey-light);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.themes {
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+}
+
+.ratings-section {
+    /* background-color: var(--clr-grey-light); */
+    display: flex;
+}
+
+.ratings-section p {
+    margin-bottom: 0.5rem;
+}
+
+.ratings-section a {
+    color : var(--clr-white);
+    text-decoration: none;
+}
+
+.ratings-section a:hover {
+    color : var(--clr-pink);
+}
+
+
+.liste-notes {
+    /* background-color: blueviolet; */
+    width: 37%;
+    border-bottom: 1px solid var(--clr-grey-light);
+    margin-bottom: 1rem;
+    padding: 0.3rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#submitRole {
+    cursor: pointer;
+}
+
+#submitRole:hover  {
+    color: var(--clr-orange);
+}
+
+#toggle-list {
+    cursor: pointer;
+}
+
+.fa-power-off {
+    color: var(--clr-orange);
+}
+
+#logoutDelete a:first-child:hover {
+   color: var(--clr-orange);
+}
