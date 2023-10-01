@@ -47,19 +47,20 @@ menuBurger.addEventListener('click', () => {
 //& dark/light mode
 //& enable the switch between dark and light mode
 
-// const toggleBtn = document.getElementById("light-mode-toggle")
-// const darkScheme = window.matchMedia("(prefers-color-scheme: dark)")
-// const lightScheme = window.matchMedia("(prefers-color-scheme: light)")
 
 // operator ternaire
 // let result = condition ? value1 : value 2
+
+
+//  commence par récupérer l'élément racine (la balise HTML) et la valeur actuelle du thème en utilisant les variables CSS personnalisées (variables CSS).
+// La valeur du thème actuel est stockée dans la variable theme. Si la valeur de la variable CSS personnalisée --light est vide (ce qui signifie que le thème actuel est sombre), la variable theme est définie sur 'dark', sinon elle est définie sur 'light'. Cette étape détermine le thème actuel de la page lorsqu'elle est chargée.
 let root = document.documentElement, theme = window.getComputedStyle(root)
 .getPropertyValue('--light') === ' ' ? 'dark' : 'light';
 
 
-
 document.getElementById('checkbox')
   .addEventListener('click', toggleTheme);
+
 
 function toggleTheme() {
   root.classList.remove(theme);
@@ -72,6 +73,27 @@ function toggleTheme() {
     }
   
 }
+
+
+// & afficher le thème choisi par l'utilisateur 
+let userTheme = "<?php echo getTheme(); ?>";
+console.log("okay")
+
+
+// Initialisez le thème de l'utilisateur lorsqu'il se connecte
+if (userTheme === "dark") {
+  // Appliquer le thème sombre
+  root.classList.remove('light');
+  root.classList.add('dark');
+} else {
+  // Thème par défaut (light)
+  root.classList.remove('dark');
+  root.classList.add('light');
+}
+
+
+
+
 
 // https://stackoverflow.com/questions/70845195/define-dark-mode-for-both-a-class-and-a-media-query-without-repeat-css-custom-p
 
@@ -180,4 +202,19 @@ ratingForm.addEventListener('submit', (e) => {
 
 // }
 
- 
+ //& ratings dropdown sur le profile
+
+//  const toggleButton = document.getElementById('toggle-list');
+//  const ratingsList = document.getElementById('ratings-list');
+
+//  toggleButton.addEventListener('click', () => {
+//      if (ratingsList.style.display === 'none' || ratingsList.style.display === '') {
+//          ratingsList.style.display = 'block';
+//          toggleButton.textContent = '▲'; // Flèche vers le haut
+//      } else {
+//          ratingsList.style.display = 'none';
+//          toggleButton.textContent = '▼'; // Flèche vers le bas
+//      }
+//  });
+
+
