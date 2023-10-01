@@ -52,15 +52,6 @@ picture {
     margin: 0;
 }
 
-/* h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-    font-weight: 400;
-} */
 
 input,
 button,
@@ -81,7 +72,6 @@ select {
 }
 
 
-
 /* &---------------------------------- */
 /* & GENERAL --                        */
 /* & --------------------------------- */
@@ -92,8 +82,7 @@ select {
     width: 80%;
     height: 100vh;
     margin : 1.7rem auto 0px auto;
-    margin-top: 6rem;
-    
+    margin-top: 6rem;    
     
 }
 
@@ -225,14 +214,10 @@ select {
 }
 
 .container-list-person .person-card {
-    height: 30rem;
     border-radius: 0.8rem;
+    height: 24rem;
     overflow: hidden;
-
 }
-
-
-
 
 
 .container-list-person .person-card .portrait {
@@ -285,8 +270,6 @@ select {
     opacity: 0.7; 
 }
 
-
-
 .container-list-person .person-card .portrait  img{
     object-fit: cover;
     width: 100%;
@@ -294,13 +277,11 @@ select {
 }
 
 
-
-
 .container-list-person .person-card .info {
     width: 100%;
     height: 20%;
     padding: 0.5rem 0 0 0;
-    font-size: var(--fs-500);
+    font-size: var(--fs-400);
    
 
 }
@@ -308,8 +289,8 @@ select {
 .container-list-person .person-card .info a {
     text-decoration: none;
     color: var(--clr-white);
-    font-weight: 500;
-    font-size:  var(--fs-600);
+    font-weight: 600;
+    /* font-size:  var(--fs-500); */
 }
 
 .container-list-person .person-card .info a:hover {
@@ -380,5 +361,6 @@ select {
     }
 
   
+   
 
 }

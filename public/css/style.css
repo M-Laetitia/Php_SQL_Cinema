@@ -95,8 +95,6 @@
 
 
 
-
-
 /* ---------------------------------- */
 /* Reset                              */
 /* ---------------------------------- */
@@ -123,15 +121,7 @@ picture {
     margin: 0;
 }
 
-/* h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-    font-weight: 400;
-} */
+
 
 input,
 button,
@@ -163,13 +153,10 @@ body {
     width: 100vw;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    /* overflow: hidden; */
     overflow-x: hidden;
     font-family: var(--ff-quickSand);
     color: var(--clr-white);
-    /* min-height: 100vh; */
     position: relative;
-    /* display: flex; */
     
 }
 
@@ -188,18 +175,15 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* flex-direction: row; */
     padding: 0 8rem;
 }
 
 .logo {
     width: 16em;
     height: 4em;
-    /* background-color: red; */
     display: flex;
     align-items: center;
     justify-content: center;
-    /* margin-left: 6em; */
 } 
 
 .logo img {
@@ -210,7 +194,7 @@ header {
 nav {
     display: flex;
     align-items: center;
-    font-size: var(--fs-600);
+    font-size: var(--fs-400);
     
 }
 
@@ -233,7 +217,7 @@ nav li  {
 nav a {
     text-decoration: none;
     color : var(--clr-white);
-    font-size: var(--fs-600);
+    
     transition: ease-in-out 0.3s;
 }
 
@@ -258,25 +242,6 @@ nav ul li:nth-child(5) a:hover {
 }
 
 
-
-/* 
-
-
-nav .add_entity p {
-    padding-right: 2rem;
-    color: var(--clr-pink);
-    font-weight: 900;
-    cursor: pointer;
-    transition: ease 0.3s;
-}
-
-nav .add_entity p:hover {
-    
-    color: var(--clr-orange);
-    transform: scale(1.1);
-    
-} */
-
 nav .add_entity {
     padding-right: 2rem;
     width: 300px;
@@ -287,8 +252,6 @@ nav .add_entity {
     background-color: transparent;
     font-family: var(--ff-quickSand);
     color: var(--clr-pink);
-    /* border-radius: 3px; */
-
 }
 
 
@@ -298,7 +261,6 @@ nav .add_entity {
     background-color: var(--clr-grey-dark); /* Couleur de fond pour les options ouvertes */
     color: var(--clr-white); /* Couleur du texte pour les options ouvertes */
     border: none;
-    
 }
 
 .dropdown {
@@ -308,25 +270,25 @@ nav .add_entity {
     color: var(--clr-pink);
     /* font-size: var(--fs-500); */
     cursor: pointer;
-  }
+    z-index: 2;
+    
+}
 
-
-  
-  .dropdown-content {
+.dropdown-content {
     display: none;
     position: absolute;
     background-color: var(--clr-grey-black);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     padding: 12px 16px;
-    z-index: 1;
-  }
+    z-index: 2;
+}
   
-  .dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown-content {
     display: block;
-  }
+}
 
-  .dropdown-content p:nth-child(1) a:hover {
+.dropdown-content p:nth-child(1) a:hover {
     color: #EE812D;
 }
 
@@ -373,21 +335,15 @@ nav .add_entity {
 .search-feature {
     position: relative;
     z-index: 1;
-    margin-right: 1.3rem;
-    
+    margin-right: 1.3rem;   
 }
-
 
 .search-feature input{
     background-color: #262630;
     border: 1px solid #737373;
     border-radius: 10px;
     padding: 0.3em 0.6em;
-    
-    color: var(--clr-white);
-
-    
-    
+    color: var(--clr-white);      
 }
 
 .search-feature button{
@@ -455,7 +411,7 @@ nav .add_entity {
   }
   
   .checkbox-label {
-    background-color: #111;
+    background-color: var(--clr-grey-light);
     width: 50px;
     height: 26px;
     border-radius: 50px;
@@ -465,6 +421,7 @@ nav .add_entity {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-left: 3rem;
   }
 
 .fa-moon {
@@ -477,7 +434,7 @@ nav .add_entity {
 }
 
 .checkbox-label .ball {
-  background-color: #fff;
+  background-color: var(--clr-white);
   width: 22px;
   height: 22px;
   position: absolute;
@@ -500,9 +457,8 @@ nav .add_entity {
     display: inline-block;
     position: fixed;
     background-color: var(--clr-pink);
-    width: 50px;
-    height: 50px;
-    text-align: center;
+    width: 2rem;
+    height: 2rem;
     border-radius: 10px;
     bottom: 30px;
     right: 30px;
@@ -511,6 +467,10 @@ nav .add_entity {
     opacity: 0;
     visibility: hidden;
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
     
   }
 
@@ -519,7 +479,7 @@ nav .add_entity {
     font-family: FontAwesome;
     font-weight: normal;
     font-style: normal;
-    font-size: 2em;
+    font-size: 1.2em;
     line-height: 50px;
     color: var(--clr-white);
   }
@@ -605,26 +565,6 @@ main {
 /* ~ custom background------------------ */
 
 
-main.custom-background {
-    /* background-color: #c03f5d; */
-  background-image: url('../Images/bg.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  position: relative;
-  z-index: 1;
-}
-
-main.custom-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(rgba(40, 39, 55, 0.7), rgba(32, 31, 44, 0.7));
-    z-index: -1; 
-  }
 
 /* &---------------------------------- */
 /* & LISTE FILMS PAGE --               */
@@ -636,13 +576,9 @@ main.custom-background::before {
 }
 
 .container-list-movie {
-    /* background-color: #37354e; */
     width: 80%;
-    /* height: 100vh; */
     margin : 1.7rem auto 0px auto;
     margin-top: 6rem;
-    
-    
 }
 
 .container-list-movie .searchBar {
@@ -654,31 +590,24 @@ main.custom-background::before {
 
 .container-list-movie .list-movie {
     width: 95%;
-    /* height: 100%; */
-    /* background-color: #5c5b70; */
     margin: 3rem auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1.8rem;
-
 }
 
 .container-list-movie .movie-card{
     background-color: #201F2C;
-    /* width: 100px; */
-    height: 26rem;
+    height: 20rem;
     border-radius: 1rem;
     overflow: hidden;
     display: flex;
-    font-size: var(--fs-500);
-
+    font-size: var(--fs-400);
 }
 
 .container-list-movie .movie-card .title{
-
-    font-size: var(--fs-600);
-   
-
+    font-size: var(--fs-500);
+    font-weight: 500;
 }
 
 /* -----------------------------HOVER EFFECT */
@@ -732,7 +661,8 @@ main.custom-background::before {
 .container-list-movie .movie-card .poster img{
     object-fit: cover;
     width: 100%;
-    
+    height: 100%;
+    aspect-ratio: 1/1;
 }
 
 .container-list-movie .movie-card .info{
@@ -745,17 +675,14 @@ main.custom-background::before {
     flex-direction: column;
     justify-content: space-between;
     padding: 0.5rem;
-    
 }
 
 .container-list-movie .movie-card .primary{
     width: 100%;
-
 }
 
 .container-list-movie .movie-card .secondary{
     width: 100%;
-
 }
 
 .container-list-movie  a {
@@ -771,22 +698,14 @@ main.custom-background::before {
 .container-list-movie .title a {
     color: var(--clr-white);
     transition: ease-in-out 0.5s;
-    
 }
 
 .container-list-movie .title a:hover {
     color: var(--clr-pink);
-    
 }
 
 .container-list-movie .director a:hover {
     color: var(--clr-orange);
-}
-
-.container-list-movie .title {
-    font-size: 1.1rem;
-    font-weight: 600;
-   
 }
 
 
@@ -848,9 +767,20 @@ main.custom-background::before {
         justify-content: center;
         text-align: center;
         transition: 0.3s;
-        margin: auto;
-
+    
     }
+
+    header {
+        width: 100vw;
+        height: 5em;
+        background-color: var(--clr-grey-black);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0rem;
+    }
+
+
     .primary-navigation li {
         margin : 16px;
     }
@@ -932,7 +862,7 @@ main.custom-background::before {
     .dropdown {
         position: relative;
         display: inline-block;
-        margin: 1rem;
+        margin: 0.2rem;
         color: var(--clr-pink);
         font-size: var(--fs-400);
         cursor: pointer;
@@ -942,6 +872,24 @@ main.custom-background::before {
     .dropdown span {
         display: flex;
         align-items: center;
+    }
+
+    header {
+        width: 100vw;
+        height: 5em;
+        background-color: var(--clr-grey-black);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0rem;
+    }
+
+    search-feature input {
+        background-color: #262630;
+        border: 1px solid #737373;
+        border-radius: 10px;
+        padding: 0.3em 0.6em;
+        color: var(--clr-white);
     }
 
 }
