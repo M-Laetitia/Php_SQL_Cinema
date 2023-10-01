@@ -129,7 +129,7 @@ class UserController {
 
             $pdo = Connect::seConnecter();
             $user = $_SESSION['user']['id_user'];
-            $requete = $pdo->prepare("SELECT rating.note, movie.movie_title
+            $requete = $pdo->prepare("SELECT rating.note, movie.movie_title, movie.id_movie
             FROM rating 
             INNER JOIN movie ON movie.id_movie = rating.id_movie
             WHERE rating.id_user = :id
@@ -144,6 +144,9 @@ class UserController {
             // echo "pas d'user connecté";
             header ("Location: index.php?action=landingPage"); exit;
         }
+
+        
+
     }
 
     // ^ Supprimer compte user
@@ -166,9 +169,7 @@ class UserController {
         }
     }
 
-
-    
-
+    // ^ enregistrer le thème
     public function themePreference() {
 
         // récupérer l'id de l'user connecté à partir de la session
@@ -180,22 +181,45 @@ class UserController {
             $newTheme = array('theme' => $_POST['theme']); 
             // convertir le tableau associatif en JSON
             $jsonTheme = json_encode($newTheme); 
-
+           
             $pdo = Connect::seConnecter();
 
             $requete = $pdo->prepare('UPDATE user SET preference = :preference WHERE id_user = :id_user');
             $requete-> execute(array(':preference' => $jsonTheme, ':id_user' => $id_user));
-          
-            
-            header("Location: index.php?action=landingPage"); exit();
+
+            require("view/user/profile.php"); 
+           
           }
-          
+          header("Location: index.php?action=profile"); exit(); 
     }
 
-     // ^ liste des films notés par l'utilisateur 
+    // ^ récupérer le thème
+
+    public function getTheme () {
+        $id_user = $_SESSION['user']['id_user'];
+
+            $pdo = Connect::seConnecter();
+
+            $requete = $pdo->prepare(" SELECT user.preference
+            FROM user
+            WHERE id_user = :id_user
+            ");
+            $requete->execute(["id_user" => $user]);
+           
+
+            if ($row = $requete->fetch(PDO::FETCH_ASSOC)) {
+                $themePreference = $row['preference'];
+                return $themePreference;
+            } else {
+                // Par défaut, retournez le thème "light" si aucune préférence n'est définie
+                return "light";
+            }
+
+    }
+
 
     
 }
+
+
 ?>
-
-
