@@ -47,6 +47,8 @@ if(isset($_GET["action"])) {
         case "deleteAccount": $ctrlUser->deleteAccount(); break;
 
         case "themePreference" : $ctrlUser->themePreference(); break;
+        case "listeFilmNote" : $ctrlUser->listeFilmNote(); break;
+        
         
 
         // SEARCH
@@ -63,6 +65,7 @@ if(isset($_GET["action"])) {
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
 
         case "addRating" : $ctrlMovie->addRating($id); break;
+        case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
 
