@@ -34,7 +34,7 @@ class RoleController {
         require "view/role/detailRole.php";
     }
 
-    // ^ Aller à la page d'ajout d'un rôe
+    // ^ Aller à la page d'ajout d'un rôle
     public function getAjouterRole(){
         $pdo = Connect::seConnecter(); 
         $requeteGetAjouterRole = $pdo->query("
