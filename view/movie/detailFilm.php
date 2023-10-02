@@ -1,26 +1,7 @@
 <?php ob_start(); ?>
 
 <style>
-    main.custom-background {
-        /* background-color: #c03f5d;
-        background-image: url('public/Images/bg.jpg'); */
-        background-image: url('<?php echo $filmBackgroundPath; ?>');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        position: relative;
-        z-index: 1
-    }
-    main.custom-background::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(rgba(40, 39, 55, 0.7), rgba(32, 31, 44, 0.7));
-        z-index: -1; 
-    }
+   
 </style>
 
 <div>
@@ -79,8 +60,6 @@
 
 
 
-
-
                         <li>Genre : <span class="text-highlight genre"><?= $genresConcatenated ?></span> </li>
                         <li>Run Time : <?= $movie["formatted_duration"] ?></li>
                         <li>Country : <span class="text-highlight"><?= $movie["movie_country"] ?></span></li>
@@ -113,29 +92,37 @@
 
 
 
-        
+        <div class="review">
+
+            <div class="rate-average">
+                <div class="rate">
+                    <p><span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?> /5</p>
+                    <p> <?= $nombreNotes["nb_note"] ?> Ratings</p>
+                </div>
+
+                <div class="rating">
+                    <p>Rate this Movie :</p>
+                </div>
+            </div>
+
+
+            <div class="review-text">
+                <div class="info">
+                    <p>Review by : Truc</p>
+                    <p>Date : 21-02-2023</p>
+                </div>
+                <div class="text">
+                    <p>You name a genre, this movie covers it</p>
+                    <p>I can't remember the last time I saw a movie that contained as many genres as 'Parasite'. The movie starts out almost like an 'Ocean's Eleven' heist film and then expands into a comedy, mystery, thriller, drama, romance, crime and even horror film. It really did have everything and it was strikingly good at all of them too.
+                    </p>
+                </div>
+            </div>
+
+        </div>
         
 
 
     </div>
-    
-    <script>
-
-       const url = window.location.href;
-       let backgroundPath = ''; // Déclarer la variable JavaScript
-
-       <?php
-       // Injecter le chemin de l'image PHP dans la variable JavaScript
-       echo "backgroundPath = '" . $filmBackgroundPath . "';";
-       ?>
-
-       if (url.includes("action=detailFilm")) {
-           const main = document.querySelector('main');
-           main.classList.add('custom-background');
-
-       }
-
-    </script>
 
 
 </div>
