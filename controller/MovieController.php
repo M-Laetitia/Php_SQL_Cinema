@@ -6,9 +6,6 @@ use Model\Connect;
 // session_start();
 // var_dump($_SESSION); die;
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // Ajoutez ces lignes pour activer l'affichage des erreurs
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -22,8 +19,7 @@ class MovieController {
     public function landingPage(){
         require "view/landingPage/landingPage.php";
     }
-   
-    
+
     // ^ Lister les films
     public function listFilms() {
         // On se connecte
@@ -46,7 +42,6 @@ class MovieController {
         INNER JOIN director ON director.id_director = movie.id_director
         INNER JOIN person ON person.id_person = director.id_person
         ");
-
         // On relie par un "require" la vue qui nous intéresse (située dans le dossier "view")
         require "view/movie/listFilms.php";
     }
@@ -54,7 +49,6 @@ class MovieController {
     // ^ Détail d'un film
     public function detailFilm($id){
         $pdo = Connect::seConnecter();
-
         $requetedetailFilm = $pdo->prepare("
         SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration,
         movie.movie_rating, movie.movie_release_date, movie.movie_rating, director.id_director, genre.label_genre AS genres, movie.movie_image, movie.movie_synopsys, movie.movie_country, movie.movie_alt_desc
@@ -66,7 +60,6 @@ class MovieController {
         WHERE movie.id_movie = :id"
         );
         $requetedetailFilm->execute (["id" => $id]);
-        
 
         $requeteGenres = $pdo->prepare("
         SELECT  movie.movie_title, label_genre AS genres, genre.id_genre, movie.id_movie
@@ -95,9 +88,17 @@ class MovieController {
         FROM movie
         INNER JOIN rating ON rating.id_movie = movie.id_movie
         WHERE movie.id_movie = :id");
-
         $requeteNoteMoyenne->execute(["id" => $id]);
         $notes = $requeteNoteMoyenne->fetch();
+
+
+        $requeteNombreNote = $pdo->prepare("SELECT COUNT(rating.note) AS nb_note
+        FROM rating
+        INNER JOIN movie ON movie.id_movie = rating.id_movie
+        WHERE movie.id_movie = :id
+        ");
+        $requeteNombreNote->execute(["id" => $id]);
+        $nombreNotes = $requeteNombreNote->fetch();
 
 
 
@@ -574,7 +575,62 @@ class MovieController {
     }
      
 
-    
+       // ^ Ajouter review
+
+       public function ajouterReview() {
+
+        $userId = $_SESSION['user']['id_user'];
+        $filmId = $_GET['id'];
+
+
+        if(isset($_POST["submitReview"])) {
+
+            // $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+            if($review !== false ) {
+                $pdo = Connect::seConnecter();
+
+                $dateReview = date("Y-m-d H:i:s");  // date et  heure actuelles au format AAAA-MM-JJ HH:MM:SS
+                $testnote = "0" ;
+                $requeteAjouterReview = $pdo->prepare(" INSERT INTO rating (review, id_movie, id_user, date_review, note)
+                VALUES (:review, :id_movie, :id_user, :dateReview, :testnote)
+                ");
+
+
+                $requeteAjouterReview->execute ([
+                    "review" => $review,
+                    "id_movie" => $filmId,
+                    "id_user" => $userId,
+                    "dateReview" => $dateReview,
+                    "testnote" => $testnote
+                ]);
+                
+            }
+            // require("view/user/detailFilm.php"); 
+        }
+        header("Location: index.php?action=listFilm"); exit; 
+    }
+
+
+    // ^ Lister les review
+    public function listReview($id) {
+        
+        $pdo = Connect::seConnecter($id);
+        
+        $requeteReview = $pdo->prepare("SELECT rating.review, rating.date_review, user.pseudo
+        FROM rating
+        INNER JOIN user ON user.id_user = rating.id_user
+        INNER JOIN movie ON movie.id_movie = rating.id_movie
+        WHERE movie.id_movie = :id 
+        ");
+        $requeteReview->execute(["id" => $id]);
+        // $review = $requeteReview->fetchAll();
+        
+        require "view/movie/detailFilm.php";
+        
+    }
 
   
 }
