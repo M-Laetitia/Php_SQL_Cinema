@@ -40,3 +40,31 @@ if(isset($_POST["user_rating"])) {
 }
 
 ?>
+
+
+
+/// 
+
+{
+    "title": "You name a genre, this movie covers it",
+    "review": "I can't remember the last time I saw a movie that contained as many genres as 'Parasite'. The movie starts out almost like an 'Ocean's Eleven' heist film and then expands into a comedy, mystery, thriller, drama, romance, crime and even horror film. It really did have everything and it was strikingly good at all of them too."
+}
+
+
+{
+    "title": "You name a genre, this movie covers it",
+    "text": "I can't remember the last time I saw a movie that contained as many genres as 'Parasite'. The movie starts out almost like an 'Ocean's Eleven' heist film and then expands into a comedy, mystery, thriller, drama, romance, crime and even horror film. It really did have everything and it was strikingly good at all of them too."
+}
+
+
+SELECT rating.review, rating.date_review, user.pseudo
+                FROM rating 
+                INNER JOIN user ON user.id_user = rating.id_user
+                INNER JOIN movie ON movie.id_movie = rating.id_movie
+                WHERE movie.id_movie = 51 AND rating.review IS NOT NULL 
+
+                <?php 
+                foreach($requeteReview->fetchAll() as $review) { ?>
+                <p><?= $review["review"] ?></p>
+                        
+            <?php  } ?>
