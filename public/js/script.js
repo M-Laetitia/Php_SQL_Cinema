@@ -252,3 +252,21 @@ function bgImageLoader(bgImage){
   }
 
 }
+
+
+// & afficher reviews page détail film
+
+// const displayReviewBtn = document.getElementById('reviews-btn')
+// const reviewList = document.querySelector('movie-review')
+
+
+
+// displayReviewBtn.addEventListener('click', () => {
+//   if (reviewList.style.display === 'none' || reviewList.style.display === '') {
+//     displayReviewBtn.textContent = '▲';
+//     reviewList.style.display = 'block'
+//   }else {
+//     displayReviewBtn.textContent = '▼';
+//     reviewList.style.display = 'none'
+//   }
+// });
