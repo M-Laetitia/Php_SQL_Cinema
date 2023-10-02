@@ -112,9 +112,33 @@ class MovieController {
         $backgroundDataForJS = [
             'backgroundPath' => $filmBackgroundPath, // Chemin de l'image de fond 
         ];
-        
         $backgroundDataJSON = json_encode($backgroundDataForJS);
         // var_dump($backgroundDataJSON);die;
+
+
+        $userId = $_SESSION['user']['id_user'];
+        $filmId = $_GET['id'];
+        
+        // $pdo = Connect::seConnecter();
+        
+        $requeteReview = $pdo->prepare("SELECT rating.review , DATE(rating.date_review) AS formatted_date, user.pseudo, rating.note
+        FROM rating
+        INNER JOIN user ON user.id_user = rating.id_user
+        INNER JOIN movie ON movie.id_movie = rating.id_movie
+        WHERE movie.id_movie = :filmId
+        ");
+        $requeteReview->execute(["filmId" => $filmId]);
+        $reviews = $requeteReview->fetchAll();
+
+
+        $requeteNbReview = $pdo->prepare("SELECT COUNT(rating.review) AS nb_review
+        FROM rating
+        INNER JOIN movie ON movie.id_movie = rating.id_movie
+        WHERE movie.id_movie = :filmId
+        ");
+        $requeteNbReview->execute(["filmId" => $filmId]);
+        $nb_review = $requeteNbReview->fetch();
+        
 
         
         require "view/movie/detailFilm.php";
@@ -585,52 +609,71 @@ class MovieController {
 
         if(isset($_POST["submitReview"])) {
 
-            // $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_SPECIAL_CHARS);
             $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
 
 
             if($review !== false ) {
                 $pdo = Connect::seConnecter();
 
-                $dateReview = date("Y-m-d H:i:s");  // date et  heure actuelles au format AAAA-MM-JJ HH:MM:SS
-                $testnote = "0" ;
-                $requeteAjouterReview = $pdo->prepare(" INSERT INTO rating (review, id_movie, id_user, date_review, note)
-                VALUES (:review, :id_movie, :id_user, :dateReview, :testnote)
-                ");
+                $dateReview = date("Y-m-d H:i:s");
 
 
-                $requeteAjouterReview->execute ([
-                    "review" => $review,
-                    "id_movie" => $filmId,
-                    "id_user" => $userId,
-                    "dateReview" => $dateReview,
-                    "testnote" => $testnote
+                // Vérifiez si une review existe
+                $requeteExisteReview = $pdo->prepare("SELECT review FROM rating WHERE id_user = :userId AND id_movie = :filmId");
+                $requeteExisteReview->execute([
+                    "userId" => $userId,
+                    "filmId" => $filmId,
                 ]);
-                
+
+                $resultatExisteReview = $requeteExisteReview->fetch();
+
+                if ($resultatExisteReview) {
+                    // Si une review existe déjà, mettez à jour la review existante
+                    $requeteMettreAJourReview = $pdo->prepare("UPDATE rating SET review = :review, date_review = :dateReview WHERE id_user = :userId AND id_movie = :filmId");
+                    $requeteMettreAJourReview->execute([
+                        "review" => $review,
+                        "dateReview" => $dateReview,
+                        "userId" => $userId,
+                        "filmId" => $filmId,
+                    ]);
+                } else {
+                    // Si aucune review n'existe, ajoutez une nouvelle review
+                    $requeteAjouterReview = $pdo->prepare("INSERT INTO rating (review, id_movie, id_user, date_review) VALUES (:review, :id_movie, :id_user, :dateReview)");
+                    $requeteAjouterReview->execute([
+                        "review" => $review,
+                        "id_movie" => $filmId,
+                        "id_user" => $userId,
+                        "dateReview" => $dateReview,
+                    ]);
+              }
             }
-            // require("view/user/detailFilm.php"); 
+            header("Location: index.php?action=listFilms");
         }
-        header("Location: index.php?action=listFilm"); exit; 
     }
 
 
-    // ^ Lister les review
-    public function listReview($id) {
+    // // ^ Lister les review
+    // public function listReview() {
+
+    //     $userId = $_SESSION['user']['id_user'];
+    //     $filmId = $_GET['id'];
+    //     var_dump($filmId); die;
         
-        $pdo = Connect::seConnecter($id);
+    //     $pdo = Connect::seConnecter();
         
-        $requeteReview = $pdo->prepare("SELECT rating.review, rating.date_review, user.pseudo
-        FROM rating
-        INNER JOIN user ON user.id_user = rating.id_user
-        INNER JOIN movie ON movie.id_movie = rating.id_movie
-        WHERE movie.id_movie = :id 
-        ");
-        $requeteReview->execute(["id" => $id]);
-        // $review = $requeteReview->fetchAll();
+    //     $requeteReview = $pdo->prepare("SELECT rating.review, rating.date_review, user.pseudo
+    //     FROM rating
+    //     INNER JOIN user ON user.id_user = rating.id_user
+    //     INNER JOIN movie ON movie.id_movie = rating.id_movie
+    //     WHERE movie.id_movie = :filmId
+    //     ");
+    //     $requeteReview->execute(["filmId" => $filmId]);
+    //     $reviews = $requeteReview->fetchAll();
+    //     var_dump($reviews); die; 
         
-        require "view/movie/detailFilm.php";
+    //     require "view/movie/detailFilm.php";
         
-    }
+    // }
 
   
 }
