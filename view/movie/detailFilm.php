@@ -1,8 +1,6 @@
 <?php ob_start(); ?>
 
-<style>
-   
-</style>
+
 
 <div>
     <?php 
@@ -15,6 +13,31 @@
         // echo '<p>'. $genresConcatenated . '</p>';
     $movie = $requetedetailFilm->fetch(); 
     ?>
+
+    <class class="">
+        <p>Your opinion matters, share a review for</p>
+        <p> <?= $movie["movie_title"]?></p>
+        
+        <div class="form">
+        <!-- <form enctype="multipart/form-data" action="" method="POST"> -->
+
+            <form id="" enctype="multipart/form-data" action="index.php?action=ajouterReview&id=<?= $movie["id_movie"]?>" method="post">
+
+                <!-- <label for="review-title">Title</label>
+                <input type="text" placeholder="Title" name="title" id="review-title" required> -->
+
+                <label for="review">Write your review:</label>
+                <textarea placeholder="Your review" name="review" id="review" required></textarea>
+
+                <div class="">
+                        <input type="submit" class="submit" name="submitReview" >
+                </div>
+
+            </form>
+        </div>
+    </class>
+
+
 
     <div class="container_detail container_movie">
         <h1 id="name"> <?= $movie["movie_title"]?> </h1>
@@ -94,6 +117,9 @@
 
         <div class="review">
 
+            
+        
+
             <div class="rate-average">
                 <div class="rate">
                     <p><span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?> /5</p>
@@ -106,26 +132,65 @@
             </div>
 
 
-            <div class="review-text">
-                <div class="info">
-                    <p>Review by : Truc</p>
-                    <p>Date : 21-02-2023</p>
+            <div class="review-top">
+                <div class="left">
+                    <p>User reviews - </p>
+                    <p>1</p>
+                    <p id="reviews-btn" class="text-highlight">▼</p>
                 </div>
-                <div class="text">
-                    <p>You name a genre, this movie covers it</p>
-                    <p>I can't remember the last time I saw a movie that contained as many genres as 'Parasite'. The movie starts out almost like an 'Ocean's Eleven' heist film and then expands into a comedy, mystery, thriller, drama, romance, crime and even horror film. It really did have everything and it was strikingly good at all of them too.
-                    </p>
+
+                <div class="right">
+                    <p id=" add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
+                    <p>Review</p>
                 </div>
             </div>
 
-        </div>
-        
+            <div class="movie-review">
+                <div class="review-text">
 
+                    <div class="text">
+                        <p><span class="text-highlight">★</span> 5/5</p>
+                        <p>You name a genre, this movie covers it</p>
+                        <p>I can't remember the last time I saw a movie that contained as many genres as 'Parasite'. The movie starts out almost like an 'Ocean's Eleven' heist film and then expands into a comedy, mystery, thriller, drama, romance, crime and even horror film. It really did have everything and it was strikingly good at all of them too. </p>
+                    </div>
+
+                </div>
+
+                <div class="info">
+                    <p>John - Sept 02, 2023</p>
+                </div>
+            </div>
+
+
+            <div class="addReview-popUp">
+                
+            </div>
+
+        </div>
 
     </div>
 
 
+
 </div>
+
+
+<script>
+const displayReviewBtn = document.getElementById('reviews-btn')
+const reviewList = document.querySelector('.movie-review')
+console.log(reviewList);
+
+
+displayReviewBtn.addEventListener('click', () => {
+  if (reviewList.style.display === 'none' || reviewList.style.display === '') {
+    displayReviewBtn.textContent = '▲';
+    reviewList.style.display = 'block'
+  }else {
+    displayReviewBtn.textContent = '▼';
+    reviewList.style.display = 'none'
+  }
+});
+</script>
 
 
 <?php
