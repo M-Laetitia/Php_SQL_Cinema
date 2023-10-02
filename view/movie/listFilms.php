@@ -30,9 +30,24 @@ pour stocker le contenu dans une variable $contenu -->
                     <div class="info">
                         <div class="primary">
                             <p class="title"><a href="index.php?action=detailFilm&id=<?= $movie["id_movie"]?>"><?= $movie["movie_title"]?></a><p>
-                            <p> <span class="text-highlight ">★</span> <?= $movie["noteMoyenne"] ?></p>
 
+                            <div class="star_rating">
+                                <?php
+                                $note = $movie["noteMoyenne"]; 
+                                for ($i = 1; $i <= 5; $i++) {
+                                    if ($i <= $note) {
+                                        echo '<i class="fa-solid fa-star fa-xs star_filled"></i>'; 
+                                    } else {
+                                        echo '<i class="far fa-star fa-xs star_empty"></i>'; 
+                                    }
+                                }
+                                ?>
+                            </div>
+                            
                         </div>
+
+
+                        
 
                         <div class="secondary">
                             
