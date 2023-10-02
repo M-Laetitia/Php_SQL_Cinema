@@ -528,19 +528,20 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .popUpRating {
-    background-color: var(--clr-grey-light);
     width: 10rem;
-    height: 3rem;
+    /* height: 3rem; */
     border-radius: 10px;
-    display: none;
     overflow: hidden;
     padding: 0.6rem;
+   
 }
 
 .popUpRating form {
     /* background-color: brown; */
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    
     
 }
 
@@ -553,16 +554,21 @@ textarea::-webkit-scrollbar-thumb {
 
 .popUpRating #submitForm {
     background: linear-gradient(to right, var(--clr-pink), var(--clr-orange));
-    border: none;
-    cursor: pointer;
     color: var(--clr-white);
-    border-radius: 0.3rem;
-    padding: 0.2rem;
-    height: 1.2rem;
-    width: 1.2rem;
-    display: flex;
-
+    font-weight: 500;
+    padding: 8px 35px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: ease-in-out 0.2s;
+    margin-top: 1rem;
 }
+
+.popUpRating #submitForm:hover {
+    transform: scale(1.1);
+}
+
 
 .popUpRating input {
     background-color: var(--clr-grey-medium);
@@ -675,14 +681,170 @@ textarea::-webkit-scrollbar-thumb {
 
 
 /* ~ REVIEW POPUP ------------------------- */
+#reviewClose-btn,
+#add-rating-btn,
+#ratingClose-btn {
+    cursor: pointer;
+}
+
 
 .addReview-popUp {
-    background-color: blueviolet;
-    width: 500px;
-    height: 250px;
+    background-color: var(--clr-grey-black);
+    width: 550px;
+    /* height: 250px; */
     position: absolute;
-    top: 50rem;
+    top: 60%;
+    right: 45%;
+    border-radius: 0.5rem;
+    border-top: 1px solid var(--clr-pink);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
 
+.reviewplace {
+    /* background-color: blue; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reviewplace p:nth-child(1) {
+    right: 1rem;
+    top: 0.8rem;
+    position: absolute;
+}
+
+
+.reviewplace p:nth-child(2) {
+    background: linear-gradient(to right, var(--clr-pink), var(--clr-orange));
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -3rem;
+}
+
+.reviewplace p:nth-child(2)::after {
+    content: "\f5ad";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 3em;
+    line-height: 50px;
+    color: var(--clr-white);
+}
+
+
+.reviewplace p:nth-child(3) {
+    font-weight: 600;
+    padding-bottom: 1rem;
+    font-size: var(--fs-500);
+}
+
+.reviewplace p:nth-child(4) {
+    padding-bottom: 1rem;
+    font-size: var(--fs-500);
+}
+
+
+.reviewplace textarea{
+    width: 25rem;
+    height: 7rem;
+    background-color: var(--clr-grey-medium);
+    resize: none;
+    margin-bottom: 1rem;
+}
+
+.stars-rating {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.star::before {
+    content: '\2605'; /* Étoile vide (U+2605) */
+    color: gray;
+}
+
+.star.active::before {
+    content: '\2605'; /* Étoile pleine (U+2605) */
+    color: gold;
+}
+
+
+/* ~ RATE POPUP ------------------------- */
+
+.addRating-popUp {
+    background-color: var(--clr-grey-black);
+    width: 550px;
+    /* height: 250px; */
+    position: absolute;
+    top: 60%;
+    right: 45%;
+    border-radius: 0.5rem;
+    border-top: 1px solid var(--clr-pink);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+
+
+.ratingPlace {
+    /* background-color: blue; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ratingPlace p:nth-child(1) {
+    right: 1rem;
+    top: 0.8rem;
+    position: absolute;
+}
+
+
+.ratingPlace p:nth-child(2) {
+    /* background: linear-gradient(to right, var(--clr-pink), var(--clr-orange)); */
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -2.9rem;
+}
+
+.ratingPlace p:nth-child(2)::after {
+    content: "\f005";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 4.6em;
+    color: var(--clr-pink);
+}
+
+
+.ratingPlace p:nth-child(3) {
+    font-weight: 600;
+    padding-bottom: 1rem;
+    font-size: var(--fs-500);
+}
+
+.ratingPlace p:nth-child(4) {
+    padding-bottom: 1rem;
+    font-size: var(--fs-500);
 }
 
 

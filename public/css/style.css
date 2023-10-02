@@ -589,6 +589,19 @@ main {
 /* & LISTE FILMS PAGE --               */
 /* & --------------------------------- */
 
+/* ~ Stars ------------------ */
+
+.star_rating .star_filled {
+    color: var(--clr-pink);
+}
+.star_rating .star_empty {
+    color: rgb(172, 171, 171);
+}
+
+.star_rating .fa-star {
+    margin-left: 0.1rem;
+}
+
 
 .container-list-movie .text-colored {
     color : var(--clr-pink);    

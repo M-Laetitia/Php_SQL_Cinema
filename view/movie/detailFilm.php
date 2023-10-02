@@ -14,29 +14,6 @@
     $movie = $requetedetailFilm->fetch(); 
     ?>
 
-    <class class="">
-        <p>Your opinion matters, share a review for</p>
-        <p> <?= $movie["movie_title"]?></p>
-        
-        <div class="form">
-        <!-- <form enctype="multipart/form-data" action="" method="POST"> -->
-
-            <form id="" enctype="multipart/form-data" action="index.php?action=ajouterReview&id=<?= $movie["id_movie"]?>" method="post">
-
-                <!-- <label for="review-title">Title</label>
-                <input type="text" placeholder="Title" name="title" id="review-title" required> -->
-
-                <label for="review">Write your review:</label>
-                <textarea placeholder="Your review" name="review" id="review" required></textarea>
-
-                <div class="">
-                        <input type="submit" class="submit" name="submitReview" >
-                </div>
-
-            </form>
-        </div>
-    </class>
-
 
 
     <div class="container_detail container_movie">
@@ -59,27 +36,7 @@
                     <ul>
                         <li> <span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?></li>
 
-                        <?php 
-                            if(isset($_SESSION["user"])) { ?>
-                            <div id="add-rating-button">Add a rating + </div>
-
-                            <div class="popUpRating" >
-
-                                <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
-
-                                    
-                                    
-                                <div>
-                                    <input type="number" name="user_rating" min="1" max="5">
-                                    <button id="submitForm" type="submit"><i class="fa-solid fa-check"></i></button>
-                                </div>
-                                    <p><span id="closePopUp"> <i class="fa-regular fa-circle-xmark"></i> </span></p>
-
-
-                                </form>
-                            </div>
-
-                        <?php } ?>
+                        
 
 
 
@@ -127,6 +84,7 @@
                 </div>
 
                 <div class="rating">
+                    <p id="add-rating-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
                     <p>Rate this Movie :</p>
                 </div>
             </div>
@@ -134,37 +92,104 @@
 
             <div class="review-top">
                 <div class="left">
-                    <p>User reviews - </p>
-                    <p>1</p>
+                    <p>User reviews : </p>
+                    <p><?= $nb_review["nb_review"] ?></p>
                     <p id="reviews-btn" class="text-highlight">▼</p>
                 </div>
 
                 <div class="right">
-                    <p id=" add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
+                    <p id="add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
                     <p>Review</p>
                 </div>
             </div>
 
             <div class="movie-review">
-                <div class="review-text">
+                <?php foreach ($reviews as $review) { 
+                    $formattedDate = date('d M Y', strtotime($review['formatted_date']));
+                    ?>
 
-                    <div class="text">
-                        <p><span class="text-highlight">★</span> 5/5</p>
-                        <p>You name a genre, this movie covers it</p>
-                        <p>I can't remember the last time I saw a movie that contained as many genres as 'Parasite'. The movie starts out almost like an 'Ocean's Eleven' heist film and then expands into a comedy, mystery, thriller, drama, romance, crime and even horror film. It really did have everything and it was strikingly good at all of them too. </p>
+                    <div class="review-text">
+
+                        <div class="text">
+                            <p><span class="text-highlight">★</span> <?= $review["note"] ?>/5</p>
+                            <p><?= $review["review"] ?></p>
+                        </div>
+
                     </div>
 
-                </div>
+                    <div class="info">
+                        <p><?= $review["pseudo"] ?> - <?= $formattedDate?></p>
+                    </div>
+                <?php } ?>
 
-                <div class="info">
-                    <p>John - Sept 02, 2023</p>
-                </div>
             </div>
 
 
             <div class="addReview-popUp">
-                
+                <class class="reviewplace">
+                    <p> <i id="reviewClose-btn" class="fa-solid fa-x fa-lg"></i> </p>
+                    <p></p>
+                    <p>Your opinion matters, share your review for </p>
+                    <p class="text-highlight"> <?= $movie["movie_title"]?></p>
+                    
+                    <div class="form">
+
+                        <form id="" enctype="multipart/form-data" action="index.php?action=ajouterReview&id=<?= $movie["id_movie"]?>" method="post">
+
+                            <!-- <label for="review-title">Title</label>
+                            <input type="text" placeholder="Title" name="title" id="review-title" required> -->
+
+                            <label for="review"></label>
+                            <textarea placeholder="Write here..." name="review" id="review" required></textarea>
+
+                            <div class="btn-submit">
+                                    <input type="submit" class="submit" name="submitReview" value="publish" >
+                            </div>
+
+                        </form>
+                    </div>
+                </class>
             </div>
+
+
+            <div class="addRating-popUp">
+                <class class="ratingPlace">
+                    <p> <i id="ratingClose-btn" class="fa-solid fa-x fa-lg"></i> </p>
+                    <p></p>
+                    <p>Rate this</p>
+                    <p class="text-highlight"> <?= $movie["movie_title"]?></p>
+                    
+                    <div class="form">
+
+                                <div class="popUpRating" >
+
+                                    <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
+
+                                    <!-- <div class="stars-rating">
+                                        <span class="star" data-rating="1"></span>
+                                        <span class="star" data-rating="2"></span>
+                                        <span class="star" data-rating="3"></span>
+                                        <span class="star" data-rating="4"></span>
+                                        <span class="star" data-rating="5"></span>
+                                    </div> -->
+                                                                            
+                                    <div>
+                                        <input type="number" name="user_rating" id="user_rating" min="1" max="5">
+                                        <!-- Champ input hidden pour stocker la note -->
+                                        <!-- <input type="hidden" name="user_rating_hidden" id="user_rating_hidden" value=""> -->
+                                    </div>
+
+                                    <div class="btn-submit">
+                                        <button   id="submitForm" type="submit">RATE</button>
+                                    </div>
+                            
+
+                                    </form>
+                                </div>
+                    </div>
+                </class>
+            </div>
+
 
         </div>
 
@@ -176,20 +201,70 @@
 
 
 <script>
-const displayReviewBtn = document.getElementById('reviews-btn')
-const reviewList = document.querySelector('.movie-review')
-console.log(reviewList);
+
+    //displaying review popUp
+    const displayReviewBtn = document.getElementById('reviews-btn')
+    const reviewList = document.querySelector('.movie-review')
+    // console.log(reviewList);
 
 
-displayReviewBtn.addEventListener('click', () => {
-  if (reviewList.style.display === 'none' || reviewList.style.display === '') {
-    displayReviewBtn.textContent = '▲';
-    reviewList.style.display = 'block'
-  }else {
-    displayReviewBtn.textContent = '▼';
-    reviewList.style.display = 'none'
-  }
-});
+    displayReviewBtn.addEventListener('click', () => {
+    if (reviewList.style.display === 'none' || reviewList.style.display === '') {
+        displayReviewBtn.textContent = '▲';
+        reviewList.style.display = 'block'
+    }else {
+        displayReviewBtn.textContent = '▼';
+        reviewList.style.display = 'none'
+    }
+    });
+
+
+    // add review popUp
+    const addReview_btn = document.getElementById('add-review-btn')
+    console.log(addReview_btn);
+    const addReview_popUp = document.querySelector('.addReview-popUp')
+
+    addReview_btn.addEventListener('click', () => {
+    if (addReview_popUp.style.display === 'none' || addReview_popUp.style.display === '') {
+        addReview_popUp.style.display = 'block'
+    }else {
+        addReview_popUp.style.display = 'none'
+    }
+    });
+
+    const reviewClose_btn = document.getElementById('reviewClose-btn')
+
+    reviewClose_btn.addEventListener('click', () => {
+        addReview_popUp.style.display = 'none'
+        
+    });
+
+    // add rating popUP
+    const addRating_btn = document.getElementById('add-rating-btn')
+
+    const addRatingPopUp = document.querySelector('.addRating-popUp')
+
+    addRating_btn.addEventListener('click', () => {
+    if (addRatingPopUp.style.display === 'none' || addRatingPopUp.style.display === '') {
+        addRatingPopUp.style.display = 'block'
+    }else {
+        addRatingPopUp.style.display = 'none'
+    }
+    });
+
+    const ratingClose_btn = document.getElementById('ratingClose-btn')
+
+    ratingClose_btn.addEventListener('click', () => {
+        addRatingPopUp.style.display = 'none'
+        
+    });
+
+    
+
+
+
+
+
 </script>
 
 
