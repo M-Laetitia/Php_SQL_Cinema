@@ -50,6 +50,7 @@ if(isset($_GET["action"])) {
         case "listeFilmNote" : $ctrlUser->listeFilmNote(); break;
         
         
+        
 
         // SEARCH
         case "search" : $ctrlSearch->search(); break;
@@ -66,6 +67,10 @@ if(isset($_GET["action"])) {
 
         case "addRating" : $ctrlMovie->addRating($id); break;
         case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
+
+        case "ajouterReview" : $ctrlMovie->ajouterReview($id); break;
+        case "listReview" : $ctrlMovie->listReview($id); break;
+      
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
 
