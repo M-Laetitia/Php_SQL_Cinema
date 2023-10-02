@@ -2,6 +2,7 @@
 $role = $requeteDetailRole->fetch();
 // var_dump($role);die;?>
 
+
 <div class="container container-genre">
     <h1> <?= $role["name_role"]?></h1>
 
