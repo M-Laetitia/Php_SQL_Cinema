@@ -571,7 +571,119 @@ textarea::-webkit-scrollbar-thumb {
     border-bottom: 1px solid var(--clr-white);
 }
 
+/* ~ MOVIE REVIEW ------------------------- */
 
+.container_movie .review {
+    /* background-color: var(--clr-grey-light); */
+    width: 70%;
+    /* height: 150px; */
+    
+}
+
+.container_movie .rate-average {
+    /* background-color: grey; */
+    border-bottom: 1px solid grey;
+    border-top: 1px solid grey;
+    
+    width: 100%;
+    /* height: 150px; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container_movie .rate {
+    /* background-color: rgb(155, 102, 102); */
+    width: 20%;
+    /* height: 150px; */
+    border-right: 1px solid grey;
+}
+
+.movie-review {
+    display: none;
+}
+
+
+.container_movie .review-text {
+    background-color: var(--clr-grey-light);
+    padding : 1rem 1.5rem 1.5rem 1.5rem;
+    width: 100%;
+    /* height : 150px; */
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    position: relative;
+    margin-bottom: 1rem;
+    
+}
+
+.container_movie .review-text:before {
+    /* clip-path: polygon(0 0,50% 50%,100% 0); */
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: var(--clr-grey-light);
+    width: 22px;
+    height: 22px;
+    transform: rotate(45deg);
+    left: 2rem;
+    bottom: -0.7rem;
+    
+}
+
+.container_movie .review-text p:first-child {
+   text-align: right;
+}
+
+.container_movie .review-text p:nth-child(2) {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.review-top {
+    display: flex;
+    justify-content: space-between;
+    /* background-color: red; */
+    border-left: 3px solid var(--clr-pink);
+    padding : 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+.review-top .left {
+    display: flex;
+    column-gap: 0.5rem;
+}
+
+.review-top .right {
+    display: flex;
+    column-gap: 0.5rem;
+}
+
+.review-top i {
+    cursor: pointer;
+}
+
+#reviews-btn {
+    cursor: pointer;
+    margin-left: 0.5rem ;
+}
+
+#reviews-btn:hover,
+.review-top i:hover
+ {
+    color : var(--clr-orange);
+}
+
+
+/* ~ REVIEW POPUP ------------------------- */
+
+.addReview-popUp {
+    background-color: blueviolet;
+    width: 500px;
+    height: 250px;
+    position: absolute;
+    top: 50rem;
+
+}
 
 
 /* ~ MEDIA QUERY ------------------------- */
