@@ -1,6 +1,8 @@
 
 // displaying different content on the detail actor page.
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const filmographyButton = document.getElementById('filmo');
     const roleButton = document.getElementById('role');
@@ -8,24 +10,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const listRoleDiv = document.querySelector('.list-role');
     const listFilmoDiv = document.querySelector('.list-filmo');
 
-    filmographyButton.addEventListener('click', function() {
-        // Affichez la filmographie et masquez le rôle
-        listRoleDiv.style.display = 'none';
-        listFilmoDiv.style.display = 'block';
 
-        // Activez le bouton "filmographie" et désactivez le bouton "rôle"
-        filmographyButton.classList.add('active');
-        roleButton.classList.remove('active');
-    });
 
-    roleButton.addEventListener('click', function() {
-        // Affichez le rôle et masquez la filmographie
-        listRoleDiv.style.display = 'block';
-        listFilmoDiv.style.display = 'none';
+    if (filmographyButton) {
+  filmographyButton.addEventListener('click', function() {
+          // Affichez la filmographie et masquez le rôle
+          listRoleDiv.style.display = 'none';
+          listFilmoDiv.style.display = 'block';
 
-        roleButton.classList.add('active');
-        filmographyButton.classList.remove('active');
-    });
+          // Activez le bouton "filmographie" et désactivez le bouton "rôle"
+          filmographyButton.classList.add('active');
+          roleButton.classList.remove('active');
+      });
+
+      roleButton.addEventListener('click', function() {
+          // Affichez le rôle et masquez la filmographie
+          listRoleDiv.style.display = 'block';
+          listFilmoDiv.style.display = 'none';
+
+          roleButton.classList.add('active');
+          filmographyButton.classList.remove('active');
+      });
+        
+      }
+
 });
 
 
@@ -33,11 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // &&Menu burger
 
 const menuBurger = document.querySelector('.menu-burger');
-console.log(menuBurger);
+// console.log(menuBurger);
 const nav = document.querySelector('.primary-navigation');
 
 menuBurger.addEventListener('click', () => {
-    console.log("click");
+    // console.log("click");
     menuBurger.classList.toggle("active");
     nav.classList.toggle('active');
 });
@@ -77,7 +85,7 @@ function toggleTheme() {
 
 // & afficher le thème choisi par l'utilisateur 
 let userTheme = "<?php echo getTheme(); ?>";
-console.log("okay")
+// console.log("okay")
 
 
 // Initialisez le thème de l'utilisateur lorsqu'il se connecte
@@ -105,7 +113,7 @@ const toggleBtn = document.getElementById("toggle-btn")
 
 // Select the theme preference from localStorage
 const currentTheme = localStorage.getItem("theme")
-console.log(currentTheme);
+// console.log(currentTheme);
 
 // function keepTheme () {
 //     const theme = localStorage.getItem('theme')
@@ -157,30 +165,40 @@ function scrollToTop() {
   const ratingBtn = document.getElementById('add-rating-button')
   const popUpDiv= document.querySelector('.popUpRating');
 
+  if (ratingBtn ){ 
   ratingBtn.addEventListener('click', (e) => {
-    e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
-    popUpDiv.style.display = 'block';
-  })
+      e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
+      popUpDiv.style.display = 'block';
+    })
+  }
+  
 
   const ratingForm = document.getElementById('rating-form');
-ratingForm.addEventListener('submit', (e) => {
+
+
+
+
+  if (ratingForm) {
+    ratingForm.addEventListener('submit', (e) => {
     // Vous n'avez pas besoin d'appeler e.preventDefault() ici
 
     // Après la soumission, vous pouvez masquer le pop-up
     popUpDiv.style.display = 'none';
-});
+    });
 
   const closePopUp = document.getElementById('closePopUp')
 
-  closePopUp.addEventListener("mouseover", (e) => {
+    closePopUp.addEventListener("mouseover", (e) => {
     e.preventDefault();
     closePopUp.style.cursor = "pointer";
-});
+    });
 
-  closePopUp.addEventListener('click', (e) => {
+    closePopUp.addEventListener('click', (e) => {
     e.preventDefault();
     popUpDiv.style.display = 'none';
-  }) 
+    }) 
+}
+  
 
 
 // & add image background dynamically to certain pages.
@@ -218,3 +236,19 @@ ratingForm.addEventListener('submit', (e) => {
 //  });
 
 
+function bgImageLoader(bgImage){
+
+  const url = window.location.href;
+  let backgroundPath = ''; // Déclarer la variable JavaScript
+
+
+
+  if (url.includes("action=detailFilm")) {
+      const main = document.querySelector('main');
+      main.classList.add('custom-background');
+      main.style.backgroundImage = "url("+bgImage+")";
+      console.log(main)
+
+  }
+
+}
