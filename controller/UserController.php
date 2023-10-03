@@ -140,7 +140,7 @@ class UserController {
             $requete->execute(["id" => $user]);
 
             // afficher liste reviews postées
-            $requeteReviews = $pdo->prepare("SELECT rating.review, movie.movie_title, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date , movie.id_movie
+            $requeteReviews = $pdo->prepare("SELECT rating.review, movie.movie_title, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date , movie.id_movie, rating.id_rating
             FROM rating
             INNER JOIN movie ON movie.id_movie = rating.id_movie
             WHERE rating.id_user = :id AND rating.review IS NOT NULL

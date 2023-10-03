@@ -247,6 +247,7 @@ select {
 .ratings-section {
     /* background-color: var(--clr-grey-light); */
     display: flex;
+    
 }
 
 .ratings-section p {
@@ -306,6 +307,7 @@ select {
     padding : 1rem;
     margin-bottom: 0.8rem;
     border-radius:0.8rem;
+    width: 45rem;
 }
 
 .liste-notes-film .review p:nth-child(1) {
