@@ -48,8 +48,13 @@ if(isset($_GET["action"])) {
 
         case "themePreference" : $ctrlUser->themePreference(); break;
         case "listeFilmNote" : $ctrlUser->listeFilmNote(); break;
+
+        case "addLike" : $ctrlUser->addLike($id); break;
+        case "addDislike" : $ctrlUser->addDislike($id); break;
         
-        
+        // USER / MODO
+        case "editerReview" : $ctrlUser->editerReview($id); break;
+        case "supprimerReview" : $ctrlUser->supprimerReview($id); break;
         
 
         // SEARCH
