@@ -140,6 +140,14 @@ class MovieController {
         $nb_review = $requeteNbReview->fetch();
         
 
+
+        $requeteNbLikes = $pdo->prepare("SELECT count(review_likes.is_like) AS nb_likes
+        FROM rating
+        INNER JOIN review_likes ON review_likes.id_rating = rating.id_rating
+        WHERE review_likes.is_like = 1
+        ");
+        $requeteNbLikes->execute(["filmId" => $filmId]);
+        $nb_likes =$requeteNbLikes->fetch();
         
         require "view/movie/detailFilm.php";
     }
