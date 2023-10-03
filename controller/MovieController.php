@@ -121,11 +121,11 @@ class MovieController {
         
         // $pdo = Connect::seConnecter();
         
-        $requeteReview = $pdo->prepare("SELECT rating.review , DATE(rating.date_review) AS formatted_date, user.pseudo, rating.note
+        $requeteReview = $pdo->prepare("SELECT rating.review , DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, user.pseudo, rating.note, rating.id_rating
         FROM rating
         INNER JOIN user ON user.id_user = rating.id_user
         INNER JOIN movie ON movie.id_movie = rating.id_movie
-        WHERE movie.id_movie = :filmId
+        WHERE movie.id_movie = :filmId  AND rating.review IS NOT NULL ORDER BY rating.date_review
         ");
         $requeteReview->execute(["filmId" => $filmId]);
         $reviews = $requeteReview->fetchAll();
