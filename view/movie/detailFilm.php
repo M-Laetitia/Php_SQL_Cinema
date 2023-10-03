@@ -79,7 +79,8 @@
 
                  <!-- Possibilité de laisser une note uniquement si user connecté -->
                 <?php 
-                if(($_SESSION["user"])) {?>
+                if(isset($_SESSION["user"])) {
+                    $userId = $_SESSION['user']['id_user'];?>
 
                     <div class="rating">
                         <p id="add-rating-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
@@ -99,7 +100,8 @@
 
                 <!-- Possibilité de laisser une review uniquement si user connecté -->
                 <?php 
-                if(($_SESSION["user"])) {?>
+                if(isset($_SESSION["user"])) {
+                    $userId = $_SESSION['user']['id_user'];?>
                     <div class="right">
                         <p id="add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
                     <p>Review</p>
@@ -131,24 +133,40 @@
 
                         <div class="likes">
                             <form  enctype="multipart/form-data" action="index.php?action=addLike&id=<?=$review['id_rating']?>" method="post">
-                                <input type="submit" class="submit" name="submitLike" id="submitLike" value="♥" >
+                          
+
+                                <button type="submit" class="submit" name="submitLike" id="submitLike">
+                                <i class="fa-solid fa-heart"></i>
+
+                            </button>
                             </form>
 
-
-                            <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
-                                <input type="submit" class="submit" name="submitDislike" id="submitDislike" value="👎" >
-                            </form>
-
+                            <div><?= $review['nb_likes'] ?></div>
                             
 
-                            <i class="fa-solid fa-heart"></i>
-                            <i class="fa-solid fa-heart-crack"></i>
+                            <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
+
+                            <button type="submit" class="submit" name="submitDislike" id="submitDislike">
+                                <i class="fa-solid fa-heart-crack"></i>
+                            </button>
+
+                            </form>
+
+                            <div><?= $review['nb_dislikes'] ?></div>
+
+                            
+                        
                         </div>
 
                         <!-- Possibilité d'éditer/supprimer une review uniquement si user moderateur-->
                         <?php 
-                        // var_dump($_SESSION["user"]); die;
-                        if(($_SESSION["user"]['role'] === 'moderateur')) { 
+                        
+                        // mauvaise façon de vérifier la présence de la clé role et de sa valeur
+                        // if(isset($_SESSION["user"]['role'] === 'moderateur')) { 
+
+                        if (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur') {
+
+                            $userId = $_SESSION['user']['id_user'];
                             // var_dump($review['id_rating']); die; ?>
 
                         <div class="edit_delete">
