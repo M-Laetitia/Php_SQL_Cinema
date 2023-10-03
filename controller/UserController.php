@@ -288,26 +288,53 @@ class UserController {
 
     // ^ Liker une review
 
-    // public function addLike($id)  {
-    //     $pdo = Connect::seConnecter();
+    public function addLike($id)  {
+        $pdo = Connect::seConnecter();
 
-    //     $id_user = $_SESSION['user']['id_user'];
-    //     var_dump($id_user); die;
+        $id_user = $_SESSION['user']['id_user'];
+        // var_dump($_SESSION['user']['id_user']); die;
 
-    //    if(isset($_POST["addLike"])) {
-    //     $likeValue = 1;
-    //     $dislikeValue = 0;
-    //      $requete = $pdo->prepare("INSERT INTO review_likes ( id_rating, id_user,likes, dislikes
-    //      VALUE (:id_rating, :id_user, :likes, :dislikes
-    //      ");
-    //      $requete->execute ([
-    //         "id_rating" => $id,
-    //         "id_user" => $id_user,
-    //         "likes" => $likeValue,
-    //         "dislikes" => $dislikeValue
-    //      ]);
-    //    }
-    // }
+       if(isset($_POST["submitLike"])) {
+        $likeValue = 1;
+         $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
+         VALUE (:id, :id_user, :likeValue)
+         ");
+
+         
+         $requete->execute ([
+            "id" => $id,
+            "id_user" => $id_user,
+            "likeValue" => $likeValue
+         ]);
+       }
+       header("Location: index.php?action=listFilms");
+    }
+
+
+    // ^ Disliker une review
+
+    // 
+    public function addDislike($id)  {
+        $pdo = Connect::seConnecter();
+
+        $id_user = $_SESSION['user']['id_user'];
+        // var_dump($_SESSION['user']['id_user']); die;
+
+       if(isset($_POST["submitDislike"])) {
+        $likeValue = 0;
+         $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
+         VALUE (:id, :id_user, :likeValue)
+         ");
+
+         
+         $requete->execute ([
+            "id" => $id,
+            "id_user" => $id_user,
+            "likeValue" => $likeValue
+         ]);
+       }
+       header("Location: index.php?action=listFilms");
+    }
 
 }
 

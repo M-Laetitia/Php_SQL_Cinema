@@ -130,6 +130,17 @@
                         </div>
 
                         <div class="likes">
+                            <form  enctype="multipart/form-data" action="index.php?action=addLike&id=<?=$review['id_rating']?>" method="post">
+                                <input type="submit" class="submit" name="submitLike" id="submitLike" value="♥" >
+                            </form>
+
+
+                            <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
+                                <input type="submit" class="submit" name="submitDislike" id="submitDislike" value="👎" >
+                            </form>
+
+                            
+
                             <i class="fa-solid fa-heart"></i>
                             <i class="fa-solid fa-heart-crack"></i>
                         </div>
@@ -264,7 +275,7 @@
     <script>
         bgImageLoader("<?= $filmBackgroundPath ?>") 
     </script>
-    <?php } ?>
+<?php } ?>
 
 
 <script>
