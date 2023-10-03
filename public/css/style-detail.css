@@ -680,6 +680,45 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 
+.movie-review .edit_delete {
+    /* background-color: red; */
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 0.6rem; 
+} 
+
+.movie-review .edit_delete i {
+    cursor: pointer;
+} 
+
+.movie-review .edit_delete i:hover {
+    color: var(--clr-pink);
+} 
+
+.likes {
+    /* background-color: red; */
+    /* width: 100%; */
+    position: absolute;
+    bottom: 1.3rem;
+}
+
+.likes i {
+ cursor: pointer;
+}
+
+.likes i:nth-child(1) {
+    color : var(--clr-pink);
+    margin-right: 0.3rem;
+    transition: ease-in-out 0.1s;
+}
+
+.likes i:nth-child(1):hover {
+    transform: scale(1.2);
+}
+
+
+
 /* ~ REVIEW POPUP ------------------------- */
 #reviewClose-btn,
 #add-rating-btn,
