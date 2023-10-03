@@ -129,6 +129,8 @@ class UserController {
 
             $pdo = Connect::seConnecter();
             $user = $_SESSION['user']['id_user'];
+
+            // afficher liste films notés
             $requete = $pdo->prepare("SELECT rating.note, movie.movie_title, movie.id_movie
             FROM rating 
             INNER JOIN movie ON movie.id_movie = rating.id_movie
@@ -136,7 +138,16 @@ class UserController {
             ORDER BY movie.movie_title 
             ");
             $requete->execute(["id" => $user]);
-            
+
+            // afficher liste reviews postées
+            $requeteReviews = $pdo->prepare("SELECT rating.review, movie.movie_title, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date , movie.id_movie
+            FROM rating
+            INNER JOIN movie ON movie.id_movie = rating.id_movie
+            WHERE rating.id_user = :id AND rating.review IS NOT NULL
+            ORDER BY movie.movie_title
+            ");
+            $requeteReviews->execute(["id" => $user]);
+    
             require("view/user/profile.php"); 
 
         } 
@@ -218,11 +229,90 @@ class UserController {
     }
 
 
-  
+    // ^ Edit review pour modo
+
+        public function editerReview ($id) {
+            $pdo = Connect::seConnecter();
+            // var_dump($id);
 
 
-    
+
+
+            $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+            FROM rating 
+            INNER JOIN movie ON movie.id_movie=rating.id_movie
+            INNER JOIN user ON user.id_user=rating.id_user
+            WHERE id_rating = :id");
+            $requeteReview->execute(["id"=>$id]);
+            // var_dump("ok"); die;
+            // var_dump(["id"=>$id]); die;
+
+
+            if(isset($_POST['editReview'])) {
+                // var_dump("ok"); die;
+                $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+                
+
+                if($review !== false) {
+                    $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
+                    ");
+
+                    $requeteEditer->execute([
+                        "review" => $review,
+                        "id" => $id
+                    ]);
+                    header("Location: index.php?action=listFilms");
+                }
+
+            }
+            require "view/user/editerReview.php" ;
+
+        }
+
+
+
+    // ^ Supprimer une review 
+       public function supprimerReview($id) {
+        
+        $pdo = Connect::seConnecter();
+
+        if (isset($id) && is_numeric($id)) {
+
+
+            $requete = $pdo->prepare("DELETE FROM rating WHERE id_rating = :id");
+            $requete->execute(["id" => $id]);
+        }
+        header("Location: index.php?action=listFilms");
+    }
+
+
+    // ^ Liker une review
+
+    // public function addLike($id)  {
+    //     $pdo = Connect::seConnecter();
+
+    //     $id_user = $_SESSION['user']['id_user'];
+    //     var_dump($id_user); die;
+
+    //    if(isset($_POST["addLike"])) {
+    //     $likeValue = 1;
+    //     $dislikeValue = 0;
+    //      $requete = $pdo->prepare("INSERT INTO review_likes ( id_rating, id_user,likes, dislikes
+    //      VALUE (:id_rating, :id_user, :likes, :dislikes
+    //      ");
+    //      $requete->execute ([
+    //         "id_rating" => $id,
+    //         "id_user" => $id_user,
+    //         "likes" => $likeValue,
+    //         "dislikes" => $dislikeValue
+    //      ]);
+    //    }
+    // }
+
 }
 
 
+
 ?>
+
+
