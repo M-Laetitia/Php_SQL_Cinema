@@ -48,6 +48,7 @@ class MovieController {
 
     // ^ Détail d'un film
     public function detailFilm($id){
+        
         $pdo = Connect::seConnecter();
         $requetedetailFilm = $pdo->prepare("
         SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration,
@@ -116,7 +117,7 @@ class MovieController {
         // var_dump($backgroundDataJSON);die;
 
 
-        $userId = $_SESSION['user']['id_user'];
+        
         $filmId = $_GET['id'];
         
         // $pdo = Connect::seConnecter();
@@ -130,6 +131,31 @@ class MovieController {
         $requeteReview->execute(["filmId" => $filmId]);
         $reviews = $requeteReview->fetchAll();
 
+        foreach ($reviews as &$review) {
+            $requeteNbLikes = $pdo->prepare("SELECT COUNT(review_likes.is_like) AS nb_likes
+                FROM rating
+                INNER JOIN review_likes ON review_likes.id_rating = rating.id_rating
+                WHERE rating.id_rating = :idRating AND review_likes.is_like = 1
+            ");
+            $requeteNbLikes->execute([":idRating" => $review['id_rating']]);
+            $nb_likes = $requeteNbLikes->fetch();
+            $review['nb_likes'] = $nb_likes['nb_likes']; // Ajoutez le nombre de likes à chaque review
+
+
+            $requeteNbDislikes = $pdo->prepare("SELECT COUNT(review_likes.is_like) AS nb_dislikes
+                FROM rating
+                INNER JOIN review_likes ON review_likes.id_rating = rating.id_rating
+                WHERE rating.id_rating = :idRating AND review_likes.is_like = 0
+            ");
+            $requeteNbDislikes->execute([":idRating" => $review['id_rating']]);
+            $nb_dislikes = $requeteNbDislikes->fetch();
+            $review['nb_dislikes'] = $nb_dislikes['nb_dislikes']; 
+        }
+
+      
+
+
+
 
         $requeteNbReview = $pdo->prepare("SELECT COUNT(rating.review) AS nb_review
         FROM rating
@@ -140,14 +166,11 @@ class MovieController {
         $nb_review = $requeteNbReview->fetch();
         
 
+        $filmId = $_GET['id'];
+        
+        
 
-        $requeteNbLikes = $pdo->prepare("SELECT count(review_likes.is_like) AS nb_likes
-        FROM rating
-        INNER JOIN review_likes ON review_likes.id_rating = rating.id_rating
-        WHERE review_likes.is_like = 1
-        ");
-        $requeteNbLikes->execute(["filmId" => $filmId]);
-        $nb_likes =$requeteNbLikes->fetch();
+      
         
         require "view/movie/detailFilm.php";
     }
