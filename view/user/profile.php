@@ -66,6 +66,10 @@ ob_start();
                                         <p> Date : <?= $reviews["formatted_date"]?></p>
 
                                         <p><?= $reviews["review"]?></p>
+
+                                       
+
+                                        <div><a href="index.php?action=editerReview&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
                                     </div>
 
                                         
