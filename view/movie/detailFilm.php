@@ -37,9 +37,6 @@
                         <li> <span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?></li>
 
                         
-
-
-
                         <li>Genre : <span class="text-highlight genre"><?= $genresConcatenated ?></span> </li>
                         <li>Run Time : <?= $movie["formatted_duration"] ?></li>
                         <li>Country : <span class="text-highlight"><?= $movie["movie_country"] ?></span></li>
@@ -59,7 +56,7 @@
                     
                     <div class="edit_delete">
                         <div><a href="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>"><i class="fa-solid fa-x"></i></a></div>
-                        <div><a href="index.php?action=updateFilm&id=<?=$movie["id_movie"]?>"> <i class="fa-solid fa-file-pen"></i></a>   </div> 
+                        <div><a href="index.php?action=updateFilm&id=<?=$movie["id_movie"]?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
                     </div>
                 </div>
             </div>
@@ -74,19 +71,21 @@
 
         <div class="review">
 
-            
-        
-
             <div class="rate-average">
                 <div class="rate">
                     <p><span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?> /5</p>
                     <p> <?= $nombreNotes["nb_note"] ?> Ratings</p>
                 </div>
 
-                <div class="rating">
-                    <p id="add-rating-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
-                    <p>Rate this Movie :</p>
-                </div>
+                 <!-- Possibilité de laisser une note uniquement si user connecté -->
+                <?php 
+                if(($_SESSION["user"])) {?>
+
+                    <div class="rating">
+                        <p id="add-rating-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
+                        <p>Rate this Movie :</p>
+                    </div>
+                <?php } ?>
             </div>
 
 
@@ -97,15 +96,30 @@
                     <p id="reviews-btn" class="text-highlight">▼</p>
                 </div>
 
-                <div class="right">
-                    <p id="add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
+
+                <!-- Possibilité de laisser une review uniquement si user connecté -->
+                <?php 
+                if(($_SESSION["user"])) {?>
+                    <div class="right">
+                        <p id="add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
                     <p>Review</p>
                 </div>
+                <?php } ?>
+
+
+
+                
             </div>
+
+
+            <!-- AFFICHAGE REVIEW --------------------------------------------->
+
+
+
 
             <div class="movie-review">
                 <?php foreach ($reviews as $review) { 
-                    $formattedDate = date('d M Y', strtotime($review['formatted_date']));
+                    // $formattedDate = date('d M Y', strtotime($review['formatted_date']));
                     ?>
 
                     <div class="review-text">
@@ -115,10 +129,35 @@
                             <p><?= $review["review"] ?></p>
                         </div>
 
+                        <div class="likes">
+                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-heart-crack"></i>
+                        </div>
+
+                        <!-- Possibilité d'éditer/supprimer une review uniquement si user moderateur-->
+                        <?php 
+                        // var_dump($_SESSION["user"]); die;
+                        if(($_SESSION["user"]['role'] === 'moderateur')) { 
+                            // var_dump($review['id_rating']); die; ?>
+
+                        <div class="edit_delete">
+                        
+
+                            <div><a href="index.php?action=supprimerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-x"></i></a></div> 
+
+
+                            <div><a href="index.php?action=editerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
+
+
+                        </div>
+                        <?php } ?>
+
                     </div>
+                    
+                    
 
                     <div class="info">
-                        <p><?= $review["pseudo"] ?> - <?= $formattedDate?></p>
+                        <p><?= $review["pseudo"] ?> - <?= $review["formatted_date"]?></p>
                     </div>
                 <?php } ?>
 
@@ -126,7 +165,7 @@
 
 
             <div class="addReview-popUp">
-                <class class="reviewplace">
+                <div class="reviewplace">
                     <p> <i id="reviewClose-btn" class="fa-solid fa-x fa-lg"></i> </p>
                     <p></p>
                     <p>Your opinion matters, share your review for </p>
@@ -148,8 +187,10 @@
 
                         </form>
                     </div>
-                </class>
+                        </div>
             </div>
+
+
 
 
             <div class="addRating-popUp">
@@ -198,6 +239,32 @@
 
 
 </div>
+
+<script>
+    function bgImageLoader(bgImage){
+
+    const url = window.location.href;
+    let backgroundPath = ''; // Déclarer la variable JavaScript
+
+
+
+    if (url.includes("action=detailFilm")) {
+        const main = document.querySelector('main');
+        main.classList.add('custom-background');
+        main.style.backgroundImage = "url("+bgImage+")";
+        console.log(main)
+
+    }
+
+    }
+</script>
+
+
+<?php if ($filmBackgroundPath != null){ ?>
+    <script>
+        bgImageLoader("<?= $filmBackgroundPath ?>") 
+    </script>
+    <?php } ?>
 
 
 <script>
@@ -258,11 +325,6 @@
         addRatingPopUp.style.display = 'none'
         
     });
-
-    
-
-
-
 
 
 </script>
