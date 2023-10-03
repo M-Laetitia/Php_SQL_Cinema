@@ -45,16 +45,49 @@ ob_start();
         </div>
 
         <div class="liste-notes">
-            <p>My movie ratings: </p>
+            <p>My movie reviews: </p>
             <p><span class="text-highlight" id="toggle-list">▼</span></p>
             </div>
                 <div class="ratings-section">
                     
                     <div class="liste-notes-film" id="ratings-list" style="display: none;">
                         <?php 
+                            $reviews = $requeteReviews->fetchAll();
+                            if (empty($reviews)) {
+                                echo '<p>No rating here yet!</p>';
+                            } else {
+                                foreach ($reviews as $reviews) {
+                                    ?>
+                                    <div class="review">
+                                        <p> <span class="text-highlight" >•</span>
+                                            <a href="index.php?action=detailFilm&id=<?= $reviews["id_movie"]?>"><?= $reviews["movie_title"] ?></a> : 
+                                        </p>
+
+                                        <p> Date : <?= $reviews["formatted_date"]?></p>
+
+                                        <p><?= $reviews["review"]?></p>
+                                    </div>
+
+                                        
+                                    <?php
+                                }
+                            }
+                        ?>
+                    </div>
+            </div>
+
+
+            <div class="liste-notes">
+            <p>My movie ratings: </p>
+            <p><span class="text-highlight" id="toggle-review">▼</span></p>
+            </div>
+                <div class="ratings-section">
+                    
+                    <div class="liste-notes-film" id="review-list" style="display: none;">
+                        <?php 
                             $notes = $requete->fetchAll();
                             if (empty($notes)) {
-                                echo '<p>No rating here yet!</p>';
+                                echo '<p>No reviews here yet!</p>';
                             } else {
                                 foreach ($notes as $note) {
                                     ?>
@@ -69,6 +102,8 @@ ob_start();
                     </div>
             </div>
 
+
+
         <div id="logoutDelete">
             <p><a href="index.php?action=logout"> <span class="text-highlight"><i class="fa-solid fa-power-off"></i></span> Log out</a></p>
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
@@ -79,8 +114,13 @@ ob_start();
 </div>
 
 
+
+
+
 <script>
-     const toggleButton = document.getElementById('toggle-list');
+
+    // display or hide the movie ratings list
+    const toggleButton = document.getElementById('toggle-list');
     const ratingsList = document.getElementById('ratings-list');
 
     toggleButton.addEventListener('click', () => {
@@ -92,6 +132,24 @@ ob_start();
             toggleButton.textContent = '▼'; // Flèche vers le bas
         }
     });
+
+
+
+    // display or hide the movie reviews list
+    const toggleReviewButton = document.getElementById('toggle-review');
+    const reviews_list = document.getElementById('review-list');
+
+    toggleReviewButton.addEventListener('click', () => {
+        if (reviews_list.style.display === 'none' || reviews_list.style.display === '') {
+            reviews_list.style.display = 'block';
+            toggleReviewButton.textContent = '▲'; // Flèche vers le haut
+        } else {
+            reviews_list.style.display = 'none';
+            toggleReviewButton.textContent = '▼'; // Flèche vers le bas
+        }
+    });
+
+
 </script>
 
 <?php
