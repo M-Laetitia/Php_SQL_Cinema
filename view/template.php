@@ -153,11 +153,7 @@
   
     <script src="public/js/script.js"></script>
     
-    <?php if ($filmBackgroundPath != null){ ?>
-    <script>
-        bgImageLoader("<?= $filmBackgroundPath ?>") 
-    </script>
-    <?php } ?>
+ 
 
 </body>
 
