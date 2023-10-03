@@ -236,22 +236,7 @@ function scrollToTop() {
 //  });
 
 
-function bgImageLoader(bgImage){
 
-  const url = window.location.href;
-  let backgroundPath = ''; // Déclarer la variable JavaScript
-
-
-
-  if (url.includes("action=detailFilm")) {
-      const main = document.querySelector('main');
-      main.classList.add('custom-background');
-      main.style.backgroundImage = "url("+bgImage+")";
-      console.log(main)
-
-  }
-
-}
 
 
 // & afficher reviews page détail film
