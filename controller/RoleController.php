@@ -90,6 +90,7 @@ class RoleController {
         $requeteRole = $pdo->prepare("SELECT id_role, name_role FROM role WHERE id_role = :id"); 
         $requeteRole->execute(["id"=>$id]);
 
+
         if(isset($_POST['updateRole'])) {
             // Récupérez les données du formulaire
             $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);

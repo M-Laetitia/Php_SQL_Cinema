@@ -36,3 +36,4 @@ $meta_description = "Update the informations about " .$genre["label_genre"];
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>
+
