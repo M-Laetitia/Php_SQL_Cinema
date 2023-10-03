@@ -292,3 +292,28 @@ select {
 #logoutDelete a:first-child:hover {
    color: var(--clr-orange);
 }
+
+#toggle-review {
+    cursor: pointer;
+}
+
+
+/* & Liste reviews :-----------------*/
+
+.liste-notes-film .review {
+    /* background: linear-gradient(to bottom, #494762, #37354e); */
+    background-color: #494762;
+    padding : 1rem;
+    margin-bottom: 0.8rem;
+    border-radius:0.8rem;
+}
+
+.liste-notes-film .review p:nth-child(1) {
+    font-weight: 600;
+
+}
+
+.liste-notes-film .review p:nth-child(2) {
+    font-size: var(--fs-300);
+
+}
