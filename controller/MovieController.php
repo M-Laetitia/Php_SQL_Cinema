@@ -111,37 +111,36 @@ class MovieController {
 
         $filmId = $_GET['id'];
     
-        $requeteReview = $pdo->prepare("SELECT rating.review , DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, user.pseudo, rating.note, rating.id_rating
+        $requeteReview = $pdo->prepare("SELECT 
+        rating.review, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, user.pseudo, rating.note, rating.id_rating,
+        likes.likes_count AS nb_likes,
+        dislikes.dislikes_count AS nb_dislikes
         FROM rating
         INNER JOIN user ON user.id_user = rating.id_user
         INNER JOIN movie ON movie.id_movie = rating.id_movie
-        WHERE movie.id_movie = :filmId  AND rating.review IS NOT NULL ORDER BY rating.date_review
+
+        LEFT JOIN (
+        SELECT id_rating, COUNT(*) AS likes_count
+        FROM review_likes
+        WHERE is_like = 1
+        GROUP BY id_rating
+        ) AS likes ON rating.id_rating = likes.id_rating
+
+        LEFT JOIN (
+        SELECT id_rating, COUNT(*) AS dislikes_count
+        FROM review_likes
+        WHERE is_like = 0
+        GROUP BY id_rating
+        ) AS dislikes ON rating.id_rating = dislikes.id_rating
+        
+        WHERE movie.id_movie = :filmId AND rating.review IS NOT NULL
+        ORDER BY rating.date_review
         ");
         $requeteReview->execute(["filmId" => $filmId]);
         $reviews = $requeteReview->fetchAll();
 
-        // foreach ($reviews as &$review) {
-   
-        //     $requeteNbLikes = $pdo->prepare("SELECT COUNT(review_likes.is_like) AS nb_likes
-        //     FROM rating
-        //     INNER JOIN review_likes ON review_likes.id_rating = rating.id_rating
-        //     WHERE rating.id_rating = :idRating AND review_likes.is_like = 1
-        // ");
-        //     $requeteNbLikes->execute([":idRating" => $review['id_rating']]);
-        //     $nb_likes = $requeteNbLikes->fetch();
-        //     $review['nb_likes'] = $nb_likes['nb_likes']; // Mettre à jour la clé 'nb_likes' dans le tableau $review
-            
 
-        //     $requeteNbDislikes = $pdo->prepare("SELECT COUNT(review_likes.is_like) AS nb_dislikes
-        //         FROM rating
-        //         INNER JOIN review_likes ON review_likes.id_rating = rating.id_rating
-        //         WHERE rating.id_rating = :idRating AND review_likes.is_like = 0
-        //     ");
-        //     $requeteNbDislikes->execute([":idRating" => $review['id_rating']]);
-        //     $nb_dislikes = $requeteNbDislikes->fetch();
-        //     $review['nb_dislikes'] = $nb_dislikes['nb_dislikes']; // Mettre à jour la clé 'nb_likes' dans le tableau $review
-             
-        // }
+        
 
         $requeteNbReview = $pdo->prepare("SELECT COUNT(rating.review) AS nb_review
         FROM rating
@@ -338,6 +337,8 @@ class MovieController {
                 $_SESSION["message"] = " This casting has been added! <i class='fa-solid fa-check'></i> ";
                  echo "<script>setTimeout(\"location.href = 'index.php?action=listRoles';\",1500);</script>"; 
                 // header("Location: index.php?action=listRoles");
+            } else {
+                $_SESSION["message"] = "Please, select a Movie, a Role and an Actor before submitting the form";
             }
         }
         require "view/movie/ajouterCasting.php"; 
@@ -526,26 +527,28 @@ class MovieController {
         // header("Location: index.php?action=listFilms");
     }
      
-       // ^ Ajouter review
-       public function ajouterReview() {
+    // ^ Ajouter review
+    public function ajouterReview() {
         $userId = $_SESSION['user']['id_user'];
         $filmId = $_GET['id'];
-
+    
         if(isset($_POST["submitReview"])) {
             $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
-
-            $pattern = '^.{200,800}$';
+    
+            $pattern = '/^.{200,800}$/';
             if(($review !== false ) && (preg_match($pattern,$review))) {
                 $pdo = Connect::seConnecter();
                 $dateReview = date("Y-m-d H:i:s");
+                
                 // Vérifiez si une review existe
                 $requeteExisteReview = $pdo->prepare("SELECT review FROM rating WHERE id_user = :userId AND id_movie = :filmId");
                 $requeteExisteReview->execute([
                     "userId" => $userId,
-                    "filmId" => $filmId,]);
-
+                    "filmId" => $filmId,
+                ]);
+    
                 $resultatExisteReview = $requeteExisteReview->fetch();
-
+    
                 if ($resultatExisteReview) {
                     // Si une review existe déjà, mettez à jour la review existante
                     $requeteMettreAJourReview = $pdo->prepare("UPDATE rating SET review = :review, date_review = :dateReview WHERE id_user = :userId AND id_movie = :filmId");
@@ -553,7 +556,8 @@ class MovieController {
                         "review" => $review,
                         "dateReview" => $dateReview,
                         "userId" => $userId,
-                        "filmId" => $filmId,]);
+                        "filmId" => $filmId,
+                    ]);
                 } else {
                     // Si aucune review n'existe, ajoutez une nouvelle review
                     $requeteAjouterReview = $pdo->prepare("INSERT INTO rating (review, id_movie, id_user, date_review) VALUES (:review, :id_movie, :id_user, :dateReview)");
@@ -561,12 +565,16 @@ class MovieController {
                         "review" => $review,
                         "id_movie" => $filmId,
                         "id_user" => $userId,
-                        "dateReview" => $dateReview,]);   
-              }
-            }
-            $_SESSION["message"] = "Review successfully posted! Thanks for sharing !<i class='fa-solid fa-check'></i>";
-            echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
-            // header("Location: index.php?action=listFilms");
+                        "dateReview" => $dateReview,
+                    ]);
+                }
+                
+                $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
+                // echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
+             } //else {
+            //     $_SESSION["message"] = "A problem has occurred. The review must be between 200 and 800 characters.";
+            //     echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
+            // }
         }
     }
 }
