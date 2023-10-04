@@ -110,10 +110,13 @@ class UserController {
     // ^ Log out
     public function logout() {
         // session_unset();
+        
+        // $_SESSION["message"] = "You had been disconnected. See you soon !";
         unset($_SESSION["user"]);
-        $_SESSION["message"] = "You had been disconnected. See you soon !";
-        echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
-        // header("Location: index.php?action=landingPage"); exit;
+        // echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
+        
+        // exit ; 
+        header("Location: index.php?action=landingPage"); exit;
     }
 
     // ^ Profile
@@ -206,35 +209,34 @@ class UserController {
     }
 
     // ^ Edit review user 
-        public function editerReview ($id) {
-            $pdo = Connect::seConnecter();
+    public function editerReview ($id) {
+        $pdo = Connect::seConnecter();
 
-            $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
-            FROM rating 
-            INNER JOIN movie ON movie.id_movie=rating.id_movie
-            INNER JOIN user ON user.id_user=rating.id_user
-            WHERE id_rating = :id");
-            $requeteReview->execute(["id"=>$id]);
+        $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+        FROM rating 
+        INNER JOIN movie ON movie.id_movie=rating.id_movie
+        INNER JOIN user ON user.id_user=rating.id_user
+        WHERE id_rating = :id");
+        $requeteReview->execute(["id"=>$id]);
 
-            if(isset($_POST['editReview'])) {
-                // var_dump("ok"); die;
-                $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
-                
-                if($review !== false) {
-                    $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id");
-                    $requeteEditer->execute([
-                        "review" => $review,
-                        "id" => $id]);
-                }
-
+        $pattern = '/^.{200,800}$/';
+        if(isset($_POST['editReview']) && (preg_match($pattern,$review)))  {
+            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            
+            if(strlen($review) < 200 || strlen($review) > 800) {
+                $_SESSION["message"] = "A problem has occurred, the authorized number of characters must be between 200 and 800.";
+            } else {
+                $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id");
+                $requeteEditer->execute([
+                    "review" => $review,
+                    "id" => $id]);
+    
                 $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
                 echo "<script>setTimeout(\"location.href = ' index.php?action=profile';\",1500);</script>";
-                // header("Location: index.php?action=profile"); exit;               
-            } else { 
-                $_SESSION["message"] = " A problem has occurred, the authorized number of characters must be between 200 and 800";
             }
-            require "view/user/editerReview.php" ;
         }
+        require "view/user/editerReview.php";
+    }
 
 
 
@@ -300,35 +302,111 @@ class UserController {
         $pdo = Connect::seConnecter();
         $id_user = $_SESSION['user']['id_user'];
 
-       if(isset($_POST["submitLike"])) {
-        $likeValue = 1;
-        $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
-        VALUE (:id, :id_user, :likeValue)");
-
-         $requete->execute ([
-            "id" => $id,
-            "id_user" => $id_user,
-            "likeValue" => $likeValue]);
-       }
-       header("Location: index.php?action=listFilms");
+        
+        if (isset($_POST['submitLike'])) {
+            // Vérifier si l'utilisateur a déjà "liké" ou "disliké" cette review
+            $requeteCheckLike = $pdo->prepare("SELECT * FROM review_likes WHERE id_rating = :id AND id_user = :id_user");
+            $requeteCheckLike->execute([
+                "id" => $id,
+                "id_user" => $id_user
+            ]);
+    
+            $existingLike = $requeteCheckLike->fetch();
+    
+            if ($existingLike) {
+                // L'utilisateur a déjà "liké" ou "disliké" cette review
+                if ($existingLike['is_like'] == 1) {
+                    // Si c'était un "like", on supprime
+                    $requeteRemoveLike = $pdo->prepare("DELETE FROM review_likes WHERE id_rating = :id AND id_user = :id_user");
+                    $requeteRemoveLike->execute([
+                        "id" => $id,
+                        "id_user" => $id_user
+                    ]);
+                } else {
+                    // Si c'était un "dislike",on met à jour pour faire un "like"
+                    $likeValue = 1;
+                    $requeteUpdateLike = $pdo->prepare("UPDATE review_likes SET is_like = :likeValue WHERE id_rating = :id AND id_user = :id_user");
+                    $requeteUpdateLike->execute([
+                        "id" => $id,
+                        "id_user" => $id_user,
+                        "likeValue" => $likeValue
+                    ]);
+                }
+            } else {
+                // L'utilisateur n'a pas encore "liké" cette review, on ajoute un like
+                $likeValue = 1;
+                $requeteAddLike = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user, is_like)
+                VALUES (:id, :id_user, :likeValue)");
+    
+                $requeteAddLike->execute([
+                    "id" => $id,
+                    "id_user" => $id_user,
+                    "likeValue" => $likeValue
+                ]);
+            }
+        }
+    
+        // Redirection vers la page où se trouvent les reviews
+        header("Location: index.php?action=listFilms");
+        exit;
     }
 
-    // ^ Disliker une review
-    public function addDislike($id)  {
+
+      // ^ disliker une review
+      public function addDislike($id)  {
         $pdo = Connect::seConnecter();
         $id_user = $_SESSION['user']['id_user'];
 
-       if(isset($_POST["submitDislike"])) {
-        $likeValue = 0;
-         $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
-         VALUE (:id, :id_user, :likeValue)");
-
-         $requete->execute ([
+        
+    if (isset($_POST['submitDislike'])) {
+        // Vérifier si l'utilisateur a déjà "liké" ou "disliké" cette review
+        $requeteCheckLike = $pdo->prepare("SELECT * FROM review_likes WHERE id_rating = :id AND id_user = :id_user");
+        $requeteCheckLike->execute([
             "id" => $id,
-            "id_user" => $id_user,
-            "likeValue" => $likeValue]);
-       }
-       header("Location: index.php?action=listFilms");
+            "id_user" => $id_user
+        ]);
+
+        $existingLike = $requeteCheckLike->fetch();
+
+        if ($existingLike) {
+   
+            if ($existingLike['is_like'] == 1) {
+  
+                $requeteRemoveLike = $pdo->prepare("DELETE FROM review_likes WHERE id_rating = :id AND id_user = :id_user");
+                $requeteRemoveLike->execute([
+                    "id" => $id,
+                    "id_user" => $id_user
+                ]);
+            } else {
+      
+                $likeValue = 1;
+                $requeteUpdateLike = $pdo->prepare("UPDATE review_likes SET is_like = :likeValue WHERE id_rating = :id AND id_user = :id_user");
+                $requeteUpdateLike->execute([
+                    "id" => $id,
+                    "id_user" => $id_user,
+                    "likeValue" => $likeValue
+                ]);
+            }
+        } else {
+
+            $likeValue = 0;
+            $requeteAddLike = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user, is_like)
+            VALUES (:id, :id_user, :likeValue)");
+
+            $requeteAddLike->execute([
+                "id" => $id,
+                "id_user" => $id_user,
+                "likeValue" => $likeValue
+            ]);
+        }
     }
+
+    // Redirection vers la page où se trouvent les reviews
+    header("Location: index.php?action=listFilms");
+    exit;
+}
+
+
+
 }
 ?>
