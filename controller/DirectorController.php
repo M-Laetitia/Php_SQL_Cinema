@@ -3,49 +3,41 @@ namespace Controller;
 use Model\Connect;
 
 class DirectorController {
-
     // ^ Lister les réalisateurs
     public function listRealisateurs() {
         $pdo = Connect::seConnecter();
         $requete = $pdo->query("SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, person.person_nationality,  DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe, 
         (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge, person.person_image, person.person_alt_desc
         FROM person
-        INNER JOIN director ON person.id_person = director.id_person
-        ");
+        INNER JOIN director ON person.id_person = director.id_person");
         $requete->execute();
         require "view/director/listRealisateurs.php";
     }
-
     // ^ Afficher détails réalisateur
     public function detailRealisateur($id) {
         $pdo = Connect::seConnecter();
         $requetedetailRealisateur = $pdo->prepare("SELECT director.id_director, CONCAT(person.person_first_name, ' ' ,person.person_last_name) AS realComplete, DATE_FORMAT(person.person_birthday, '%d' ' ' '%M' ' ' '%Y') AS dateDMY, person.person_sexe,  (DATE_FORMAT(CURDATE(), '%Y') - DATE_FORMAT(person.person_birthday, '%Y')) AS ActorAge , person.person_sexe, person.person_nationality, person.person_image, person.person_alt_desc
         FROM person
         INNER JOIN director ON person.id_person = director.id_person
-        WHERE id_director = :id"
-        );
+        WHERE id_director = :id");
         $requetedetailRealisateur->execute (["id" => $id]);
 
         // ^ Liste des films 
-        $requeteFilms = $pdo->prepare("
-        SELECT movie.movie_title, movie.movie_release_date, director.id_director, movie.id_movie
+        $requeteFilms = $pdo->prepare("SELECT movie.movie_title, movie.movie_release_date, director.id_director, movie.id_movie
         FROM movie
         INNER JOIN director ON movie.id_director = director.id_director
         INNER JOIN person ON person.id_person = director.id_person
-        WHERE director.id_director = :id
-        ");
+        WHERE director.id_director = :id");
         $requeteFilms->execute(["id" => $id]);
         require "view/director/detailRealisateur.php";
     }
-
 
     // ^ Aller à la page d'ajout d'un acteur 
     public function getAjouterRealisateur(){
         $pdo = Connect::seConnecter(); 
         $requeteGetAjouterRealisateur = $pdo->query(" SELECT person.person_first_name, person.person_last_name
         FROM director
-        INNER JOIN person ON person.id_person = director.id_person
-        ");
+        INNER JOIN person ON person.id_person = director.id_person");
         $requeteGetAjouterRealisateur->execute();
         require "view/director/ajouterRealisateur.php";
     }
@@ -56,7 +48,6 @@ class DirectorController {
         if(isset($_POST["submitRealisateur"])){
             
             if(isset($_FILES["director_image"])){ 
-
                 $tmpName = $_FILES["director_image"]["tmp_name"];
                 $name = $_FILES["director_image"]["name"];
                 $size = $_FILES["director_image"]["size"];
@@ -89,14 +80,9 @@ class DirectorController {
             $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($person_first_name && $person_last_name && $person_sexe && $person_birthday){
-
                 $imageAlt = "Portrait of " . $person_first_name . ' ' . $person_last_name;
-
-                
-                $requeteAjouterPersonne = $pdo->prepare(" 
-                    INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image, person_alt_desc) 
-                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin, :imageAlt)
-                    ");
+                $requeteAjouterPersonne = $pdo->prepare("INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image, person_alt_desc) 
+                VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin, :imageAlt)");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
                     "person_last_name" => $person_last_name,
@@ -104,33 +90,31 @@ class DirectorController {
                     "person_birthday" => $person_birthday,
                     "person_nationality" => $person_nationality,
                     "movieImageChemin" => $movieImageChemin,
-                    "imageAlt" => $imageAlt,
-                ]);
+                    "imageAlt" => $imageAlt,]);
                 $id_realisateur = $pdo->lastInsertID();
-                $requeteAjouterRealisateur = $pdo->prepare("
-                    INSERT INTO director (id_person)
-                    VALUES (:id_director)
-                    ");   
-                $requeteAjouterRealisateur ->execute([
-                    "id_director" => $id_realisateur
-                ]);
+                $requeteAjouterRealisateur = $pdo->prepare("INSERT INTO director (id_person) VALUES (:id_director)");   
+                $requeteAjouterRealisateur ->execute(["id_director" => $id_realisateur]);
             }
+            $_SESSION["message"] = " This director has been added ! <i class='fa-solid fa-check'></i> ";
+            echo "<script>setTimeout(\"location.href = 'index.php?action=listRealisateurs';\",1500);</script>";
+            // header("Location: index.php?action=listRealisateurs");
+        } else {
+            $_SESSION["message"] = " an error has occurred please check that you have filled in all required fields";
         }
-        header("Location: index.php?action=listRealisateurs");
     }
 
     // ^ Supprimer un réalisateur 
     public function supprimerRealisateur($id) {
         $pdo = Connect::seConnecter();
-
         if (isset($id) && is_numeric($id)) {
             $requeteSupprimerMovie = $pdo->prepare("DELETE FROM movie WHERE id_director = :id");
             $requeteSupprimerMovie->execute(["id"=>$id]);
-
             $requeteSupprimerActor = $pdo->prepare("DELETE FROM director WHERE id_director = :id");
             $requeteSupprimerActor->execute(["id" => $id]);
         }
-            header("Location: index.php?action=listRealisateurs");
+        $_SESSION["message"] = " This director has been deleted! <i class='fa-solid fa-check'></i> ";
+        echo "<script>setTimeout(\"location.href = 'index.php?action=listRealisateurs';\",1500);</script>";
+        // header("Location: index.php?action=listRealisateurs");
     }
 
     // ^ Editer un réalisateur
@@ -139,13 +123,11 @@ class DirectorController {
         $requeteUpdateRealisateur = $pdo->prepare(" SELECT director.id_director, CONCAT(person.person_first_name, ' ', person.person_last_name) AS directorComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name, person.person_nationality
         FROM director
         INNER JOIN person ON person.id_person = director.id_person
-        WHERE director.id_director = :id
-        ");
+        WHERE director.id_director = :id");
         $requeteUpdateRealisateur->execute(["id"=>$id]);
 
         if(isset($_POST["updateDirector"])){ 
             if(isset($_FILES["director_image"])){
-
                 $tmpName = $_FILES["director_image"]["tmp_name"];
                 $name = $_FILES["director_image"]["name"];
                 $size = $_FILES["director_image"]["size"];
@@ -182,8 +164,7 @@ class DirectorController {
                 $requeteAjouterPersonne = $pdo->prepare(" UPDATE person
                 INNER JOIN director ON director.id_person = person.id_person
                 SET person_first_name = :person_first_name, person_last_name = :person_last_name, person_sexe = :person_sexe, person_birthday = :person_birthday, person_nationality = :person_nationality, person_image =:movieImageChemin
-                WHERE director.id_director = :id
-                    ");
+                WHERE director.id_director = :id");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
                     "person_last_name" => $person_last_name,
@@ -191,10 +172,12 @@ class DirectorController {
                     "person_birthday" => $person_birthday,
                     "id" => $id,
                     "person_nationality" => $person_nationality,
-                    "movieImageChemin" => $movieImageChemin,
-                    
-                ]);
-            header("Location: index.php?action=listRealisateurs");
+                    "movieImageChemin" => $movieImageChemin,]);
+            
+            $_SESSION["message"] = " This director has been updated ! <i class='fa-solid fa-check'></i> ";
+            echo "<script>setTimeout(\"location.href = 'index.php?action=listRealisateurs';\",1500);</script>";
+
+            // header("Location: index.php?action=listRealisateurs");
             }
         }
     require "view/director/updateRealisateur.php" ;

@@ -111,8 +111,7 @@ class ActorController {
                 $imageAlt = "Portrait of " . $person_first_name . ' ' . $person_last_name;
 
                 $requeteAjouterPersonne = $pdo->prepare(" INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image, person_alt_desc ) 
-                    VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin, :imageAlt)
-                    ");
+                VALUES (:person_first_name, :person_last_name, :person_sexe, :person_birthday, :person_nationality, :movieImageChemin, :imageAlt)");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
                     "person_last_name" => $person_last_name,
@@ -120,38 +119,35 @@ class ActorController {
                     "person_birthday" => $person_birthday,
                     "person_nationality" => $person_nationality,
                     "movieImageChemin" => $movieImageChemin,
-                    "imageAlt" => $imageAlt,
-                ]);
-                // The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
-                // The INSERT INTO SELECT statement requires that the data types in source and target tables match.
+                    "imageAlt" => $imageAlt,]);
                 // LAST_INSERT_ID() Function Return the AUTO_INCREMENT id of the last row that has been inserted or updated in a table: SELECT LAST_INSERT_ID();
                 $id_acteur = $pdo->lastInsertID();
-                $requeteAjouterActeur = $pdo->prepare("
-                    INSERT INTO actor (id_person)
-                    VALUES (:id_actor)
-                ");
-                
-                $requeteAjouterActeur->execute([
-                    "id_actor" => $id_acteur
-                ]);  
-            }  
+                $requeteAjouterActeur = $pdo->prepare("INSERT INTO actor (id_person)
+                VALUES (:id_actor)");
+                $requeteAjouterActeur->execute(["id_actor" => $id_acteur]); 
+                  
+                $_SESSION["message"] = " This actor has been added ! <i class='fa-solid fa-check'></i> ";
+                echo "<script>setTimeout(\"location.href = 'index.php?action=listActeurs';\",1500);</script>";
+            }  else {
+                $_SESSION["message"] = " An error has occured, please check that you have filled in all required fields ";
+            }
         }
-        header("Location: index.php?action=listActeurs");
+        // header("Location: index.php?action=listActeurs");
     }
 
     // ^ Supprimer un acteur 
     public function supprimerActeur($id) {
         $pdo = Connect::seConnecter();
-
         if (isset($id) && is_numeric($id)) {
             // d'abord supprimer les clés étrangères
             $requeteSupprimerActeur = $pdo->prepare("DELETE FROM play WHERE id_actor = :id");
             $requeteSupprimerActeur->execute(["id" => $id]);
-
             $requeteSupprimerActor1 = $pdo->prepare("DELETE FROM actor WHERE id_actor = :id");
             $requeteSupprimerActor1->execute(["id" => $id]);
         }
-        header("Location: index.php?action=listActeurs");
+        $_SESSION["message"] = " This actor has been deleted ! <i class='fa-solid fa-check'></i> ";
+        echo "<script>setTimeout(\"location.href = 'index.php?action=listActeurs';\",1500);</script>";
+        // header("Location: index.php?action=listActeurs");
     }
 
     // ^ Editer un acteur 
@@ -160,12 +156,10 @@ class ActorController {
         $requeteUpdateActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ', person.person_last_name) AS acteurComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name, person.person_nationality, person.person_image
         FROM actor
         INNER JOIN person ON person.id_person = actor.id_person
-        WHERE actor.id_actor = :id
-        ");
+        WHERE actor.id_actor = :id");
         $requeteUpdateActeur->execute(["id"=>$id]);
 
         if(isset($_POST["updateActor"])){ 
-
             if(isset($_FILES["actor_image"])){ 
                 $tmpName = $_FILES["actor_image"]["tmp_name"];
                 $name = $_FILES["actor_image"]["name"];
@@ -203,17 +197,18 @@ class ActorController {
                 $requeteAjouterPersonne = $pdo->prepare(" UPDATE person
                 INNER JOIN actor ON actor.id_person = person.id_person
                 SET person_first_name = :person_first_name, person_last_name = :person_last_name, person_sexe = :person_sexe, person_birthday = :person_birthday, person_image =:movieImageChemin
-                WHERE actor.id_actor = :id
-                    ");
+                WHERE actor.id_actor = :id");
                 $requeteAjouterPersonne ->execute([
                     "person_first_name" => $person_first_name,
                     "person_last_name" => $person_last_name,
                     "person_sexe" => $person_sexe,
                     "person_birthday" => $person_birthday,
                     "movieImageChemin" => $movieImageChemin,
-                    "id" => $id,
-                ]);
-                header("Location: index.php?action=listActeurs");
+                    "id" => $id,]);
+
+                $_SESSION["message"] = " This actor has been updated! <i class='fa-solid fa-check'></i> ";
+                echo "<script>setTimeout(\"location.href = 'index.php?action=listActeurs';\",1500);</script>";
+                // header("Location: index.php?action=listActeurs");
             }
         }
     require "view/actor/updateActeur.php" ;

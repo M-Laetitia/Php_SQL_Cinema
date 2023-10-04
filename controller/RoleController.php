@@ -12,8 +12,7 @@ class RoleController {
         INNER JOIN actor ON actor.id_actor = play.id_actor
         INNER JOIN person ON person.id_person = actor.id_person
         INNER JOIN movie ON movie.id_movie = play.id_movie
-        ORDER by role.name_role ASC
-        ");
+        ORDER by role.name_role ASC");
         require "view/role/listRoles.php";          
     }
 
@@ -26,9 +25,7 @@ class RoleController {
         INNER JOIN movie ON movie.id_movie = play.id_movie
         INNER JOIN actor ON actor.id_actor = play.id_actor
         INNER JOIN person ON person.id_person = actor.id_person
-        WHERE role.id_role = :id
-        "
-        );
+        WHERE role.id_role = :id");
         $requeteDetailRole->execute (["id" => $id]);
         // var_dump($requeteDetailRole); die;
         require "view/role/detailRole.php";
@@ -39,46 +36,40 @@ class RoleController {
         $pdo = Connect::seConnecter(); 
         $requeteGetAjouterRole = $pdo->query("
         SELECT role.name_role
-        FROM role
-        ");
+        FROM role");
         $requeteGetAjouterRole->execute();
         require "view/role/ajouterRole.php";
     }
 
     // ^ Ajouter Role
-
     public function ajouterRole() {
         if(isset($_POST["submitRole"])) {
             $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($name_role) {
                 $pdo = Connect::seConnecter();
-
                 $requeteAjouterRole = $pdo->prepare("INSERT INTO role(name_role)
-                VALUES (:name_role)
-                ");
-
-                $requeteAjouterRole->execute ([
-                    "name_role" => $name_role
-                ]);
+                VALUES (:name_role)");
+                $requeteAjouterRole->execute (["name_role" => $name_role]);
             }
-            header("Location: index.php?action=listRoles");
+            $_SESSION["message"] = " This role has been added ! <i class='fa-solid fa-check'></i> ";
+            echo "<script>setTimeout(\"location.href = ' index.php?action=listRoles';\",1500);</script>";
+            // header("Location: index.php?action=listRoles");
+        }
+        else {
+            $_SESSION["message"] = "An error has occurred; please make sure you have filled in all required fields";
         }
         require "view/role/ajouterRole.php";
-       
     }
 
     // ^ Supprimer un role
     public function supprimerRole($id) {
         $pdo = Connect::seConnecter();
         if (isset($id) && is_numeric($id)) {
-            
             $requeteSupprimerPlay = $pdo->prepare("DELETE FROM play WHERE id_role = :id");
             $requeteSupprimerPlay->execute(["id" => $id]);
-
             $requeteSupprimerRole = $pdo->prepare("DELETE FROM role WHERE id_role = :id");
             $requeteSupprimerRole->execute(["id" => $id]);
-
         }
         header("Location: index.php?action=listRoles");
     }
@@ -89,8 +80,6 @@ class RoleController {
         // récupérer les données du genre à mettre à jour si besoin d'afficher les informations actuelles du genre dans le formulaire de mise à jour, pour que l'utilisateur puisse voir les données existantes avant de les modifier.
         $requeteRole = $pdo->prepare("SELECT id_role, name_role FROM role WHERE id_role = :id"); 
         $requeteRole->execute(["id"=>$id]);
-
-
         if(isset($_POST['updateRole'])) {
             // Récupérez les données du formulaire
             $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -103,10 +92,14 @@ class RoleController {
                     // Exécutez la mise à jour en liant les paramètres
                     $requeteUpdateRole->execute([
                     "name_role" => $name_role,
-                    "id" => $id
-                ]);
-                header("Location: index.php?action=listRoles");
+                    "id" => $id]);
+
+                $_SESSION["message"] = " This role has been updated ! <i class='fa-solid fa-check'></i> ";
+                echo "<script>setTimeout(\"location.href = ' index.php?action=listRoles';\",1500);</script>";
+                // header("Location: index.php?action=listRoles");
             }
+        } else {
+            $_SESSION["message"] = "An error has occurred; please make sure you have filled in all required fields";
         }
         require "view/role/updateRole.php" ;
     }
