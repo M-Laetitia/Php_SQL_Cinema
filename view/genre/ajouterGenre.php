@@ -22,15 +22,22 @@
                     <div class="btn-submit">
                         <input type="submit" class="submit" name="submitGenre" id="submitGenre">
                     </div>
-
                 </form>
-            
+
+                <div class="messages_neutral">
+                    <?php
+                        if (isset($_SESSION["message"])) {
+                            echo "<p>" . $_SESSION["message"] . "</p>";
+                            unset($_SESSION["message"]); // Supprimer le message de la session
+                    }?>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
-<?php
 
+<?php
 $titre = "Add a Genre";
 $meta_description = "form to add a genre and to expand the database";
 $contenu = ob_get_clean();

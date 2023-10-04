@@ -22,13 +22,21 @@ $review = $requeteReview ->fetch();?>
     <form id="" enctype="multipart/form-data" action="index.php?action=editerReview&id=<?= $review["id_rating"]?>" method="post">
 
         <label for="review"></label>
-        <textarea name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
+        <textarea maxlength="800" minlength="200" name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
 
         <div class="btn-submit">
                 <input type="submit" class="submit" name="editReview" value="publish" >
         </div>
 
     </form>
+
+    <div class="messages_neutral">
+        <?php
+            if (isset($_SESSION["message"])) {
+                echo "<p>" . $_SESSION["message"] . "</p>";
+                unset($_SESSION["message"]); // Supprimer le message de la session
+        }?>
+    </div>
 </div>
    
 

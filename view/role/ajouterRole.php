@@ -24,11 +24,23 @@
                     </div>
 
                 </form>
+
+                <div class="messages_neutral">
+                    <?php
+                        if (isset($_SESSION["message"])) {
+                            echo "<p>" . $_SESSION["message"] . "</p>";
+                            unset($_SESSION["message"]); // Supprimer le message de la session
+                    }?>
+                </div>
+
+                
             </div>
         </div>
     </div>
 </div>
 
+
+  
 <?php
 $titre = "Add a Role";
 $meta_description = "form to add a Role and to expand the database";

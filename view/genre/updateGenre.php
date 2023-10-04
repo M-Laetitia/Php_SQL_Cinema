@@ -26,6 +26,15 @@ $genre = $requeteGenre->fetch(); ?>
                 </div>
 
             </form>
+
+            <div class="messages_neutral">
+                <?php
+                    if (isset($_SESSION["message"])) {
+                        echo "<p>" . $_SESSION["message"] . "</p>";
+                        unset($_SESSION["message"]); // Supprimer le message de la session
+                }?>
+            </div>
+            
         </div>
     </div>
 </div>

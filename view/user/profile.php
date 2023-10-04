@@ -112,6 +112,14 @@ ob_start();
             <p><a href="index.php?action=logout"> <span class="text-highlight"><i class="fa-solid fa-power-off"></i></span> Log out</a></p>
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
         </div>
+
+        <div>
+        <?php
+            if (isset($_SESSION["message"])) {
+                echo "<p>" . $_SESSION["message"] . "</p>";
+                unset($_SESSION["message"]); // Supprimer le message de la session
+        }?>
+        </div>
         
     </div>
 
