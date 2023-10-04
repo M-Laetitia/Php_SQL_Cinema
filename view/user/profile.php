@@ -54,7 +54,7 @@ ob_start();
                         <?php 
                             $reviews = $requeteReviews->fetchAll();
                             if (empty($reviews)) {
-                                echo '<p>No rating here yet!</p>';
+                                echo '<p>No review here yet!</p>';
                             } else {
                                 foreach ($reviews as $reviews) {
                                     ?>
@@ -73,10 +73,8 @@ ob_start();
                                     </div>
 
                                         
-                                    <?php
-                                }
-                            }
-                        ?>
+                                <?php }
+                            }?>
                     </div>
             </div>
 
@@ -114,6 +112,7 @@ ob_start();
         </div>
 
         <div>
+            
         <?php
             if (isset($_SESSION["message"])) {
                 echo "<p>" . $_SESSION["message"] . "</p>";
@@ -122,6 +121,51 @@ ob_start();
         </div>
         
     </div>
+    
+
+    <div class="container01">
+        <div class="un"></div>
+        <div class="deux"></div>
+    </div>
+
+
+
+
+
+    <?php 
+        $reviews = $requeteReviews->fetchAll();
+        if (empty($reviews)) {
+            echo '<p>No rating here yet!</p>';
+        } else {
+            foreach ($reviews as $reviews) {
+       
+                ?>
+                <div class="container01">
+                <div class="un">
+                    <p> <span class="text-highlight" >•</span>
+                            <a href="index.php?action=detailFilm&id=<?= $reviews["id_movie"]?>"><?= $reviews["movie_title"] ?></a> : 
+                        </p>
+
+            
+                        <div><a href="index.php?action=editerReview&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
+                </div>
+
+                <div class="deux">
+                    <p> <span class="text-highlight" >•</span>
+                            <a href="index.php?action=detailFilm&id=<?= $reviews["id_movie"]?>"><?= $reviews["movie_title"] ?></a> : 
+                        </p>
+
+            
+                        <div><a href="index.php?action=editerReview&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
+                </div>
+
+
+                    
+                </div>
+
+                    
+            <?php }
+        }?>
 
 </div>
 
