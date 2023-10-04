@@ -52,11 +52,9 @@ $person = $requetedetailRealisateur->fetch();
                 <div><a href="index.php?action=updateRealisateur&id=<?=$person["id_director"]?>"> <i class="fa-solid fa-file-pen"></i></a>   </div> 
             </div>
         </div>
-        
     </div>
 
 <?php
-
 $titre = "More about " . $person["realComplete"];
 $meta_description = "Find out more about the director :" . $person["realComplete"];
 $contenu = ob_get_clean();

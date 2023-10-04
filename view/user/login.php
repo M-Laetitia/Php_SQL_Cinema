@@ -27,6 +27,18 @@
 
         </form>
 
+        <?php
+        if(isset($_SESSION["user"])) { ?>
+            <div>
+            </div>     
+            
+        <?php } else { ?>
+            <div id="sign-up">
+            <p>Don't have an account? <a href="index.php?action=register"><span class="text-highlight">Sign up !</span></a></p>
+            </div>
+        <?php } ?>
+
+
         <div>
         <?php
             if (isset($_SESSION["message"])) {
@@ -35,16 +47,12 @@
         }?>
         </div>
 
-        <div id="sign-up">
-            <p>Don't have an account? <a href="index.php?action=register"><span class="text-highlight">Sign up !</span></a></p>
-        </div>
-
     </div>
 
 </div>
 
-<?php
 
+<?php
 $titre = "Login";
 $meta_description = "";
 $contenu = ob_get_clean();

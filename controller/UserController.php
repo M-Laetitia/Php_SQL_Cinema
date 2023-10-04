@@ -8,9 +8,7 @@ class UserController {
     // ^ Register
     public function register() {
         $pdo = Connect::seConnecter();
-
         if(isset($_POST["submit"])) {
-         
             $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_SPECIAL_CHARS);
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
             $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -25,26 +23,24 @@ class UserController {
                 if($user) {
                     $_SESSION["message"] = "This username or email already exists.";
                 } else {
-                    // var_dump("utilisateur inexistant");die;
                     //insertion de l'utilisateur en BDD
                     if($pass1 == $pass2) {
                         // ajouter la date d'inscription
                         $dateInscription = date("Y-m-d H:i:s");  // date et  heure actuelles au format AAAA-MM-JJ HH:MM:SS
-
+                        //regEX
                         $pattern =  '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
                         if (preg_match($pattern,$pass1)) {
                             echo "password is strong enough";
-
                             $insertUser = $pdo->prepare("INSERT INTO user (pseudo, password, email, register_date ) 
                             VALUES (:pseudo, :password, :email, :dateInscription)");
                             $insertUser->execute ([
                                 "pseudo" => $pseudo,
                                 "password" => password_hash($pass1, PASSWORD_DEFAULT),
                                 "email" => $email,
-                                "dateInscription" => $dateInscription
-                                
-                            ]);
-                            header ("Location: index.php?action=landingPage"); exit;
+                                "dateInscription" => $dateInscription]);
+                            $_SESSION["message"] = "Account successfully created! <br>Thank you for joining us!";
+                            echo "<script>setTimeout(\"location.href = 'index.php?action=login';\",1500);</script>";
+                            // header ("Location: index.php?action=landingPage"); exit;
                         } else {
                             $_SESSION["message"] = "The password is not strong enough. It must contain at least one capital letter, one number, one special character and be between 8 and 20 characters long.";
                         }
@@ -58,6 +54,7 @@ class UserController {
         }
         require("view/user/register.php");
     }
+ 
 
     // ^ Login
     public function login() {
@@ -72,7 +69,6 @@ class UserController {
                 $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email ");
                 $requete->execute(["email" => $email]);
                 $user = $requete->fetch();
-                // var_dump($user);die;
 
                 if($user) {
                     $hash = $user["password"];
@@ -81,31 +77,29 @@ class UserController {
                         //var_dump($_SESSION["user"]);die;
 
                     // Récupérer la préférence de l'user concernant le thème
-                    $id_user = $user["id_user"];
-                    $requete = $pdo->prepare('SELECT preference FROM user WHERE id_user = :id_user');
-                    $requete->execute(array(":id_user" => $user_id));
-                    $user_preference = $requete->fetch();
+                    // $id_user = $user["id_user"];
+                    // $requete = $pdo->prepare('SELECT preference FROM user WHERE id_user = :id_user');
+                    // $requete->execute(array(":id_user" => $user_id));
+                    // $user_preference = $requete->fetch();
 
-                    if ($user_preference) {
-                        $_SESSION["user_theme"] = json_decode($user_preference, true)['theme'];
-                        var_dump($_SESSION["user_theme"]); die;
-                    } else {
-                        // Par défaut, utiliser un thème (ici, "light") si l'user n'a pas de préférence enregistrée
-                        $_SESSION["user_theme"] = "light";
-                    }
-
-
+                    // if ($user_preference) {
+                    //     $_SESSION["user_theme"] = json_decode($user_preference, true)['theme'];
+                    //     var_dump($_SESSION["user_theme"]); die;
+                    // } else {
+                    //     // Par défaut, utiliser un thème (ici, "light") si l'user n'a pas de préférence enregistrée
+                    //     $_SESSION["user_theme"] = "light";
+                    // }
 
                         // rediriger vers page d'accueil
-                        echo "<p> Connexion réussie </p>";
-                        header("Location: index.php?action=landingPage");   exit;
+                        $_SESSION["message"] = "You have successfully logged in. <i class='fa-solid fa-check'></i>";
+                        echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
+
+                        // header("Location: index.php?action=landingPage");   
                     } else {
                         // Identifiants invalides
-                        
                        $_SESSION["message"] = "Invalid email or password.";
                     }
                 } else {
-                    
                    $_SESSION["message"] = "Invalid email or password.";
                 }
             }
@@ -115,28 +109,24 @@ class UserController {
 
     // ^ Log out
     public function logout() {
-        unset($_SESSION["user"]);
         // session_unset();
-        echo "You had been disconnected";
-        header("Location: index.php?action=landingPage"); exit;
+        unset($_SESSION["user"]);
+        $_SESSION["message"] = "You had been disconnected. See you soon !";
+        echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
+        // header("Location: index.php?action=landingPage"); exit;
     }
-
 
     // ^ Profile
     public function profile() {
-
         if($_SESSION["user"]) {
-
             $pdo = Connect::seConnecter();
             $user = $_SESSION['user']['id_user'];
-
             // afficher liste films notés
             $requete = $pdo->prepare("SELECT rating.note, movie.movie_title, movie.id_movie
             FROM rating 
             INNER JOIN movie ON movie.id_movie = rating.id_movie
-            WHERE rating.id_user = :id
-            ORDER BY movie.movie_title 
-            ");
+            WHERE rating.id_user = :id AND rating.note IS NOT NULL
+            ORDER BY movie.movie_title ");
             $requete->execute(["id" => $user]);
 
             // afficher liste reviews postées
@@ -144,25 +134,18 @@ class UserController {
             FROM rating
             INNER JOIN movie ON movie.id_movie = rating.id_movie
             WHERE rating.id_user = :id AND rating.review IS NOT NULL
-            ORDER BY movie.movie_title
-            ");
+            ORDER BY movie.movie_title");
             $requeteReviews->execute(["id" => $user]);
-    
             require("view/user/profile.php"); 
-
         } 
         else {
             // echo "pas d'user connecté";
             header ("Location: index.php?action=landingPage"); exit;
         }
-
-        
-
     }
 
     // ^ Supprimer compte user
     public function deleteAccount() {
-
         $pdo = Connect::seConnecter();
         // supprimer user de la table user
         if($_SESSION["user"]) {
@@ -172,71 +155,59 @@ class UserController {
             // var_dump(($_SESSION["user"]));die;
             // Destroys all data registered to a session
             session_destroy();
-            echo "Account deleted";
-            header ("Location: index.php?action=landingPage"); exit;
+
+            $_SESSION["message"] = "This account has been deleted!";
+            echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
+            // header ("Location: index.php?action=landingPage"); exit;
         } else {
             echo "pas d'user connecté";
-            header ("Location: index.php?action=landingPage"); exit;
+            $_SESSION["message"] = " There is no user currently connected!";
+            // header ("Location: index.php?action=landingPage"); exit;
         }
     }
 
     // ^ enregistrer le thème
     public function themePreference() {
-
         // récupérer l'id de l'user connecté à partir de la session
         $id_user = $_SESSION['user']['id_user'];
-
         // vérif si le formulaire a été soumis
         if(ISSET($_POST['theme'])) {
             // Créer un tableau associatif ?
             $newTheme = array('theme' => $_POST['theme']); 
             // convertir le tableau associatif en JSON
             $jsonTheme = json_encode($newTheme); 
-           
-            $pdo = Connect::seConnecter();
 
+            $pdo = Connect::seConnecter();
             $requete = $pdo->prepare('UPDATE user SET preference = :preference WHERE id_user = :id_user');
             $requete-> execute(array(':preference' => $jsonTheme, ':id_user' => $id_user));
 
             require("view/user/profile.php"); 
-           
           }
           header("Location: index.php?action=profile"); exit(); 
     }
 
     // ^ récupérer le thème
-
     public function getTheme () {
         $id_user = $_SESSION['user']['id_user'];
-
             $pdo = Connect::seConnecter();
 
             $requete = $pdo->prepare(" SELECT user.preference
             FROM user
-            WHERE id_user = :id_user
-            ");
+            WHERE id_user = :id_user");
             $requete->execute(["id_user" => $user]);
            
-
             if ($row = $requete->fetch(PDO::FETCH_ASSOC)) {
                 $themePreference = $row['preference'];
                 return $themePreference;
             } else {
                 // Par défaut, retournez le thème "light" si aucune préférence n'est définie
                 return "light";
-            }
-
+        }
     }
 
-
-    // ^ Edit review pour modo
-
+    // ^ Edit review user 
         public function editerReview ($id) {
             $pdo = Connect::seConnecter();
-            // var_dump($id);
-
-
-
 
             $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
             FROM rating 
@@ -244,102 +215,120 @@ class UserController {
             INNER JOIN user ON user.id_user=rating.id_user
             WHERE id_rating = :id");
             $requeteReview->execute(["id"=>$id]);
-            // var_dump("ok"); die;
-            // var_dump(["id"=>$id]); die;
-
 
             if(isset($_POST['editReview'])) {
                 // var_dump("ok"); die;
                 $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
                 
-
                 if($review !== false) {
-                    $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
-                    ");
-
+                    $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id");
                     $requeteEditer->execute([
                         "review" => $review,
-                        "id" => $id
-                    ]);
-                    header("Location: index.php?action=listFilms");
+                        "id" => $id]);
                 }
 
+                $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
+                echo "<script>setTimeout(\"location.href = ' index.php?action=profile';\",1500);</script>";
+                // header("Location: index.php?action=profile"); exit;               
+            } else { 
+                $_SESSION["message"] = " A problem has occurred, the authorized number of characters must be between 200 and 800";
             }
             require "view/user/editerReview.php" ;
-
         }
 
 
 
-    // ^ Supprimer une review 
+    // ^ Edit review modo
+
+    // public function editerReview ($id) {
+    //     $pdo = Connect::seConnecter();
+    //     // var_dump($id);
+
+    //     $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+    //     FROM rating 
+    //     INNER JOIN movie ON movie.id_movie=rating.id_movie
+    //     INNER JOIN user ON user.id_user=rating.id_user
+    //     WHERE id_rating = :id");
+    //     $requeteReview->execute(["id"=>$id]);
+    //     // var_dump("ok"); die;
+    //     // var_dump(["id"=>$id]); die;
+
+    //     if(isset($_POST['editReview'])) {
+    //         // var_dump("ok"); die;
+    //         $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            
+
+    //         if(($review !== false) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur')) {
+
+    //             $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
+    //             ");
+
+    //             $requeteEditer->execute([
+    //                 "review" => $review,
+    //                 "id" => $id
+    //             ]);
+
+    //            $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
+    //             header("Location: index.php?action=listFilms");
+    //         }
+
+    //     }
+    //     require "view/user/editerReview.php" ;
+    // }
+
+
+    // ^ Supprimer une review par modo 
        public function supprimerReview($id) {
-        
         $pdo = Connect::seConnecter();
 
-        if (isset($id) && is_numeric($id)) {
+        if (isset($id) && is_numeric($id) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur') ) {
 
-
+            $requete = $pdo->prepare("DELETE FROM review_likes WHERE id_rating = :id");
+            $requete->execute(["id" => $id]);
             $requete = $pdo->prepare("DELETE FROM rating WHERE id_rating = :id");
             $requete->execute(["id" => $id]);
         }
-        header("Location: index.php?action=listFilms");
+
+        $_SESSION["message"] = "This review has been deleted!";
+        echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
+        // header("Location: index.php?action=listFilms");
     }
 
 
     // ^ Liker une review
-
     public function addLike($id)  {
         $pdo = Connect::seConnecter();
-
         $id_user = $_SESSION['user']['id_user'];
-        // var_dump($_SESSION['user']['id_user']); die;
 
        if(isset($_POST["submitLike"])) {
         $likeValue = 1;
-         $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
-         VALUE (:id, :id_user, :likeValue)
-         ");
+        $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
+        VALUE (:id, :id_user, :likeValue)");
 
-         
          $requete->execute ([
             "id" => $id,
             "id_user" => $id_user,
-            "likeValue" => $likeValue
-         ]);
+            "likeValue" => $likeValue]);
        }
        header("Location: index.php?action=listFilms");
     }
 
-
     // ^ Disliker une review
-
-    // 
     public function addDislike($id)  {
         $pdo = Connect::seConnecter();
-
         $id_user = $_SESSION['user']['id_user'];
-        // var_dump($_SESSION['user']['id_user']); die;
 
        if(isset($_POST["submitDislike"])) {
         $likeValue = 0;
          $requete = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user,is_like)
-         VALUE (:id, :id_user, :likeValue)
-         ");
+         VALUE (:id, :id_user, :likeValue)");
 
-         
          $requete->execute ([
             "id" => $id,
             "id_user" => $id_user,
-            "likeValue" => $likeValue
-         ]);
+            "likeValue" => $likeValue]);
        }
        header("Location: index.php?action=listFilms");
     }
-
 }
-
-
-
 ?>
-
-

@@ -1,7 +1,5 @@
 <?php ob_start(); ?>
 
-
-
 <div>
     <?php 
     // initialiser un tableau pour stocker les genres
@@ -13,8 +11,6 @@
         // echo '<p>'. $genresConcatenated . '</p>';
     $movie = $requetedetailFilm->fetch(); 
     ?>
-
-
 
     <div class="container_detail container_movie">
         <h1 id="name"> <?= $movie["movie_title"]?> </h1>
@@ -68,6 +64,10 @@
         </div>
 
 
+        <div class="test-like">
+            <i class="fa-solid fa-heart"></i>
+            <span>Liked !</span>              
+        </div>
 
         <div class="review">
 
@@ -106,24 +106,15 @@
                         <p id="add-review-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
                     <p>Review</p>
                 </div>
-                <?php } ?>
-
-
-
-                
+                <?php } ?>   
             </div>
 
 
             <!-- AFFICHAGE REVIEW --------------------------------------------->
-
-
-
-
             <div class="movie-review">
                 <?php foreach ($reviews as $review) { 
                     // $formattedDate = date('d M Y', strtotime($review['formatted_date']));
                     ?>
-
                     <div class="review-text">
 
                         <div class="text">
@@ -133,65 +124,46 @@
 
                         <div class="likes">
                             <form  enctype="multipart/form-data" action="index.php?action=addLike&id=<?=$review['id_rating']?>" method="post">
-                          
-
                                 <button type="submit" class="submit" name="submitLike" id="submitLike">
                                 <i class="fa-solid fa-heart"></i>
+                                <span>liked!</span>
 
                             </button>
                             </form>
 
-                            <div><?= $review['nb_likes'] ?></div>
+                            <!-- <div><?= $review['nb_likes'] ?></div> -->
                             
-
                             <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
-
-                            <button type="submit" class="submit" name="submitDislike" id="submitDislike">
-                                <i class="fa-solid fa-heart-crack"></i>
-                            </button>
-
+                                <button type="submit" class="submit" name="submitDislike" id="submitDislike">
+                                    <i class="fa-solid fa-heart-crack"></i>
+                                </button>
                             </form>
 
-                            <div><?= $review['nb_dislikes'] ?></div>
-
-                            
+                            <!-- <div><?= $review['nb_dislikes']?></div> -->
                         
                         </div>
 
                         <!-- Possibilité d'éditer/supprimer une review uniquement si user moderateur-->
                         <?php 
-                        
                         // mauvaise façon de vérifier la présence de la clé role et de sa valeur
                         // if(isset($_SESSION["user"]['role'] === 'moderateur')) { 
-
                         if (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur') {
 
                             $userId = $_SESSION['user']['id_user'];
                             // var_dump($review['id_rating']); die; ?>
 
                         <div class="edit_delete">
-                        
-
                             <div><a href="index.php?action=supprimerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-x"></i></a></div> 
-
-
                             <div><a href="index.php?action=editerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
-
-
                         </div>
                         <?php } ?>
-
                     </div>
                     
-                    
-
                     <div class="info">
                         <p><?= $review["pseudo"] ?> - <?= $review["formatted_date"]?></p>
                     </div>
                 <?php } ?>
-
             </div>
-
 
             <div class="addReview-popUp">
                 <div class="reviewplace">
@@ -208,65 +180,68 @@
                             <input type="text" placeholder="Title" name="title" id="review-title" required> -->
 
                             <label for="review"></label>
-                            <textarea placeholder="Write here..." name="review" id="review" required></textarea>
+                            <textarea placeholder="Write here..." name="review" id="review" maxlength="800" minlength="200" required></textarea>
 
                             <div class="btn-submit">
                                     <input type="submit" class="submit" name="submitReview" value="publish" >
                             </div>
 
                         </form>
+
+                        <?php
+                            if (isset($_SESSION["message"])) {
+                                echo "<p>" . $_SESSION["message"] . "</p>";
+                                unset($_SESSION["message"]); // Supprimer le message de la session
+                        }?>
                     </div>
-                        </div>
+                </div>
             </div>
 
-
-
-
             <div class="addRating-popUp">
-                <class class="ratingPlace">
+                <div class="ratingPlace">
                     <p> <i id="ratingClose-btn" class="fa-solid fa-x fa-lg"></i> </p>
                     <p></p>
                     <p>Rate this</p>
                     <p class="text-highlight"> <?= $movie["movie_title"]?></p>
                     
                     <div class="form">
+                        <div class="popUpRating" >
+                            <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
 
-                                <div class="popUpRating" >
+                            <!-- <div class="stars-rating">
+                                <span class="star" data-rating="1"></span>
+                                <span class="star" data-rating="2"></span>
+                                <span class="star" data-rating="3"></span>
+                                <span class="star" data-rating="4"></span>
+                                <span class="star" data-rating="5"></span>
+                            </div> -->
+                                                                    
+                            <div>
+                                <input type="number" name="user_rating" id="user_rating" min="1" max="5">
+                                <!-- Champ input hidden pour stocker la note -->
+                                <!-- <input type="hidden" name="user_rating_hidden" id="user_rating_hidden" value=""> -->
+                            </div>
 
-                                    <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
+                            <div class="btn-submit">
+                                <button   id="submitForm" type="submit">RATE</button>
+                            </div>
+                    
 
-                                    <!-- <div class="stars-rating">
-                                        <span class="star" data-rating="1"></span>
-                                        <span class="star" data-rating="2"></span>
-                                        <span class="star" data-rating="3"></span>
-                                        <span class="star" data-rating="4"></span>
-                                        <span class="star" data-rating="5"></span>
-                                    </div> -->
-                                                                            
-                                    <div>
-                                        <input type="number" name="user_rating" id="user_rating" min="1" max="5">
-                                        <!-- Champ input hidden pour stocker la note -->
-                                        <!-- <input type="hidden" name="user_rating_hidden" id="user_rating_hidden" value=""> -->
-                                    </div>
+                            </form>
 
-                                    <div class="btn-submit">
-                                        <button   id="submitForm" type="submit">RATE</button>
-                                    </div>
-                            
-
-                                    </form>
-                                </div>
+                            <div>
+                                <?php
+                                    if (isset($_SESSION["message"])) {
+                                        echo "<p>" . $_SESSION["message"] . "</p>";
+                                        unset($_SESSION["message"]); // Supprimer le message de la session
+                                }?>
+                            </div>
+                        </div>
                     </div>
-                </class>
+                </div>
             </div>
-
-
         </div>
-
     </div>
-
-
-
 </div>
 
 <script>
@@ -275,19 +250,13 @@
     const url = window.location.href;
     let backgroundPath = ''; // Déclarer la variable JavaScript
 
-
-
     if (url.includes("action=detailFilm")) {
         const main = document.querySelector('main');
         main.classList.add('custom-background');
         main.style.backgroundImage = "url("+bgImage+")";
-        console.log(main)
-
-    }
-
+        console.log(main)}
     }
 </script>
-
 
 <?php if ($filmBackgroundPath != null){ ?>
     <script>
@@ -297,13 +266,10 @@
 
 
 <script>
-
     //displaying review popUp
     const displayReviewBtn = document.getElementById('reviews-btn')
     const reviewList = document.querySelector('.movie-review')
     // console.log(reviewList);
-
-
     displayReviewBtn.addEventListener('click', () => {
     if (reviewList.style.display === 'none' || reviewList.style.display === '') {
         displayReviewBtn.textContent = '▲';
@@ -313,7 +279,6 @@
         reviewList.style.display = 'none'
     }
     });
-
 
     // add review popUp
     const addReview_btn = document.getElementById('add-review-btn')
@@ -329,7 +294,6 @@
     });
 
     const reviewClose_btn = document.getElementById('reviewClose-btn')
-
     reviewClose_btn.addEventListener('click', () => {
         addReview_popUp.style.display = 'none'
         
@@ -337,9 +301,7 @@
 
     // add rating popUP
     const addRating_btn = document.getElementById('add-rating-btn')
-
     const addRatingPopUp = document.querySelector('.addRating-popUp')
-
     addRating_btn.addEventListener('click', () => {
     if (addRatingPopUp.style.display === 'none' || addRatingPopUp.style.display === '') {
         addRatingPopUp.style.display = 'block'
@@ -349,18 +311,14 @@
     });
 
     const ratingClose_btn = document.getElementById('ratingClose-btn')
-
     ratingClose_btn.addEventListener('click', () => {
         addRatingPopUp.style.display = 'none'
-        
     });
-
 
 </script>
 
 
 <?php
-
 $titre = "More about " .$movie["movie_title"];
 $meta_description = "Browse through the movies catalogue";
 $contenu = ob_get_clean();

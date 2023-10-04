@@ -8,11 +8,9 @@ class SearchController {
 
     public function search() {
         $pdo = Connect::seConnecter();
-        
         if(isset($_POST['submit-search'])) {
             $search = $_POST['search'];
             // var_dump($search);die;
-    
             // initialisation variable pour stocker les résultats de la recherche
             $results = [];
     
@@ -23,7 +21,6 @@ class SearchController {
             INNER JOIN person ON person.id_person = director.id_person
             WHERE movie.movie_title LIKE :search");
 
-
             // requête SQL pour rechercher par nom d'acteur
             $requeteActeurs =$pdo->prepare("SELECT * 
             FROM actor 
@@ -31,7 +28,6 @@ class SearchController {
     
             // requête SQL pour rechercher par nom de réalisateur
             $requeteRealisateurs = $pdo->prepare("SELECT * FROM director INNER JOIN person ON director.id_person = person.id_person WHERE person.person_first_name LIKE :search OR person.person_last_name LIKE :search");
-
 
             // requête SQL pour rechercher par role
             $requeteRoles = $pdo->prepare("SELECT role.*, CONCAT(person.person_first_name, ' ' , person.person_last_name) AS acteurComplete, movie.movie_title, movie.id_movie, actor.id_actor
@@ -41,7 +37,6 @@ class SearchController {
             INNER JOIN person ON person.id_person = actor.id_person
             INNER JOIN movie ON play.id_movie = movie.id_movie
             WHERE role.name_role LIKE :search");
-
 
             // requête SQL pour rechercher par genre
             $requeteGenres = $pdo->prepare("SELECT genre.id_genre, genre.label_genre, COUNT(categorise.id_movie) AS nb_movies
@@ -74,11 +69,7 @@ class SearchController {
             ];
     
             // var_dump($results);die;
-    
-   
             require ("view/search/search.php");
         }
     }
-   
 }
-
