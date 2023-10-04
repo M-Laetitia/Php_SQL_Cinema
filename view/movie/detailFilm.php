@@ -64,10 +64,7 @@
         </div>
 
 
-        <div class="test-like">
-            <i class="fa-solid fa-heart"></i>
-            <span>Liked !</span>              
-        </div>
+ 
 
         <div class="review">
 
@@ -112,9 +109,10 @@
 
             <!-- AFFICHAGE REVIEW --------------------------------------------->
             <div class="movie-review">
-                <?php foreach ($reviews as $review) { 
-                    // $formattedDate = date('d M Y', strtotime($review['formatted_date']));
-                    ?>
+            <?php if (empty($reviews)) { ?>
+                 <p>It's empty here! Be the first to share with us your review.</p>
+                 <?php } else { ?>
+                <?php foreach ($reviews as $review) { ?>
                     <div class="review-text">
 
                         <div class="text">
@@ -123,23 +121,43 @@
                         </div>
 
                         <div class="likes">
-                            <form  enctype="multipart/form-data" action="index.php?action=addLike&id=<?=$review['id_rating']?>" method="post">
-                                <button type="submit" class="submit" name="submitLike" id="submitLike">
-                                <i class="fa-solid fa-heart"></i>
-                                <span>liked!</span>
-
-                            </button>
-                            </form>
-
-                            <!-- <div><?= $review['nb_likes'] ?></div> -->
                             
+                        <?php if (isset($_SESSION["user"])) : ?>
+                            <!-- Afficher le formulaire de like uniquement si l'utilisateur est connecté -->
+                            <form enctype="multipart/form-data" action="index.php?action=addLike&id=<?=$review['id_rating']?>" method="post">
+                                <button type="submit" class="submit" name="submitLike" id="submitLike">
+                                    <i class="fa-solid fa-heart fa-heart-click"></i>
+                                </button>
+                            </form>
+                        <?php else : ?>
+                            <!-- Afficher une icône de like pour les utilisateurs non connectés -->
+                            <i class="fa-solid fa-heart" style="cursor: default;"></i>
+                        <?php endif; ?>
+                            
+
+                            <?php 
+                            if (isset($review['nb_likes'])) {
+                                echo $review['nb_likes'];
+                            } else {
+                                echo 0;
+                            }
+                            ?>
+                        <?php if (isset($_SESSION["user"])) : ?>
                             <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
                                 <button type="submit" class="submit" name="submitDislike" id="submitDislike">
                                     <i class="fa-solid fa-heart-crack"></i>
                                 </button>
                             </form>
+                        <?php else : ?>
+                            <!-- Afficher une icône de like pour les utilisateurs non connectés -->
+                            <i class="fa-solid fa-heart-crack" style="cursor: default;"></i>
+                        <?php endif; ?>
 
-                            <!-- <div><?= $review['nb_dislikes']?></div> -->
+
+
+
+                            <!-- expression conditionnelle ternaire - version "abrégée" -->
+                            <div><?= $review['nb_dislikes'] ?? 0 ?></div>
                         
                         </div>
 
@@ -156,12 +174,20 @@
                             <div><a href="index.php?action=supprimerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-x"></i></a></div> 
                             <div><a href="index.php?action=editerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
                         </div>
+                        <?php } else { ?>
+
+                            <div class="edit_delete" style="visibility: hidden;">
+                                 <div><i class="fa-solid fa-x"></i></div>
+                                 <div><i class="fa-solid fa-file-pen"></i></div>
+                             </div>
                         <?php } ?>
+
                     </div>
                     
                     <div class="info">
                         <p><?= $review["pseudo"] ?> - <?= $review["formatted_date"]?></p>
                     </div>
+                <?php } ?>
                 <?php } ?>
             </div>
 
@@ -180,19 +206,21 @@
                             <input type="text" placeholder="Title" name="title" id="review-title" required> -->
 
                             <label for="review"></label>
-                            <textarea placeholder="Write here..." name="review" id="review" maxlength="800" minlength="200" required></textarea>
+                            <textarea placeholder="Write here..." name="review" id="review"  required></textarea>
 
                             <div class="btn-submit">
                                     <input type="submit" class="submit" name="submitReview" value="publish" >
                             </div>
 
-                        </form>
-
-                        <?php
+                            <?php
                             if (isset($_SESSION["message"])) {
                                 echo "<p>" . $_SESSION["message"] . "</p>";
                                 unset($_SESSION["message"]); // Supprimer le message de la session
-                        }?>
+                            }?>
+
+                        </form>
+
+                        
                     </div>
                 </div>
             </div>
@@ -208,18 +236,9 @@
                         <div class="popUpRating" >
                             <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
 
-                            <!-- <div class="stars-rating">
-                                <span class="star" data-rating="1"></span>
-                                <span class="star" data-rating="2"></span>
-                                <span class="star" data-rating="3"></span>
-                                <span class="star" data-rating="4"></span>
-                                <span class="star" data-rating="5"></span>
-                            </div> -->
-                                                                    
+                                                   
                             <div>
                                 <input type="number" name="user_rating" id="user_rating" min="1" max="5">
-                                <!-- Champ input hidden pour stocker la note -->
-                                <!-- <input type="hidden" name="user_rating_hidden" id="user_rating_hidden" value=""> -->
                             </div>
 
                             <div class="btn-submit">
