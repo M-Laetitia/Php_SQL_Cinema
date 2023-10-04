@@ -22,7 +22,7 @@ $review = $requeteReview ->fetch();?>
     <form id="" enctype="multipart/form-data" action="index.php?action=editerReview&id=<?= $review["id_rating"]?>" method="post">
 
         <label for="review"></label>
-        <textarea maxlength="800" minlength="200" name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
+        <textarea name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
 
         <div class="btn-submit">
                 <input type="submit" class="submit" name="editReview" value="publish" >
