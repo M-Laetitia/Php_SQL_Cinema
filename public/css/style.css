@@ -184,6 +184,16 @@ main.custom-background::before {
 /* & TEMPLATE PAGE --                  */
 /* & --------------------------------- */
 
+/* ~ & message avertissement ---------- */
+
+.messages_neutral p {
+    font-size:  var(--fs-500) !important;
+    text-align: center;
+}
+
+.messages_neutral i {
+    color: var(--clr-pink);
+}
 
 /* ~ & Header / Nav ------------------ */
 
