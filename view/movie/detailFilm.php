@@ -30,7 +30,7 @@
             <div class="info">
                 <div class="description">
                     <ul>
-                        <li> <span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?></li>
+                        <!-- <li> <span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?></li> -->
 
                         
                         <li>Genre : <span class="text-highlight genre"><?= $genresConcatenated ?></span> </li>
@@ -70,8 +70,21 @@
 
             <div class="rate-average">
                 <div class="rate">
-                    <p><span class="text-highlight ">★</span> <?= $notes["noteMoyenne"] ?> /5</p>
-                    <p> <?= $nombreNotes["nb_note"] ?> Ratings</p>
+                    <p style="margin-right:0.3rem" >Ratings  (<?= $nombreNotes["nb_note"] ?>) :  </p>
+
+                    <div>
+                        <?php
+                            $note =$notes["noteMoyenne"]; 
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $note) {
+                                    echo '<i class="fa-solid fa-star fa-lg star_filled"></i>'; 
+                                } else {
+                                    echo '<i class="far fa-star fa-lg star_empty"></i>'; 
+                                }
+                            }
+                        ?>
+                    </div>
+
                 </div>
 
                  <!-- Possibilité de laisser une note uniquement si user connecté -->
@@ -80,8 +93,8 @@
                     $userId = $_SESSION['user']['id_user'];?>
 
                     <div class="rating">
-                        <p id="add-rating-btn"><i class="text-highlight  fa-solid fa-plus"></i></p>
-                        <p>Rate this Movie :</p>
+                        <p><span id="add-rating-btn"><i class="fa-solid fa-star fa-sm"></i></span></p>
+                        <p>Rate</p>
                     </div>
                 <?php } ?>
             </div>
@@ -89,8 +102,8 @@
 
             <div class="review-top">
                 <div class="left">
-                    <p>User reviews : </p>
-                    <p><?= $nb_review["nb_review"] ?></p>
+                    <p>User reviews</p>
+                    <p>(<?= $nb_review["nb_review"] ?>) :</p>
                     <p id="reviews-btn" class="text-highlight">▼</p>
                 </div>
 
@@ -134,7 +147,7 @@
                             <i class="fa-solid fa-heart" style="cursor: default;"></i>
                         <?php endif; ?>
                             
-
+                            <div class="number">
                             <?php 
                             if (isset($review['nb_likes'])) {
                                 echo $review['nb_likes'];
@@ -142,6 +155,8 @@
                                 echo 0;
                             }
                             ?>
+                            </div>
+
                         <?php if (isset($_SESSION["user"])) : ?>
                             <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
                                 <button type="submit" class="submit" name="submitDislike" id="submitDislike">
@@ -152,12 +167,9 @@
                             <!-- Afficher une icône de like pour les utilisateurs non connectés -->
                             <i class="fa-solid fa-heart-crack" style="cursor: default;"></i>
                         <?php endif; ?>
-
-
-
-
+                     
                             <!-- expression conditionnelle ternaire - version "abrégée" -->
-                            <div><?= $review['nb_dislikes'] ?? 0 ?></div>
+                            <div class="number"><?= $review['nb_dislikes'] ?? 0 ?></div>
                         
                         </div>
 

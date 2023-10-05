@@ -170,6 +170,8 @@ class MovieController {
     public function ajouterFilm() {
         $pdo = Connect::seConnecter();
         if(isset($_POST["submitFilm"])) {
+
+            $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
             //rajouter iMAGE
             if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
                 // voir upload-img_php pour détail du process
@@ -202,6 +204,7 @@ class MovieController {
                 }
 
             //rajouter background
+            $movieBackgroundChemin = NULL; // Définir la variable avec une valeur par défaut 
             if(isset($_FILES["movie_background"])){  
                 $tmpName = $_FILES["movie_background"]["tmp_name"];
                 $name = $_FILES["movie_background"]["name"];
@@ -569,12 +572,13 @@ class MovieController {
                     ]);
                 }
                 
-                $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
-                // echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
-             } //else {
-            //     $_SESSION["message"] = "A problem has occurred. The review must be between 200 and 800 characters.";
-            //     echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
-            // }
+                // $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
+
+                 echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
+             } else {
+                 $_SESSION["message"] = "A problem has occurred. The review must be between 200 and 800 characters.";
+                
+             }
         }
     }
 }

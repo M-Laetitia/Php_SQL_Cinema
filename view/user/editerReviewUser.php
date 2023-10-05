@@ -9,15 +9,15 @@
 $review = $requeteReviewUser ->fetch();
 ?>
 
+<h1 class="title_ref"> Edit review</h1>
 
 
-<h1>edit the review </h1>
-<p>Date : <?= $review["formatted_date"]?></p>
-<p>Movie : <?= $review["movie_title"]?></p>
-
-
-
-<div class="form">
+<div class="list edit-review-page">
+    <p></p>
+    <p></p>
+    <p></p>
+    <p>Date : <?= $review["formatted_date"]?></p>
+    <p>Movie : <?= $review["movie_title"]?></p>
 
     <form id="" enctype="multipart/form-data" action="index.php?action=editerReviewUser&id=<?= $review["id_rating"]?>" method="post">
 
@@ -25,7 +25,7 @@ $review = $requeteReviewUser ->fetch();
         <textarea name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
 
         <div class="btn-submit">
-                <input type="submit" class="submit" name="editReviewUser" value="publish" >
+                <input type="submit" class="submit" name="editReviewUser" value="edit" >
         </div>
 
     </form>
