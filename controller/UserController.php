@@ -62,39 +62,23 @@ class UserController {
         if(isset($_POST["submit"]))  {
         $pdo = Connect::seConnecter();
 
-            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
+            
+            $loggin = filter_input(INPUT_POST, "loggin", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
             $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            if($email && $password ) {
-                $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email ");
-                $requete->execute(["email" => $email]);
+            if($loggin && $password ) {
+                $requete = $pdo->prepare("SELECT * FROM user  WHERE email = :loggin OR pseudo = :loggin");
+                $requete->execute(["loggin" => $loggin]);
                 $user = $requete->fetch();
 
                 if($user) {
                     $hash = $user["password"];
                     if (password_verify($password, $hash)) {
                         $_SESSION["user"] = $user;
-                        //var_dump($_SESSION["user"]);die;
 
-                    // Récupérer la préférence de l'user concernant le thème
-                    // $id_user = $user["id_user"];
-                    // $requete = $pdo->prepare('SELECT preference FROM user WHERE id_user = :id_user');
-                    // $requete->execute(array(":id_user" => $user_id));
-                    // $user_preference = $requete->fetch();
-
-                    // if ($user_preference) {
-                    //     $_SESSION["user_theme"] = json_decode($user_preference, true)['theme'];
-                    //     var_dump($_SESSION["user_theme"]); die;
-                    // } else {
-                    //     // Par défaut, utiliser un thème (ici, "light") si l'user n'a pas de préférence enregistrée
-                    //     $_SESSION["user_theme"] = "light";
-                    // }
-
-                        // rediriger vers page d'accueil
                         $_SESSION["message"] = "You have successfully logged in. <i class='fa-solid fa-check'></i>";
                         echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
-
-                        // header("Location: index.php?action=landingPage");   
+ 
                     } else {
                         // Identifiants invalides
                        $_SESSION["message"] = "Invalid email or password.";
@@ -208,43 +192,9 @@ class UserController {
         }
     }
 
-    // ^ Edit review user 
-    public function editerReview ($id) {
-        $pdo = Connect::seConnecter();
-
-        $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
-        FROM rating 
-        INNER JOIN movie ON movie.id_movie=rating.id_movie
-        INNER JOIN user ON user.id_user=rating.id_user
-        WHERE id_rating = :id");
-        $requeteReview->execute(["id"=>$id]);
-
-        $pattern = '/^.{200,800}$/';
-        if(isset($_POST['editReview']) && (preg_match($pattern,$review)))  {
-            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
-            
-            if(strlen($review) < 200 || strlen($review) > 800) {
-                $_SESSION["message"] = "A problem has occurred, the authorized number of characters must be between 200 and 800.";
-            } else {
-                $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id");
-                $requeteEditer->execute([
-                    "review" => $review,
-                    "id" => $id]);
-    
-                $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
-                echo "<script>setTimeout(\"location.href = ' index.php?action=profile';\",1500);</script>";
-            }
-        }
-        require "view/user/editerReview.php";
-    }
-
-
-
-    // ^ Edit review modo
-
-    // public function editerReview ($id) {
+    // // ^ Edit review user 
+    // public function editerReviewUser ($id) {
     //     $pdo = Connect::seConnecter();
-    //     // var_dump($id);
 
     //     $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
     //     FROM rating 
@@ -252,31 +202,101 @@ class UserController {
     //     INNER JOIN user ON user.id_user=rating.id_user
     //     WHERE id_rating = :id");
     //     $requeteReview->execute(["id"=>$id]);
-    //     // var_dump("ok"); die;
-    //     // var_dump(["id"=>$id]); die;
 
-    //     if(isset($_POST['editReview'])) {
-    //         // var_dump("ok"); die;
+    //     $pattern = '/^.{200,800}$/';
+    //     if(isset($_POST['editReview']) && (preg_match($pattern,$review)))  {
     //         $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
             
-
-    //         if(($review !== false) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur')) {
-
-    //             $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
-    //             ");
-
+    //         if(strlen($review) < 200 || strlen($review) > 800) {
+    //             $_SESSION["message"] = "A problem has occurred, the authorized number of characters must be between 200 and 800.";
+    //         } else {
+    //             $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id");
     //             $requeteEditer->execute([
     //                 "review" => $review,
-    //                 "id" => $id
-    //             ]);
-
-    //            $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
-    //             header("Location: index.php?action=listFilms");
+    //                 "id" => $id]);
+    
+    //             $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
+    //             echo "<script>setTimeout(\"location.href = ' index.php?action=listFilms';\",1500);</script>";
     //         }
-
     //     }
-    //     require "view/user/editerReview.php" ;
+    //     require "view/user/profile.php";
     // }
+
+
+
+    // ^ Edit review modo
+
+    public function editerReview ($id) {
+        $pdo = Connect::seConnecter();
+        // var_dump($id);
+
+        $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+        FROM rating 
+        INNER JOIN movie ON movie.id_movie=rating.id_movie
+        INNER JOIN user ON user.id_user=rating.id_user
+        WHERE id_rating = :id");
+        $requeteReview->execute(["id"=>$id]);
+
+
+        if(isset($_POST['editReview'])) {
+            // var_dump("ok"); die;
+            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            
+
+            if(($review !== false) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur')) {
+
+                $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
+                ");
+
+                $requeteEditer->execute([
+                    "review" => $review,
+                    "id" => $id
+                ]);
+
+               $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
+                header("Location: index.php?action=listFilms");
+            }
+
+        }
+        require "view/user/editerReview.php" ;
+    }
+
+      // ^ Edit review user
+
+      public function editerReviewUser($id) {
+        $pdo = Connect::seConnecter();
+      
+
+        $requeteReviewUser = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+        FROM rating 
+        INNER JOIN movie ON movie.id_movie=rating.id_movie
+        INNER JOIN user ON user.id_user=rating.id_user
+        WHERE id_rating = :id");
+        $requeteReviewUser->execute(["id"=>$id]);
+
+
+        if(isset($_POST['editReviewUser'])) {
+            // var_dump("ok"); die;
+            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            
+
+            if(($review !== false) && (isset($_SESSION["user"]) )) {
+
+                $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
+                ");
+
+                $requeteEditer->execute([
+                    "review" => $review,
+                    "id" => $id
+                ]);
+
+               $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
+                header("Location: index.php?action=listFilms");
+            }
+
+        }
+        require "view/user/editerReviewUser.php" ;
+    }
 
 
     // ^ Supprimer une review par modo 

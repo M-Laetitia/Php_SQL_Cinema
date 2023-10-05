@@ -14,8 +14,8 @@
             <input type="text" name="pseudo" id="pseudo"><br> -->
             <div class="register-input">
 
-                <label for="email">Email :</label>
-                <input type="text" name="email" id="email"><br>
+                <label for="loggin">Pseudo or email:</label>
+                <input type="text" name="loggin" id="loggin"><br>
 
                 <label for="password">Password :</label>
                 <input type="password" name="password" id="password"><br>
