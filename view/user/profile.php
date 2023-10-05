@@ -48,9 +48,9 @@ ob_start();
             <p>My movie reviews: </p>
             <p><span class="text-highlight" id="toggle-list">▼</span></p>
             </div>
-                <div class="ratings-section">
+                <div class="container01">
                     
-                    <div class="liste-notes-film" id="ratings-list" style="display: none;">
+                    <div class="un" id="divUn" style="visibility: visible;" >
                         <?php 
                             $reviews = $requeteReviews->fetchAll();
                             if (empty($reviews)) {
@@ -69,13 +69,39 @@ ob_start();
 
                                        
 
-                                        <div><a href="index.php?action=editerReview&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
+                                        <div><i id="toggleButton2" class="fa-solid fa-file-pen"></i></a></div> 
                                     </div>
 
                                         
                                 <?php }
                             }?>
                     </div>
+
+                    <div class="deux" id="divDeux"  style="visibility: hidden;">
+                        <?php 
+                            $review = $requeteReviews->fetch(); ?>
+                                    <div class="review">
+                                        <p> <span class="text-highlight" >•</span>
+                                            <a href=""></a> : 
+                                        </p>
+
+                                        <p> Date : </p>
+
+                                        <form id="" enctype="multipart/form-data" action="index.php?action=editerReview&id=<?= $review["id_rating"]?>" method="post">
+
+                                            <label for="review"></label>
+                                            <textarea name="review" id="review"   required></textarea>
+
+                                            <div class="btn-submit">
+                                                    <input type="submit" class="submit" name="editReview" value="publish" >
+                                            </div>
+
+                                        </form>
+
+                                        <div ><i class="fa-solid fa-file-pen"></i></div> 
+                                    </div>               
+                    </div>
+
             </div>
 
 
@@ -123,49 +149,9 @@ ob_start();
     </div>
     
 
-    <div class="container01">
-        <div class="un"></div>
-        <div class="deux"></div>
-    </div>
 
 
 
-
-
-    <?php 
-        $reviews = $requeteReviews->fetchAll();
-        if (empty($reviews)) {
-            echo '<p>No rating here yet!</p>';
-        } else {
-            foreach ($reviews as $reviews) {
-       
-                ?>
-                <div class="container01">
-                <div class="un">
-                    <p> <span class="text-highlight" >•</span>
-                            <a href="index.php?action=detailFilm&id=<?= $reviews["id_movie"]?>"><?= $reviews["movie_title"] ?></a> : 
-                        </p>
-
-            
-                        <div><a href="index.php?action=editerReview&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
-                </div>
-
-                <div class="deux">
-                    <p> <span class="text-highlight" >•</span>
-                            <a href="index.php?action=detailFilm&id=<?= $reviews["id_movie"]?>"><?= $reviews["movie_title"] ?></a> : 
-                        </p>
-
-            
-                        <div><a href="index.php?action=editerReview&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
-                </div>
-
-
-                    
-                </div>
-
-                    
-            <?php }
-        }?>
 
 </div>
 
@@ -204,6 +190,22 @@ ob_start();
             toggleReviewButton.textContent = '▼'; // Flèche vers le bas
         }
     });
+
+    // essai édit sur place
+    const divUn = document.getElementById("divUn");
+    const divDeux = document.getElementById("divDeux");
+    const toggleButton2 = document.getElementById("toggleButton2");
+
+    toggleButton2.addEventListener("click", function() {
+    if (divUn.style.visibility === "hidden") {
+        divUn.style.visibility = "visible";
+        divDeux.style.visibility = "hidden";
+    } else {
+        divUn.style.visibility = "hidden";
+        divDeux.style.visibility = "visible";
+    }
+    });
+
 
 
 </script>
