@@ -590,19 +590,44 @@ textarea::-webkit-scrollbar-thumb {
     /* background-color: grey; */
     border-bottom: 1px solid grey;
     border-top: 1px solid grey;
-    
+    margin-bottom: 1rem;
     width: 100%;
     /* height: 150px; */
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    padding : 1rem 0;
 }
+
+#add-rating-btn:hover {
+   transition: ease 0.3s;
+} 
+
+
+#add-rating-btn:hover {
+    color: var(--clr-pink);
+} 
+
+
+.rate-average .star_filled{
+    color: var(--clr-pink);
+}
+
+.rate-average .rating {
+    display: flex;
+    column-gap: 0.5rem;
+}
+
+
 
 .container_movie .rate {
     /* background-color: rgb(155, 102, 102); */
-    width: 20%;
+    /* width: 100%; */
     /* height: 150px; */
-    border-right: 1px solid grey;
+    display: flex;
+    align-items: center
+   
 }
 
 .movie-review {
@@ -678,7 +703,9 @@ textarea::-webkit-scrollbar-thumb {
  {
     color : var(--clr-orange);
 }
-
+.movie-review {
+    margin-bottom: 3rem;
+}
 
 .movie-review .edit_delete {
     /* background-color: red; */
@@ -702,19 +729,24 @@ textarea::-webkit-scrollbar-thumb {
     position: absolute;
     bottom: 1.3rem;
     display: flex;
+    
+   
 }
 
 .likes i {
  cursor: pointer;
 }
 
+.movie-review .number {
+
+    padding-right: 1rem;
+}
 .likes button {
     background-color: transparent;
     border: none;
 }
 
 .likes i {
-   
     margin-right: 0.3rem;
     transition: ease-in-out 0.1s;
 }
@@ -728,7 +760,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 
-.likes i:nth-child(1):hover {
+.fa-heart-click:hover {
     transform: scale(1.2);
 }
 
@@ -770,6 +802,15 @@ textarea::-webkit-scrollbar-thumb {
     top: 0.8rem;
     position: absolute;
 }
+
+.reviewplace #review_title {
+    background-color: transparent;
+    border: none;
+    margin-bottom: 1rem;
+    color: var(--clr-white);
+    border-bottom: 1px solid var(--clr-white);
+}
+
 
 
 .reviewplace p:nth-child(2) {
@@ -1027,3 +1068,29 @@ textarea::-webkit-scrollbar-thumb {
 
 
 }
+
+
+/*?------------------------------- TEST */
+
+.container01 {
+/* background-color: grey; */
+width: 600px;
+height: 300px;
+display: flex;
+position: relative;
+}
+
+.container01 .un {
+    background-color: rgb(73, 67, 68);
+    width: 580px;
+    height: 280px;
+}
+
+.container01 .deux {
+    background-color: blue;
+    width: 580px;
+    height: 280px;
+    position: absolute;
+    /* z-index: -1; */
+}
+
