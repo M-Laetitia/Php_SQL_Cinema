@@ -48,13 +48,13 @@ ob_start();
             <p>My movie reviews: </p>
             <p><span class="text-highlight" id="toggle-list">▼</span></p>
             </div>
-                <div class="container01">
+                <div class="ratings-section">
                     
-                    <div class="un" id="divUn" style="visibility: visible;" >
+                    <div class="liste-notes-film" id="ratings-list" style="display: none;">
                         <?php 
                             $reviews = $requeteReviews->fetchAll();
                             if (empty($reviews)) {
-                                echo '<p>No review here yet!</p>';
+                                echo '<p>No rating here yet!</p>';
                             } else {
                                 foreach ($reviews as $reviews) {
                                     ?>
@@ -65,43 +65,27 @@ ob_start();
 
                                         <p> Date : <?= $reviews["formatted_date"]?></p>
 
-                                        <p><?= $reviews["review"]?></p>
+                                        <?php
+                                            $reviewData = json_decode($reviews["reviewComplete"], true); // Décoder les données JSON en tant que tableau associatif
+                                            if ($reviewData) {
+                                                ?>
+                                                <p><?= $reviewData["title"] ?></p>
+                                                <p><?= $reviewData["text"] ?></p>
+                                                <?php
+                                            }
+                                        ?>
 
                                        
 
-                                        <div><i id="toggleButton2" class="fa-solid fa-file-pen"></i></a></div> 
+                                        <div><a href="index.php?action=editerReviewUser&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
                                     </div>
 
                                         
-                                <?php }
-                            }?>
+                                    <?php
+                                }
+                            }
+                        ?>
                     </div>
-
-                    <div class="deux" id="divDeux"  style="visibility: hidden;">
-                        <?php 
-                            $review = $requeteReviews->fetch(); ?>
-                                    <div class="review">
-                                        <p> <span class="text-highlight" >•</span>
-                                            <a href=""></a> : 
-                                        </p>
-
-                                        <p> Date : </p>
-
-                                        <form id="" enctype="multipart/form-data" action="index.php?action=editerReview&id=<?= $review["id_rating"]?>" method="post">
-
-                                            <label for="review"></label>
-                                            <textarea name="review" id="review"   required></textarea>
-
-                                            <div class="btn-submit">
-                                                    <input type="submit" class="submit" name="editReview" value="publish" >
-                                            </div>
-
-                                        </form>
-
-                                        <div ><i class="fa-solid fa-file-pen"></i></div> 
-                                    </div>               
-                    </div>
-
             </div>
 
 
@@ -136,22 +120,8 @@ ob_start();
             <p><a href="index.php?action=logout"> <span class="text-highlight"><i class="fa-solid fa-power-off"></i></span> Log out</a></p>
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
         </div>
-
-        <div>
-            
-        <?php
-            if (isset($_SESSION["message"])) {
-                echo "<p>" . $_SESSION["message"] . "</p>";
-                unset($_SESSION["message"]); // Supprimer le message de la session
-        }?>
-        </div>
         
     </div>
-    
-
-
-
-
 
 </div>
 
@@ -190,22 +160,6 @@ ob_start();
             toggleReviewButton.textContent = '▼'; // Flèche vers le bas
         }
     });
-
-    // essai édit sur place
-    const divUn = document.getElementById("divUn");
-    const divDeux = document.getElementById("divDeux");
-    const toggleButton2 = document.getElementById("toggleButton2");
-
-    toggleButton2.addEventListener("click", function() {
-    if (divUn.style.visibility === "hidden") {
-        divUn.style.visibility = "visible";
-        divDeux.style.visibility = "hidden";
-    } else {
-        divUn.style.visibility = "hidden";
-        divDeux.style.visibility = "visible";
-    }
-    });
-
 
 
 </script>
