@@ -7,6 +7,9 @@
 
 <?php ob_start(); 
 $review = $requeteReviewUser ->fetch();
+$reviewComplete = json_decode($review['reviewComplete'], true);
+$review_title = $reviewComplete['title'];
+$review_text = $reviewComplete['text'];
 ?>
 
 <h1 class="title_ref"> Edit review</h1>
@@ -21,8 +24,11 @@ $review = $requeteReviewUser ->fetch();
 
     <form id="" enctype="multipart/form-data" action="index.php?action=editerReviewUser&id=<?= $review["id_rating"]?>" method="post">
 
-        <label for="review"></label>
-        <textarea name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
+    <label for="review_title"></label>
+    <input type="text" placeholder="Title" name="review_title" id="review_title" value="<?= $review_title ?>" required>
+
+    <label for="review_text"></label>
+    <textarea  name="review_text" id="review_text"   required><?= $review_text ?></textarea>
 
         <div class="btn-submit">
                 <input type="submit" class="submit" name="editReviewUser" value="edit" >

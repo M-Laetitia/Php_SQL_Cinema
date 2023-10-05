@@ -112,7 +112,7 @@ class MovieController {
         $filmId = $_GET['id'];
     
         $requeteReview = $pdo->prepare("SELECT 
-        rating.review, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, user.pseudo, rating.note, rating.id_rating,
+        rating.reviewComplete, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, user.pseudo, rating.note, rating.id_rating,
         likes.likes_count AS nb_likes,
         dislikes.dislikes_count AS nb_dislikes
         FROM rating
@@ -133,16 +133,14 @@ class MovieController {
         GROUP BY id_rating
         ) AS dislikes ON rating.id_rating = dislikes.id_rating
         
-        WHERE movie.id_movie = :filmId AND rating.review IS NOT NULL
+        WHERE movie.id_movie = :filmId AND rating.reviewComplete IS NOT NULL
         ORDER BY rating.date_review
         ");
         $requeteReview->execute(["filmId" => $filmId]);
         $reviews = $requeteReview->fetchAll();
-
-
         
 
-        $requeteNbReview = $pdo->prepare("SELECT COUNT(rating.review) AS nb_review
+        $requeteNbReview = $pdo->prepare("SELECT COUNT(rating.reviewComplete) AS nb_review
         FROM rating
         INNER JOIN movie ON movie.id_movie = rating.id_movie
         WHERE movie.id_movie = :filmId
@@ -534,45 +532,55 @@ class MovieController {
     public function ajouterReview() {
         $userId = $_SESSION['user']['id_user'];
         $filmId = $_GET['id'];
+        
     
         if(isset($_POST["submitReview"])) {
-            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
+           
     
-            $pattern = '/^.{200,800}$/';
-            if(($review !== false ) && (preg_match($pattern,$review))) {
+            // $pattern = '/^.{200,800}$/';
+            if ($review_title && $review_text) {
                 $pdo = Connect::seConnecter();
                 $dateReview = date("Y-m-d H:i:s");
                 
                 // Vérifiez si une review existe
-                $requeteExisteReview = $pdo->prepare("SELECT review FROM rating WHERE id_user = :userId AND id_movie = :filmId");
+                $requeteExisteReview = $pdo->prepare("SELECT reviewComplete FROM rating WHERE id_user = :userId AND id_movie = :filmId");
                 $requeteExisteReview->execute([
                     "userId" => $userId,
                     "filmId" => $filmId,
                 ]);
     
                 $resultatExisteReview = $requeteExisteReview->fetch();
-    
+
+                 // Enregistrez la review au format JSON
+                $reviewComplete = [
+                    "title" => $review_title,
+                    "text" => $review_text
+                ];
+                $json_review = json_encode($reviewComplete);
+                
                 if ($resultatExisteReview) {
                     // Si une review existe déjà, mettez à jour la review existante
-                    $requeteMettreAJourReview = $pdo->prepare("UPDATE rating SET review = :review, date_review = :dateReview WHERE id_user = :userId AND id_movie = :filmId");
+                    $requeteMettreAJourReview = $pdo->prepare("UPDATE rating SET reviewComplete = :reviewComplete, date_review = :dateReview WHERE id_user = :userId AND id_movie = :filmId");
                     $requeteMettreAJourReview->execute([
-                        "review" => $review,
+                        "reviewComplete" => $json_review,
                         "dateReview" => $dateReview,
                         "userId" => $userId,
                         "filmId" => $filmId,
                     ]);
                 } else {
                     // Si aucune review n'existe, ajoutez une nouvelle review
-                    $requeteAjouterReview = $pdo->prepare("INSERT INTO rating (review, id_movie, id_user, date_review) VALUES (:review, :id_movie, :id_user, :dateReview)");
+                    $requeteAjouterReview = $pdo->prepare("INSERT INTO rating (reviewComplete, id_movie, id_user, date_review) VALUES (:reviewComplete, :id_movie, :id_user, :dateReview)");
                     $requeteAjouterReview->execute([
-                        "review" => $review,
+                        "reviewComplete" => $json_review,
                         "id_movie" => $filmId,
                         "id_user" => $userId,
                         "dateReview" => $dateReview,
                     ]);
                 }
                 
-                // $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
+                $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
 
                  echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
              } else {

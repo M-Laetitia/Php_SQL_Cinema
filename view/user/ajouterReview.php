@@ -15,7 +15,7 @@
                 <input type="text" placeholder="Title" name="title" id="review-title" required> -->
 
                 <label for="review">Your review</label>
-                <textarea placeholder="Your review" name="review" id="review" maxlength="800" minlength="200" required></textarea>
+                <textarea placeholder="Your review" name="review" id="review"  required></textarea>
 
 
                 <div class="btn-submit">

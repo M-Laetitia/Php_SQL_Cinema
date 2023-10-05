@@ -6,27 +6,39 @@
 </style>
 
 <?php ob_start(); 
-$review = $requeteReview ->fetch();?>
+$review = $requeteReview ->fetch();
+$reviewComplete = json_decode($review['reviewComplete'], true);
+$review_title = $reviewComplete['title'];
+$review_text = $reviewComplete['text'];
+
+?>
 
 
 
-<h1>edit the review </h1>
-<p>Username : <?= $review["pseudo"]?> </p>
-<p>Date : <?= $review["formatted_date"]?></p>
-<p>Movie : <?= $review["movie_title"]?></p>
 
 
+<h1 class="title_ref"> Edit review</h1>
 
-<div class="form">
+<div class="list edit-review-page">
+
+    
+    <p>Review Editing Page</p>
+    <p>Review : </p>
+    <p>Username : <?= $review["pseudo"]?> </p>
+    <p>Date : <?= $review["formatted_date"]?></p>
+    <p>Movie : <?= $review["movie_title"]?></p>
 
     <form id="" enctype="multipart/form-data" action="index.php?action=editerReview&id=<?= $review["id_rating"]?>" method="post">
 
-        <label for="review"></label>
-        <textarea name="review" id="review"  value="<?= $review["review"]?>"   required><?= $review["review"]?></textarea>
+    <label for="review_title"></label>
+    <input type="text" placeholder="Title" name="review_title" id="review_title" value="<?= $review_title ?>" required>
 
-        <div class="btn-submit">
-                <input type="submit" class="submit" name="editReview" value="publish" >
-        </div>
+    <label for="review_text"></label>
+    <textarea  name="review_text" id="review_text"   required><?= $review_text ?></textarea>
+
+    <div class="btn-submit">
+            <input type="submit" class="submit" name="editReview" value="EDIT" >
+    </div>
 
     </form>
 

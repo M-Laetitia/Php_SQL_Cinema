@@ -130,7 +130,18 @@
 
                         <div class="text">
                             <p><span class="text-highlight">★</span> <?= $review["note"] ?>/5</p>
-                            <p><?= $review["review"] ?></p>
+
+                            <?php
+                                $reviewData = json_decode($review["reviewComplete"], true); // Décoder les données JSON en tant que tableau associatif
+                                if ($reviewData) {
+                                    ?>
+                                    <p><?= $reviewData["title"] ?></p>
+                                    <p><?= $reviewData["text"] ?></p>
+                                    <?php
+                                }
+                            ?>
+
+
                         </div>
 
                         <div class="likes">
@@ -214,11 +225,11 @@
 
                         <form id="" enctype="multipart/form-data" action="index.php?action=ajouterReview&id=<?= $movie["id_movie"]?>" method="post">
 
-                            <!-- <label for="review-title">Title</label>
-                            <input type="text" placeholder="Title" name="title" id="review-title" required> -->
+                            <label for="review_title"></label>
+                            <input type="text" placeholder="Title" name="review_title" id="review_title" required>
 
-                            <label for="review"></label>
-                            <textarea placeholder="Write here..." name="review" id="review"  required></textarea>
+                            <label for="review_text"></label>
+                            <textarea placeholder="Tell us everything..." name="review_text" id="review_text"  required></textarea>
 
                             <div class="btn-submit">
                                     <input type="submit" class="submit" name="submitReview" value="publish" >

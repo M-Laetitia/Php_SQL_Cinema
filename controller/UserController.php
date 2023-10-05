@@ -117,10 +117,10 @@ class UserController {
             $requete->execute(["id" => $user]);
 
             // afficher liste reviews postées
-            $requeteReviews = $pdo->prepare("SELECT rating.review, movie.movie_title, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date , movie.id_movie, rating.id_rating
+            $requeteReviews = $pdo->prepare("SELECT rating.reviewComplete, movie.movie_title, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date , movie.id_movie, rating.id_rating
             FROM rating
             INNER JOIN movie ON movie.id_movie = rating.id_movie
-            WHERE rating.id_user = :id AND rating.review IS NOT NULL
+            WHERE rating.id_user = :id AND rating.reviewComplete IS NOT NULL
             ORDER BY movie.movie_title");
             $requeteReviews->execute(["id" => $user]);
             require("view/user/profile.php"); 
@@ -228,30 +228,37 @@ class UserController {
 
     public function editerReview ($id) {
         $pdo = Connect::seConnecter();
-        // var_dump($id);
 
-        $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+        $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.reviewComplete, user.pseudo, movie.movie_title, rating.id_rating
         FROM rating 
         INNER JOIN movie ON movie.id_movie=rating.id_movie
         INNER JOIN user ON user.id_user=rating.id_user
         WHERE id_rating = :id");
         $requeteReview->execute(["id"=>$id]);
-
-
+  
         if(isset($_POST['editReview'])) {
             // var_dump("ok"); die;
-            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
             
 
-            if(($review !== false) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur')) {
+            if(($review_title !== false && $review_text !== false) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur')) {
 
-                $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
+                $reviewComplete = [
+                    "title" => $review_title,
+                    "text" => $review_text
+                ];
+                $json_review = json_encode($reviewComplete);
+
+                $requeteEditer = $pdo->prepare("UPDATE rating SET reviewComplete = :reviewComplete WHERE id_rating = :id
                 ");
 
                 $requeteEditer->execute([
-                    "review" => $review,
+                    "reviewComplete" => $json_review,
                     "id" => $id
                 ]);
+
+                
 
                $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
                 header("Location: index.php?action=listFilms");
@@ -267,7 +274,7 @@ class UserController {
         $pdo = Connect::seConnecter();
       
 
-        $requeteReviewUser = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
+        $requeteReviewUser = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.reviewComplete, user.pseudo, movie.movie_title, rating.id_rating
         FROM rating 
         INNER JOIN movie ON movie.id_movie=rating.id_movie
         INNER JOIN user ON user.id_user=rating.id_user
@@ -277,21 +284,28 @@ class UserController {
 
         if(isset($_POST['editReviewUser'])) {
             // var_dump("ok"); die;
-            $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
+            $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
             
 
-            if(($review !== false) && (isset($_SESSION["user"]) )) {
+            if(($review_title !== false && $review_text !== false) && (isset($_SESSION["user"]) )) {
 
-                $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id
+                $reviewComplete = [
+                    "title" => $review_title,
+                    "text" => $review_text
+                ];
+                $json_review = json_encode($reviewComplete);
+
+                $requeteEditer = $pdo->prepare("UPDATE rating SET reviewComplete = :reviewComplete WHERE id_rating = :id
                 ");
 
                 $requeteEditer->execute([
-                    "review" => $review,
+                    "reviewComplete" => $json_review,
                     "id" => $id
                 ]);
 
                $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
-                header("Location: index.php?action=listFilms");
+                header("Location: index.php?action=profile");
             }
 
         }
