@@ -589,5 +589,12 @@ class MovieController {
              }
         }
     }
+
+
+    // // ^ Ajouter poster aléatoire homepage
+
+    // function displayRandomPoster () {
+
+    // }
 }
 ?>

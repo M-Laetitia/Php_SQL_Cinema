@@ -66,7 +66,8 @@ class ActorController {
         if(isset($_POST["submitActor"])){
 
             //rajouter iMAGE
-            if(isset($_FILES["actor_image"])){  // name de l'input dans le formulaire de l'ajout du film
+            $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
+            if(isset($_FILES["actor_image"]) ){  // name de l'input dans le formulaire de l'ajout du film
                 // voir upload-img_php pour détail du process
                 $tmpName = $_FILES["actor_image"]["tmp_name"];
                 $name = $_FILES["actor_image"]["name"];
@@ -78,18 +79,18 @@ class ActorController {
                 $tailleMax = 5242880; // 5 Mo (en octets)
             
                 if ($error != 0) {
-                    echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
-                } elseif (!in_array($extension, $extensionsAutorisees)) {
-                    echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
-                } elseif ($size > $tailleMax) {
-                    echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
-                } else {
-                    // L'image est valide, on procède au traitement
-                    $uniqueName = uniqid('', true);
-                    $FileNameUnique = $uniqueName. '.' .$extension;
-                    move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
-                    $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
-                }
+                    // echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
+                    } elseif (!in_array($extension, $extensionsAutorisees)) {
+                        echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
+                    } elseif ($size > $tailleMax) {
+                        echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
+                    } else {
+                        // L'image est valide, on procède au traitement
+                        $uniqueName = uniqid('', true);
+                        $FileNameUnique = $uniqueName. '.' .$extension;
+                        move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
+                        $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
+                    }
 
                 } else {
                     /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
@@ -159,6 +160,7 @@ class ActorController {
         WHERE actor.id_actor = :id");
         $requeteUpdateActeur->execute(["id"=>$id]);
 
+        $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
         if(isset($_POST["updateActor"])){ 
             if(isset($_FILES["actor_image"])){ 
                 $tmpName = $_FILES["actor_image"]["tmp_name"];

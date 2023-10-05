@@ -1,6 +1,7 @@
 <?php
 namespace Controller;
 use Model\Connect;
+
 class RoleController {
 
     // ^ Lister les rôles
@@ -98,8 +99,9 @@ class RoleController {
                 echo "<script>setTimeout(\"location.href = ' index.php?action=listRoles';\",1500);</script>";
                 // header("Location: index.php?action=listRoles");
             }
-        } else {
-            $_SESSION["message"] = "An error has occurred; please make sure you have filled in all required fields";
+            else {
+            $_SESSION["message"] = "An error occured.";
+            } 
         }
         require "view/role/updateRole.php" ;
     }

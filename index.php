@@ -51,9 +51,12 @@ if(isset($_GET["action"])) {
 
         case "addLike" : $ctrlUser->addLike($id); break;
         case "addDislike" : $ctrlUser->addDislike($id); break;
+
+        case "editerReviewUser" : $ctrlUser->editerReviewUser($id); break;
         
-        // USER / MODO
+        // MODO
         case "editerReview" : $ctrlUser->editerReview($id); break;
+        
         case "supprimerReview" : $ctrlUser->supprimerReview($id); break;
         
 
@@ -78,6 +81,7 @@ if(isset($_GET["action"])) {
       
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
+        // case "landingPage" : $ctrlMovie->landingPage(); break;
 
         // ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;

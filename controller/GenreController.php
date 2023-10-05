@@ -76,8 +76,7 @@ class GenreController {
         }
         $_SESSION["message"] = " This genre has been deleted ! <i class='fa-solid fa-check'></i> ";
         echo "<script>setTimeout(\"location.href = 'index.php?action=listGenres';\",1500);</script>";
-        //Ne pas inclure detailGenre avant la redirection. le code de "detailGenre.php" est toujours exécuté après la redirection, ce qui peut provoquer des erreurs car certaines variables ne sont pas définies
-        // require "view/genre/detailGenre.php";
+
         // header("Location: index.php?action=listGenres");
     }
 

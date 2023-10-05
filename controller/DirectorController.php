@@ -46,7 +46,8 @@ class DirectorController {
     public function ajouterRealisateur(){
         $pdo = Connect::seConnecter();
         if(isset($_POST["submitRealisateur"])){
-            
+
+            $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
             if(isset($_FILES["director_image"])){ 
                 $tmpName = $_FILES["director_image"]["tmp_name"];
                 $name = $_FILES["director_image"]["name"];
@@ -126,6 +127,7 @@ class DirectorController {
         WHERE director.id_director = :id");
         $requeteUpdateRealisateur->execute(["id"=>$id]);
 
+        $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
         if(isset($_POST["updateDirector"])){ 
             if(isset($_FILES["director_image"])){
                 $tmpName = $_FILES["director_image"]["tmp_name"];
