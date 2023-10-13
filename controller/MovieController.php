@@ -297,6 +297,31 @@ class MovieController {
         }    
     }
 
+    // ^ Check Movie title (ajax)
+
+    public function checkMovie() {
+        $pdo = Connect::SeConnecter ();
+
+        if(isset($_POST["movie_title"])) {
+            $movie_title = filter_input(INPUT_POST, "movie_title", FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $requete = $pdo->prepare(
+                "SELECT movie.movie_title 
+                FROM movie
+                WHERE movie_title = :movie_title"
+            );
+            $requete->execute(["movie_title" => $movie_title]);
+            $movieTitle = $requete->fetch();
+
+            if($movieTitle) {
+                echo "This movie has already been added.";
+            } else {
+                echo "";
+            }
+        }
+
+    }
+
     // ^ Aller à la page d'ajout de casting
     public function getAjouterCasting(){
         $pdo = Connect::seConnecter(); 
