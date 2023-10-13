@@ -17,6 +17,7 @@
                             <label for="name_role"></label>
                             <input type="text" placeholder="Role name*" name="name_role" id="name_role" required>
                         </div>
+                        <p id="roleMessage" class="alertMessage"></p>
                     </div>
 
                     <div class="btn-submit">

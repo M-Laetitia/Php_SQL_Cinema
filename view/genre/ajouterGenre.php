@@ -17,6 +17,7 @@
                             <label for="label_genre"></label>
                             <input type="text" placeholder="Genre*" name="label_genre" id="label_genre" required>
                         </div>
+                        <p id="genreMessage" class="alertMessage"></p>
                     </div>
 
                     <div class="btn-submit">

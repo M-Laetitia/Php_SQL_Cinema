@@ -19,7 +19,7 @@
             <input type="text" name="pseudo" id="pseudo">
 
             <label for="Mail">Email : </label>
-            <input type="email" name="email" id="Mail">
+            <input type="email" name="email" id="email">
 
             <label for="pass1">Password : </label>
             <input type="password" name="pass1" id="pass1">
@@ -44,6 +44,8 @@
                     unset($_SESSION["message"]); // Supprimer le message de la session
              }?>
         </div>
+
+        <div id="registerMessage"></div>
 
     
 

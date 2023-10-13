@@ -17,7 +17,9 @@
                         <div class="form-input">
                             <label for="movie_title"></label>
                             <input type="text" placeholder="Movie Title*" name="movie_title" id="movie_title" required>
+                            <p id="movieMessage" class="alertMessage"></p>
                         </div>
+                        
 
                         <div class="form-input">
                             <label for="movie_release_date"></label>
@@ -91,6 +93,10 @@
                             unset($_SESSION["message"]); // Supprimer le message de la session
                     }?>
                 </div>
+
+                
+
+
             </div>
         </div>
     </div>
@@ -102,3 +108,4 @@ $meta_description = "Form to add a Movie to the database";
 $contenu = ob_get_clean();
 require "view/template.php";
 ?>
+
