@@ -65,6 +65,33 @@ class GenreController {
     require "view/genre/ajouterGenre.php";
     }
 
+    // ^ Check genre (ajax)
+
+    public function checkGenre() {
+        $pdo = Connect::SeConnecter ();
+
+        if(isset($_POST["label_genre"])) {
+            $label_genre = filter_input(INPUT_POST, "label_genre", FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $requete = $pdo->prepare(
+                "SELECT genre.label_genre 
+                FROM genre
+                WHERE label_genre = :label_genre"
+            );
+            $requete->execute(["label_genre" => $label_genre]);
+            $movieTitle = $requete->fetch();
+
+            if($movieTitle) {
+                echo "This genre has already been added.";
+            } else {
+                echo "";
+            }
+        }
+
+    }
+
+    
+
     // ^ Supprimer genre
     public function supprimerGenre($id) {
         $pdo = Connect::seConnecter();
