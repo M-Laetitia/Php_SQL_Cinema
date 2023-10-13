@@ -192,6 +192,54 @@ class UserController {
         }
     }
 
+    // ^ check register (ajax)
+
+    public function checkRegister() {
+        $pdo = Connect::SeConnecter ();
+
+        
+        if (isset($_POST["pseudo"])) {
+            $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_SPECIAL_CHARS);
+    
+            $requete = $pdo->prepare("SELECT * FROM user WHERE pseudo = :pseudo");
+            $requete->execute(["pseudo" => $pseudo]);
+            $user = $requete->fetch();  
+
+            if($user) {
+                echo "This pseudo already exists";
+            } else {
+                echo "";
+            }
+
+        } elseif (isset($_POST["email"])) {
+            $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            if($email === false) {
+                echo "Invalid email format";
+            } else {
+                $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email");
+                $requete->execute(["email" => $email]);
+                $user = $requete->fetch();
+
+                if($user) {
+                    echo "This email already exists.";
+                } else {
+                    echo "";
+                }
+            }
+        } elseif (isset($_POST["pass2"])) {
+            $pass1 = filter_input(INPUT_POST, "pass1", FILTER_SANITIZE_SPECIAL_CHARS);
+            $pass2 = filter_input(INPUT_POST, "pass2", FILTER_SANITIZE_SPECIAL_CHARS);
+
+            if($pass1 !== $pass2) {
+                echo "The passwords do not match";
+            } else {
+                echo "";
+            }
+        }
+    }
+
+
     // // ^ Edit review user 
     // public function editerReviewUser ($id) {
     //     $pdo = Connect::seConnecter();
