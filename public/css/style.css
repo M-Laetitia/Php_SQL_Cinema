@@ -184,6 +184,20 @@ main.custom-background::before {
 /* & TEMPLATE PAGE --                  */
 /* & --------------------------------- */
 
+/* ~ test like dislikes ---------- */
+
+.likedIcon {
+    color : var(--clr-pink);
+}
+
+.dislikedIcon {
+    color : orange;
+}
+
+.rated {
+    color : red;
+}
+
 /* ~ & message avertissement ---------- */
 
 .messages_neutral p {

@@ -77,6 +77,10 @@ select {
 /* & FORMS --                          */
 /* & --------------------------------- */
 
+.alertMessage {
+    font-size: var(--fs-400);
+}
+
 .wrapper-form {
     /* background-color: red; */
     width: 100%;
@@ -129,8 +133,8 @@ select {
 }
 
 .form_section p {
-    font-size: var(--fs-800);
-    margin-top: 2rem;
+    /* font-size: var(--fs-800); */
+    /* margin-top: 2rem; */
 }
 
 .form_section h2 {

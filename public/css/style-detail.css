@@ -751,9 +751,9 @@ textarea::-webkit-scrollbar-thumb {
     transition: ease-in-out 0.1s;
 }
 
-.likes .fa-heart{
+/* .likes .fa-heart{
     color : var(--clr-pink);
-}
+} */
 
 .likes .fa-heart-crack{
     color : var(--clr-orange);
