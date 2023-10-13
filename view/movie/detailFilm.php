@@ -126,7 +126,7 @@
                  <p>It's empty here! Be the first to share with us your review.</p>
                  <?php } else { ?>
                 <?php foreach ($reviews as $review) { ?>
-                    <div class="review-text">
+                    <div id=<?= $review["id_rating"] ?> class="review-text">
 
                         <div class="text">
                             <p><span class="text-highlight">★</span> <?= $review["note"] ?>/5</p>
@@ -148,14 +148,12 @@
                             
                         <?php if (isset($_SESSION["user"])) : ?>
                             <!-- Afficher le formulaire de like uniquement si l'utilisateur est connecté -->
-                            <form enctype="multipart/form-data" action="index.php?action=addLike&id=<?=$review['id_rating']?>" method="post">
-                                <button type="submit" class="submit" name="submitLike" id="submitLike">
-                                    <i class="fa-solid fa-heart fa-heart-click"></i>
-                                </button>
-                            </form>
+                        
+                                <i data-id_review="<?=  $review['id_rating'] ?>" class="fa-solid fa-heart fa-heart-click"></i>
+                 
                         <?php else : ?>
                             <!-- Afficher une icône de like pour les utilisateurs non connectés -->
-                            <i class="fa-solid fa-heart" style="cursor: default;"></i>
+                            <i  class="fa-solid fa-heart" style="cursor: default;"></i>
                         <?php endif; ?>
                             
                             <div class="number">
@@ -169,11 +167,9 @@
                             </div>
 
                         <?php if (isset($_SESSION["user"])) : ?>
-                            <form  enctype="multipart/form-data" action="index.php?action=addDislike&id=<?=$review['id_rating']?>" method="post">
-                                <button type="submit" class="submit" name="submitDislike" id="submitDislike">
-                                    <i class="fa-solid fa-heart-crack"></i>
-                                </button>
-                            </form>
+                            
+                                    <i data-id_review="<?=  $review['id_rating'] ?>" class="fa-solid fa-heart-crack"></i>
+             
                         <?php else : ?>
                             <!-- Afficher une icône de like pour les utilisateurs non connectés -->
                             <i class="fa-solid fa-heart-crack" style="cursor: default;"></i>
@@ -265,7 +261,7 @@
                             </div>
 
                             <div class="btn-submit">
-                                <button   id="submitForm" type="submit">RATE</button>
+                                <button  id="submitForm" type="submit">RATE</button>
                             </div>
                     
 
@@ -300,11 +296,11 @@
     }
 </script>
 
-<?php if ($filmBackgroundPath != null){ ?>
-    <script>
-        bgImageLoader("<?= $filmBackgroundPath ?>") 
-    </script>
-<?php } ?>
+    <?php if ($filmBackgroundPath != null){ ?>
+        <script>
+            bgImageLoader("<?= $filmBackgroundPath ?>") 
+        </script>
+    <?php } ?>
 
 
 <script>

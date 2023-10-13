@@ -545,15 +545,19 @@ class MovieController {
                     $_SESSION["message"] = " Your rating has been successfully sent!";
                 } else {
                     $_SESSION["message"] = "an error has occurred; please send a rating between 1 and 5!";
+
                 }
             } else {
+
+            
             // ID du film manquant dans l'URL
         }
-        echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
-        // header("Location: index.php?action=listFilms");
+
+        // echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
+        header("Location: index.php?action=detailFilm");
     }
      
-    // ^ Ajouter review
+    // ^ Ajouter review (ajax)
     public function ajouterReview() {
         $userId = $_SESSION['user']['id_user'];
         $filmId = $_GET['id'];
@@ -570,7 +574,7 @@ class MovieController {
                 $dateReview = date("Y-m-d H:i:s");
                 
                 // Vérifiez si une review existe
-                $requeteExisteReview = $pdo->prepare("SELECT reviewComplete FROM rating WHERE id_user = :userId AND id_movie = :filmId");
+                $requeteExisteReview = $pdo->prepare("SELECT reviewComplete, rating.id_rating FROM rating WHERE id_user = :userId AND id_movie = :filmId");
                 $requeteExisteReview->execute([
                     "userId" => $userId,
                     "filmId" => $filmId,

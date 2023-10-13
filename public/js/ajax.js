@@ -124,6 +124,106 @@ $("#label_genre").on("input", function() {
      });
 });
 
+
+//  ^ ADD like / dislike
+
+$(document).ready(function() {
+    $(".fa-solid.fa-heart.fa-heart-click").on("click", function() {
+        console.log("click");
+        let reviewId = $(this).data("id_review");
+        console.log("check review id:" , reviewId);
+
+        $.ajax ({
+            type : "POST",
+            url : "index.php?action=addLike",
+            data : {review_id: reviewId},
+            
+            success : function(response) {
+                // console.log(response)
+                console.log("data:",  reviewId  )
+                if(response.success) {
+                console.log("réponse", response)
+                    if(response.likeAction == "liked") {
+                        
+                        // $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").removeClass(".likes.fa-heart");
+
+                        $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").addClass("likedIcon");
+                        console.log("logo id" , reviewId)
+                    } else if (response.likeAction == "unliked") {
+                        $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").removeClass("likedIcon");
+                    }
+                }
+            }
+        })
+    })
+});
+
+// ^ ADD a rating 
+$(document).ready(function() {
+    $("#submitForm").on("submit", function (event) {
+        event.preventDefault();
+
+
+        let movieRating = $form.find("input[name='user_rating']").val();
+
+        $.ajax({
+            type: "POST",
+            url : "index.php?action=addRating",
+            data : {
+                note : movieRating
+            },
+        success: function(response) {
+            if(response.success) {
+                $(".fa-solid.fa-x.fa-lg").addClass("rated"); 
+            }
+       
+        }
+        })
+        
+    })
+})
+
+
+
+//  ^ Check review liked - keep the style change on the icon
+// requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews
+$(document).ready(function () {
+    $.ajax({
+        type : "POST",
+        url : "index.php?action=checkLikedReviews",
+
+        success: function (response) {
+            console.log("isliked réponse 1", response )
+            response = JSON.parse(response);
+            console.log("isliked réponse 2", response )
+
+            response.forEach(review => {
+                var reviewId = review.id_review_like;
+                var isLiked = review.isLiked;
+                var isDisliked = review.isDisliked;
+
+                if (isLiked == 1 ) {
+                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("likedIcon");
+                } else {
+                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("likedIcon");
+                }
+
+
+                if (isDisliked == 0 ) {
+                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("dislikedIcon");
+                } else {
+                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("dislikedIcon");
+                }
+            });
+        },
+        error : function(error) {
+            console.error ("Error when adding a like or a dislike : " + error);
+        }
+    });
+});
+
+
+
   // modèle  2
 
 //   $("#person_first_name, #person_last_name").on("input", function () {

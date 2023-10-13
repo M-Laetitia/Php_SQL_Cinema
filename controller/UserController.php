@@ -91,6 +91,33 @@ class UserController {
         require("view/user/login.php");
     }
 
+    // ^ Ckeck if the user liked/disliked a review
+
+    public function checkLikedReviews() {
+        $pdo = Connect::seConnecter();
+        $id_user = $_SESSION['user']['id_user'];
+        $reviewId = $_POST["review_id"];
+
+        // effectuer une requête pour vérifier si l'user a liké/dislké cette review
+        $requete = $pdo->prepare("SELECT COUNT(*) AS liked FROM review_likes 
+        WHERE id_user = :id_user AND id_rating = :review_id
+        ");
+
+        $requete->execute([
+            "id_user" => $id_user,
+            "id_rating" => $review_id
+        ]);
+
+        $result = $requete->fetch();
+        $response = array("liked" => ($result["liked"]> 0));
+
+        header("Content-Type: application/json");
+        echo json_encode($response);
+
+        require "view/photo/displayPhotos.php";
+    }
+
+
     // ^ Log out
     public function logout() {
         // session_unset();
@@ -240,36 +267,6 @@ class UserController {
     }
 
 
-    // // ^ Edit review user 
-    // public function editerReviewUser ($id) {
-    //     $pdo = Connect::seConnecter();
-
-    //     $requeteReview = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, rating.review, user.pseudo, movie.movie_title, rating.id_rating
-    //     FROM rating 
-    //     INNER JOIN movie ON movie.id_movie=rating.id_movie
-    //     INNER JOIN user ON user.id_user=rating.id_user
-    //     WHERE id_rating = :id");
-    //     $requeteReview->execute(["id"=>$id]);
-
-    //     $pattern = '/^.{200,800}$/';
-    //     if(isset($_POST['editReview']) && (preg_match($pattern,$review)))  {
-    //         $review = filter_input(INPUT_POST, "review", FILTER_SANITIZE_SPECIAL_CHARS);
-            
-    //         if(strlen($review) < 200 || strlen($review) > 800) {
-    //             $_SESSION["message"] = "A problem has occurred, the authorized number of characters must be between 200 and 800.";
-    //         } else {
-    //             $requeteEditer = $pdo->prepare("UPDATE rating SET review = :review WHERE id_rating = :id");
-    //             $requeteEditer->execute([
-    //                 "review" => $review,
-    //                 "id" => $id]);
-    
-    //             $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
-    //             echo "<script>setTimeout(\"location.href = ' index.php?action=listFilms';\",1500);</script>";
-    //         }
-    //     }
-    //     require "view/user/profile.php";
-    // }
-
 
 
     // ^ Edit review modo
@@ -380,61 +377,57 @@ class UserController {
 
 
     // ^ Liker une review
-    public function addLike($id)  {
+    public function addLike()  {
         $pdo = Connect::seConnecter();
         $id_user = $_SESSION['user']['id_user'];
 
+        $response = array('success' => false);
         
-        if (isset($_POST['submitLike'])) {
-            // Vérifier si l'utilisateur a déjà "liké" ou "disliké" cette review
-            $requeteCheckLike = $pdo->prepare("SELECT * FROM review_likes WHERE id_rating = :id AND id_user = :id_user");
-            $requeteCheckLike->execute([
-                "id" => $id,
+        if (isset($_POST['review_id'])) {
+            $reviewId = $_POST["review_id"];
+
+            // vérifier si l'user a déjà like cette photo
+            $requete = $pdo->prepare("SELECT * FROM review_likes WHERE id_rating = :reviewId AND id_user = :id_user");
+            $requete->execute([
+                "reviewId" => $reviewId,
                 "id_user" => $id_user
             ]);
-    
-            $existingLike = $requeteCheckLike->fetch();
-    
-            if ($existingLike) {
-                // L'utilisateur a déjà "liké" ou "disliké" cette review
-                if ($existingLike['is_like'] == 1) {
+            $result = $requete->fetch();
+
+            if ($result) {
+                // L'utilisateur a déjà "liké" cette review
+                if ($result['is_like'] == 1) {
                     // Si c'était un "like", on supprime
-                    $requeteRemoveLike = $pdo->prepare("DELETE FROM review_likes WHERE id_rating = :id AND id_user = :id_user");
+                    $requeteRemoveLike = $pdo->prepare("DELETE FROM review_likes WHERE id_rating = :reviewId AND id_user = :id_user");
                     $requeteRemoveLike->execute([
-                        "id" => $id,
+                        "reviewId" => $reviewId,
                         "id_user" => $id_user
                     ]);
+                    $response['likeAction'] = "unliked";
+
                 } else {
-                    // Si c'était un "dislike",on met à jour pour faire un "like"
+                    // Sinon on rajoute le like
                     $likeValue = 1;
-                    $requeteUpdateLike = $pdo->prepare("UPDATE review_likes SET is_like = :likeValue WHERE id_rating = :id AND id_user = :id_user");
+                    $requeteUpdateLike = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user, is_like)
+                    VALUES (:reviewId, :id_user, :likeValue)
+                    ");
                     $requeteUpdateLike->execute([
-                        "id" => $id,
+                        "reviewId" => $reviewId,
                         "id_user" => $id_user,
                         "likeValue" => $likeValue
                     ]);
+                    $response['likeAction'] = "liked";
                 }
-            } else {
-                // L'utilisateur n'a pas encore "liké" cette review, on ajoute un like
-                $likeValue = 1;
-                $requeteAddLike = $pdo->prepare("INSERT INTO review_likes (id_rating, id_user, is_like)
-                VALUES (:id, :id_user, :likeValue)");
-    
-                $requeteAddLike->execute([
-                    "id" => $id,
-                    "id_user" => $id_user,
-                    "likeValue" => $likeValue
-                ]);
+                $response['success'] = true;
             }
+            header('Content-Type: application/json');
+            echo json_encode($response);
         }
-    
-        // Redirection vers la page où se trouvent les reviews
-        header("Location: index.php?action=listFilms");
-        exit;
     }
 
 
-      // ^ disliker une review
+
+    // ^ disliker une review
       public function addDislike($id)  {
         $pdo = Connect::seConnecter();
         $id_user = $_SESSION['user']['id_user'];
