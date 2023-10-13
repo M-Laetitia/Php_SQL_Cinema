@@ -136,6 +136,46 @@ class ActorController {
         // header("Location: index.php?action=listActeurs");
     }
 
+     // ^ Check Actor (ajax)
+    public function checkActor() {
+        $pdo = Connect::seConnecter();
+
+        $response = ['actorExists' => false, 'message' => ''];
+
+        if(isset($_POST["person_first_name"], $_POST["person_last_name"])) {
+            $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
+            $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $requete = $pdo->prepare(
+                "SELECT person.person_first_name, person.person_last_name
+                FROM person
+                WHERE person_first_name = :person_first_name AND person_last_name = :person_last_name
+                ");
+            $requete->execute(["person_first_name" => $person_first_name, "person_last_name" => $person_last_name ]);
+            $actorName = $requete->fetch();
+
+            if ($actorName) {
+            $response['actorExists'] = true;
+            $response['message'] = "This actor has already been added";
+            }
+
+        }
+        // header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    // récupérer id_person vérif si id_person avec id_actor
+    // messaga acteur
+    // vérif id_person avec id_director
+    //message réalisateur
+
+    // SELECT person.person_first_name, person.person_last_name, person.id_person, actor.*, director.*
+    // FROM person
+    // LEFT JOIN director ON director.id_person = person.id_person
+    // LEFT JOIN actor ON actor.id_person = person.id_person
+
+
+
     // ^ Supprimer un acteur 
     public function supprimerActeur($id) {
         $pdo = Connect::seConnecter();
