@@ -63,6 +63,32 @@ class RoleController {
         require "view/role/ajouterRole.php";
     }
 
+
+    // ^ Check role (ajax)
+
+    public function checkRole() {
+        $pdo = Connect::SeConnecter ();
+
+        if(isset($_POST["name_role"])) {
+            $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $requete = $pdo->prepare(
+                "SELECT role.name_role 
+                FROM role
+                WHERE name_role = :name_role"
+            );
+            $requete->execute(["name_role" => $name_role]);
+            $movieTitle = $requete->fetch();
+
+            if($movieTitle) {
+                echo "This role has already been added.";
+            } else {
+                echo "";
+            }
+        }
+
+    }
+
     // ^ Supprimer un role
     public function supprimerRole($id) {
         $pdo = Connect::seConnecter();
