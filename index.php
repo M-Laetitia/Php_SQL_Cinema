@@ -45,21 +45,22 @@ if(isset($_GET["action"])) {
         case "logout" : $ctrlUser->logout(); break;
         case "profile" : $ctrlUser->profile(); break;
         case "deleteAccount": $ctrlUser->deleteAccount(); break;
-
         case "themePreference" : $ctrlUser->themePreference(); break;
         case "listeFilmNote" : $ctrlUser->listeFilmNote(); break;
-
-        case "addLike" : $ctrlUser->addLike($id); break;
+        
         case "addDislike" : $ctrlUser->addDislike($id); break;
-
         case "editerReviewUser" : $ctrlUser->editerReviewUser($id); break;
+
+        // ^ (ajax)
+        case "addLike" : $ctrlUser->addLike(); break;
+        case "checkRegister" : $ctrlUser->checkRegister(); break;
+        case "checkLikedReviews" : $ctrlUser->checkLikedReviews(); break;
+        
         
         // MODO
         case "editerReview" : $ctrlUser->editerReview($id); break;
-        
         case "supprimerReview" : $ctrlUser->supprimerReview($id); break;
         
-
         // SEARCH
         case "search" : $ctrlSearch->search(); break;
 
@@ -72,12 +73,13 @@ if(isset($_GET["action"])) {
         case "ajouterCasting" : $ctrlMovie->ajouterCasting(); break; 
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
-
         case "addRating" : $ctrlMovie->addRating($id); break;
         case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
-
         case "ajouterReview" : $ctrlMovie->ajouterReview($id); break;
         case "listReview" : $ctrlMovie->listReview($id); break;
+
+        // ^ (ajax)
+        case "checkMovie" : $ctrlMovie->checkMovie(); break;
       
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
@@ -90,6 +92,9 @@ if(isset($_GET["action"])) {
         case "supprimerActeur" : $ctrlActor->supprimerActeur($id); break;
         case "getAjouterActeur" : $ctrlActor->getAjouterActeur(); break;
         case "updateActeur" : $ctrlActor->updateActeur($id); break; 
+
+        // ^ (ajax)
+        case "checkActor" : $ctrlActor->checkActor(); break; 
 
         // DIRECTOR
         case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
@@ -106,6 +111,9 @@ if(isset($_GET["action"])) {
         case "supprimerGenre" : $ctrlGenre->supprimerGenre($id); break;
         case "getAjouterGenre" : $ctrlGenre->getAjouterGenre(); break;
         case "updateGenre" : $ctrlGenre->updateGenre($id); break;
+        // ^ (ajax)
+        case "checkGenre" : $ctrlGenre->checkGenre(); break;
+        
 
         // ROLE
         case "listRoles" : $ctrlRole->listRoles(); break;
@@ -114,6 +122,10 @@ if(isset($_GET["action"])) {
         case "supprimerRole" : $ctrlRole->supprimerRole($id); break;
         case "getAjouterRole" : $ctrlRole->getAjouterRole(); break;
         case "updateRole" : $ctrlRole->updateRole($id); break;
+
+        // ^ (ajax)
+        case "checkRole" : $ctrlRole->checkRole(); break;
+        
     }
 }
 ?>
