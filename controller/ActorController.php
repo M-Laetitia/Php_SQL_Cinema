@@ -136,7 +136,7 @@ class ActorController {
         // header("Location: index.php?action=listActeurs");
     }
 
-     // ^ Check Actor (ajax)
+     // ^ Check Person (ajax)
     public function checkActor() {
         $pdo = Connect::seConnecter();
 
@@ -146,21 +146,33 @@ class ActorController {
             $person_first_name = filter_input(INPUT_POST, "person_first_name", FILTER_SANITIZE_SPECIAL_CHARS);
             $person_last_name = filter_input(INPUT_POST, "person_last_name", FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $requete = $pdo->prepare(
-                "SELECT person.person_first_name, person.person_last_name
+            $requeteActor = $pdo->prepare(
+                "SELECT person_first_name, person_last_name
                 FROM person
+                RIGHT JOIN actor ON actor.id_person = person.id_person
                 WHERE person_first_name = :person_first_name AND person_last_name = :person_last_name
                 ");
-            $requete->execute(["person_first_name" => $person_first_name, "person_last_name" => $person_last_name ]);
-            $actorName = $requete->fetch();
+            $requeteActor->execute(["person_first_name" => $person_first_name, "person_last_name" => $person_last_name ]);
 
-            if ($actorName) {
-            $response['actorExists'] = true;
-            $response['message'] = "This actor has already been added";
+            $requeteDirector = $pdo->prepare(
+                "SELECT person_first_name, person_last_name
+                FROM person
+                RIGHT JOIN director ON director.id_person = person.id_person
+                WHERE person_first_name = :person_first_name AND person_last_name = :person_last_name
+                ");
+            $requeteDirector->execute(["person_first_name" => $person_first_name, "person_last_name" => $person_last_name ]);
+
+            if ($requeteActor->rowCount() > 0) {
+                $response['actorExists'] = true;
+                $response['message'] = "This actor has already been added.";
+            } elseif ($requeteDirector->rowCount() > 0) {
+                $response['actorExists'] = true;
+                $response['message'] = "This director has already been added.";
             }
-
+     
+          
         }
-        // header('Content-Type: application/json');
+        header('Content-Type: application/json');
         echo json_encode($response);
     }
 

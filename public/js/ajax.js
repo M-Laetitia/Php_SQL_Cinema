@@ -63,30 +63,26 @@ $("#movie_title").on("input", function() {
 //  ^ MOVIE - ADD AN ACTOR
  
 $("#person_first_name, #person_last_name").on("input", function() {
-    // console.log("click")
+
     const firstName = $("#person_first_name").val();
     const lastName = $("#person_last_name").val();
     
 
-    if (firstName && lastName) {
-        const actorName = { firstName, lastName };
-        let actorNameStr = firstName + " " + lastName;
-        console.log("actor name", actorName)
-        console.log("actor name str", actorNameStr)
-
     $.ajax({
         type : "POST",
         url : "index.php?action=checkActor",
-        data : {actorName: actorName},
+        data: {
+            person_first_name: firstName,
+            person_last_name: lastName
+        },
             success: function(response) {
                 console.log("response 1", response)
-                // const result = JSON.parse(response);
-                // console.log("response 2", response)
-                $("#actorMessage").text(response.message)
+
+                $("#personMessage").text(response.message)
                 
             }
         });
-    }
+    
 });
 
 //  ^ ROLE - ADD A ROLE
