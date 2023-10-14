@@ -93,29 +93,33 @@ class UserController {
 
     // // ^ Ckeck if the user liked/disliked a review
 
-    // public function checkLikedReviews() {
-    //     $pdo = Connect::seConnecter();
-    //     $id_user = $_SESSION['user']['id_user'];
-    //     $reviewId = $_POST["review_id"];
+    public function checkLikedReviews() {
+        $pdo = Connect::seConnecter();
+        $id_user = $_SESSION['user']['id_user'];
+        $filmId = $_POST["film_id"];
 
-    //     // effectuer une requête pour vérifier si l'user a liké/dislké cette review
-    //     $requete = $pdo->prepare("SELECT COUNT(*) AS liked FROM review_likes 
-    //     WHERE id_user = :id_user AND id_rating = :review_id
-    //     ");
+        // effectuer une requête pour vérifier si l'user a liké/dislké cette review
+        $requete = $pdo->prepare(
+        "SELECT review_likes.is_like, rating.id_movie
+        FROM review_likes
+        LEFT JOIN rating ON rating.id_rating = review_likes.id_rating
+        
+        WHERE review_likes.id_user = :id_user AND rating.id_movie = :filmId
+        ");
 
-    //     $requete->execute([
-    //         "id_user" => $id_user,
-    //         "id_rating" => $review_id
-    //     ]);
+        $requete->execute([
+            "id_user" => $id_user,
+            "filmId" => $filmId
+        ]);
 
-    //     $result = $requete->fetch();
-    //     $response = array("liked" => ($result["liked"]> 0));
+        $result = $requete->fetchAll();
+        // $response = array("liked" => ($result["liked"]> 0));
 
-    //     header("Content-Type: application/json");
-    //     echo json_encode($response);
+        header("Content-Type: application/json");
+        echo json_encode($result);
 
-    //     require "view/photo/displayPhotos.php";
-    // }
+        
+    }
 
 
     // ^ Log out
@@ -481,6 +485,8 @@ class UserController {
     header('Content-Type: application/json');
     echo json_encode($response);
     }
+
+
 
 }
 ?>

@@ -335,40 +335,47 @@ $(document).ready(function() {
 
 //  ^ Check review liked - keep the style change on the icon
 // requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews
-// $(document).ready(function () {
-//     $.ajax({
-//         type : "POST",
-//         url : "index.php?action=checkLikedReviews",
+$(document).ready(function () {
 
-//         success: function (response) {
-//             console.log("isliked réponse 1", response )
-//             response = JSON.parse(response);
-//             console.log("isliked réponse 2", response )
+    var urlParams = new URLSearchParams(window.location.search);
+    var filmId = urlParams.get("id");
+    // console.log("récup id via url page", filmId)
 
-//             response.forEach(review => {
-//                 var reviewId = review.id_review_like;
-//                 var isLiked = review.isLiked;
-//                 var isDisliked = review.isDisliked;
+    var containers = $(".review-text");
 
-//                 if (isLiked == 1 ) {
-//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("likedIcon");
-//                 } else {
-//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("likedIcon");
-//                 }
+    containers.each(function() {
+        var reviewId = $(this).attr("id");
+        var container = $(this); 
+        $.ajax({
+            type : "POST",
+            url : "index.php?action=checkLikedReviews",
+            data: {film_id: filmId, review_id: reviewId},
 
+            success: function (response) {
+                console.log("isliked réponse 1", response )
 
-//                 if (isDisliked == 0 ) {
-//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("dislikedIcon");
-//                 } else {
-//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("dislikedIcon");
-//                 }
-//             });
-//         },
-//         error : function(error) {
-//             console.error ("Error when adding a like or a dislike : " + error);
-//         }
-//     });
-// });
+                response.forEach(review => {
+
+                    if (review.is_like == 1) {
+                        container.find(".fa-heart").addClass("likedIcon");
+                    } else {
+                        container.find(".fa-heart").removeClass("likedIcon");
+                    }
+    
+                    if (review.is_like == 0) {
+                        container.find(".fa-heart-crack").addClass("dislikedIcon");
+                    } else {
+                        container.find(".fa-heart-crack").removeClass("dislikedIcon");
+                    }
+                });
+            },
+            error : function(error) {
+                console.error ("Error when adding a like or a dislike : " + error);
+            }
+        });
+    })
+
+});
 
 
 
