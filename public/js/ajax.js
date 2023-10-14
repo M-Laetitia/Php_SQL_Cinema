@@ -125,7 +125,7 @@ $("#label_genre").on("input", function() {
 });
 
 
-//  ^ ADD like / dislike
+//  ^ ADD like
 
 $(document).ready(function() {
     $(".fa-solid.fa-heart.fa-heart-click").on("click", function() {
@@ -139,7 +139,7 @@ $(document).ready(function() {
             data : {review_id: reviewId},
             
             success : function(response) {
-                // console.log(response)
+                console.log(response)
                 console.log("data:",  reviewId  )
                 if(response.success) {
                 console.log("réponse", response)
@@ -147,10 +147,43 @@ $(document).ready(function() {
                         
                         // $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").removeClass(".likes.fa-heart");
 
-                        $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").addClass("likedIcon");
+                        $(".fa-heart-click[data-id_review='" + reviewId + "']").addClass("likedIcon");
                         console.log("logo id" , reviewId)
+
                     } else if (response.likeAction == "unliked") {
-                        $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").removeClass("likedIcon");
+                        $(".fa-heart-click[data-id_review='" + reviewId + "']").removeClass("likedIcon");
+                    }
+                }
+            }
+        })
+    })
+});
+
+//  ^ ADD dislike
+
+$(document).ready(function() {
+    $(".fa-solid.fa-heart-crack").on("click", function() {
+        console.log("click");
+        let reviewId = $(this).data("id_review");
+        console.log("check review id:" , reviewId);
+
+        $.ajax ({
+            type : "POST",
+            url : "index.php?action=addDislike",
+            data : {review_id: reviewId},
+            
+            success : function(response) {
+                console.log(response)
+                console.log("data:",  reviewId  )
+                if(response.success) {
+                console.log("réponse", response)
+                    if(response.likeAction == "disliked") {
+
+                        $(".fa-heart-crack[data-id_review='" + reviewId + "']").addClass("dislikedIcon");
+                        console.log("logo id" , reviewId)
+
+                    } else if (response.likeAction == "undisliked") {
+                        $(".fa-heart-crack[data-id_review='" + reviewId + "']").removeClass("dislikedIcon");
                     }
                 }
             }
@@ -187,40 +220,40 @@ $(document).ready(function() {
 
 //  ^ Check review liked - keep the style change on the icon
 // requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews
-$(document).ready(function () {
-    $.ajax({
-        type : "POST",
-        url : "index.php?action=checkLikedReviews",
+// $(document).ready(function () {
+//     $.ajax({
+//         type : "POST",
+//         url : "index.php?action=checkLikedReviews",
 
-        success: function (response) {
-            console.log("isliked réponse 1", response )
-            response = JSON.parse(response);
-            console.log("isliked réponse 2", response )
+//         success: function (response) {
+//             console.log("isliked réponse 1", response )
+//             response = JSON.parse(response);
+//             console.log("isliked réponse 2", response )
 
-            response.forEach(review => {
-                var reviewId = review.id_review_like;
-                var isLiked = review.isLiked;
-                var isDisliked = review.isDisliked;
+//             response.forEach(review => {
+//                 var reviewId = review.id_review_like;
+//                 var isLiked = review.isLiked;
+//                 var isDisliked = review.isDisliked;
 
-                if (isLiked == 1 ) {
-                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("likedIcon");
-                } else {
-                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("likedIcon");
-                }
+//                 if (isLiked == 1 ) {
+//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("likedIcon");
+//                 } else {
+//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("likedIcon");
+//                 }
 
 
-                if (isDisliked == 0 ) {
-                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("dislikedIcon");
-                } else {
-                    $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("dislikedIcon");
-                }
-            });
-        },
-        error : function(error) {
-            console.error ("Error when adding a like or a dislike : " + error);
-        }
-    });
-});
+//                 if (isDisliked == 0 ) {
+//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").addClass("dislikedIcon");
+//                 } else {
+//                     $(".fa-heart-click[data-id_photo='" + reviewId + "']").removeClass("dislikedIcon");
+//                 }
+//             });
+//         },
+//         error : function(error) {
+//             console.error ("Error when adding a like or a dislike : " + error);
+//         }
+//     });
+// });
 
 
 
