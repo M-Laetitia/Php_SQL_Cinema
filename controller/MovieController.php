@@ -620,10 +620,37 @@ class MovieController {
     }
 
 
-    // // ^ Ajouter poster aléatoire homepage
+ 
+    
+    //  ^ Check likes/dislkes to display nb (ajax)
 
-    // function displayRandomPoster () {
+    public function getReviewLikesDislikesCount() {
+        $filmId = $_POST['film_id']; 
+        $reviewId = $_POST['review_id']; 
+        $pdo = Connect::seConnecter(); 
 
-    // }
+
+        $requete= $pdo->prepare(
+        "SELECT rating.id_rating, 
+        SUM(CASE WHEN review_likes.is_like = 1 THEN 1 ELSE 0 END) AS likes,
+        SUM(CASE WHEN review_likes.is_like = 0 THEN 1 ELSE 0 END) AS dislikes
+        FROM rating
+        LEFT JOIN review_likes ON rating.id_rating = review_likes.id_rating
+        WHERE rating.id_movie = :filmId
+        GROUP BY rating.id_rating
+        ");
+
+        $requete->execute ([
+            "filmId" => $filmId,
+            ]);
+        $result =  $requete->fetchAll();
+
+        header('Content-Type: application/json');
+        echo json_encode($result);
+
+    }
+
+
+
 }
 ?>

@@ -155,17 +155,10 @@
                             <!-- Afficher une icône de like pour les utilisateurs non connectés -->
                             <i  class="fa-solid fa-heart" style="cursor: default;"></i>
                         <?php endif; ?>
-                            
-                            <div class="number">
-                            <?php 
-                            if (isset($review['nb_likes'])) {
-                                echo $review['nb_likes'];
-                            } else {
-                                echo 0;
-                            }
-                            ?>
-                            </div>
 
+                        <div class="likes-count" data-id_review="<?=  $review['id_rating'] ?>"></div>
+                        
+       
                         <?php if (isset($_SESSION["user"])) : ?>
                             
                                     <i data-id_review="<?=  $review['id_rating'] ?>" class="fa-solid fa-heart-crack"></i>
@@ -175,9 +168,8 @@
                             <i class="fa-solid fa-heart-crack" style="cursor: default;"></i>
                         <?php endif; ?>
                      
-                            <!-- expression conditionnelle ternaire - version "abrégée" -->
-                            <div class="number"><?= $review['nb_dislikes'] ?? 0 ?></div>
-                        
+                            <div class="dislikes-count" data-id_review="<?=  $review['id_rating'] ?>"></div>
+                            
                         </div>
 
                         <!-- Possibilité d'éditer/supprimer une review uniquement si user moderateur-->
