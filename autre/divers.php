@@ -218,3 +218,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     // }
 
                         // rediriger vers page d'accueil
+
+
+
+
+
+<div class="number">
+
+<?php 
+if (isset($review['nb_likes'])) {
+    echo $review['nb_likes'];
+} else {
+    echo 0;
+}
+?>
+</div>
+
+<!-- expression conditionnelle ternaire - version "abrégée" -->
+<div class="number"><?= $review['nb_dislikes'] ?? 0 ?></div>
+                
