@@ -21,6 +21,7 @@
                         <div class="form-input">
                             <label for="person_last_name"></label>
                             <input type="text" placeholder="Last Name*" name="person_last_name" id="person_last_name" required>
+                            <p id="personMessage" class="alertMessage"></p>
                         </div>
 
                         <div class="form-input">
