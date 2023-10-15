@@ -81,20 +81,9 @@ class MovieController {
         ");
         $requeteCastingFilm->execute(["id" => $id]);
         
-        $requeteNoteMoyenne = $pdo->prepare("SELECT movie.id_movie, movie.movie_title, ROUND(AVG(rating.note), 0) AS noteMoyenne
-        FROM movie
-        INNER JOIN rating ON rating.id_movie = movie.id_movie
-        WHERE movie.id_movie = :id");
-        $requeteNoteMoyenne->execute(["id" => $id]);
-        $notes = $requeteNoteMoyenne->fetch();
+        
 
-        $requeteNombreNote = $pdo->prepare("SELECT COUNT(rating.note) AS nb_note
-        FROM rating
-        INNER JOIN movie ON movie.id_movie = rating.id_movie
-        WHERE movie.id_movie = :id
-        ");
-        $requeteNombreNote->execute(["id" => $id]);
-        $nombreNotes = $requeteNombreNote->fetch();
+       
 
         $requeteBackground = $pdo->prepare("SELECT  movie.movie_background
         FROM movie WHERE movie.id_movie = :id"
@@ -509,12 +498,14 @@ class MovieController {
         require("view/movie/updateFilm.php");
     }
 
-    // ^ ajout de note par les utilisateurs
-    public function addRating () {
+    // ^ ajout de note par les utilisateurs (ajax)
+    public function addRating ($id) {
         $userId = $_SESSION['user']['id_user'];
         $filmId = $_GET['id'];
+        $response = ['success' => false, 'message' => ''];
+        
 
-        if(isset($_POST["user_rating"])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $user_rating = filter_input(INPUT_POST, "user_rating", FILTER_SANITIZE_NUMBER_INT);
 
                 if($user_rating !== false) {
@@ -542,26 +533,45 @@ class MovieController {
                         "id_user" => $userId,
                         "note" => $user_rating]);
                     }
-                    $_SESSION["message"] = " Your rating has been successfully sent!";
+                    // $_SESSION["message"] = " Your rating has been successfully sent!";
+                    $response["success"] = true;
                 } else {
-                    $_SESSION["message"] = "an error has occurred; please send a rating between 1 and 5!";
-                    
+                    // $_SESSION["message"] = "an error has occurred; please send a rating between 1 and 5!";
+                    $response["message"] = "An error has occurred; please send a rating between 1 and 5!";
                 }
-            } else {
+                // header('Content-Type: application/json');
+                // echo json_encode($response);
+                $response["message"] = "Film ID missing in URL";
+           
+
+                header('Content-Type: application/json');
+                echo json_encode($response);
+        }
+    }
+
+    // ^ Affichage moyenne (ajax)
+    public function getAverageRating($id) {
+        $pdo = Connect::seConnecter();
+        $requeteNoteMoyenne = $pdo->prepare("SELECT movie.id_movie, movie.movie_title, ROUND(AVG(rating.note), 0) AS noteMoyenne
+        FROM movie
+        INNER JOIN rating ON rating.id_movie = movie.id_movie
+        WHERE movie.id_movie = :id");
+        $requeteNoteMoyenne->execute(["id" => $id]);
+
+        $result = $requeteNoteMoyenne->fetch();
+
+        header("Content-Type: application/json");
+        echo json_encode($result);
+
+    }
 
             
-            // ID du film manquant dans l'URL
-        }
-
-        // echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
-        header("Location: index.php?action=detailFilm");
-    }
      
     // ^ Ajouter review (ajax)
     public function ajouterReview($id) {
         $userId = $_SESSION['user']['id_user'];
         $filmId = $_GET['id'];
-        // $response = ['success' => false, 'message' => ''];
+        $response = ['success' => false, 'message' => ''];
        
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             //id movie
@@ -630,17 +640,23 @@ class MovieController {
 
 
 
-
         // ^ Display review (ajax)
         public function afficherCritiquesFilm($id) {
 
             $pdo = Connect::seConnecter();
             $requete = $pdo->prepare(
-                "SELECT rating.* , user.pseudo
-                FROM rating
-                INNER JOIN user ON user.id_user = rating.id_user
-             WHERE id_movie = :id 
-            ORDER BY date_review DESC");
+                "SELECT
+                rating.*,
+                user.pseudo,
+                DATE_FORMAT(rating.date_review, '%D %M %Y %H:%i') AS formatted_duration,
+                SUM(CASE WHEN review_likes.is_like = 1 THEN 1 ELSE 0 END) AS nb_likes,
+                SUM(CASE WHEN review_likes.is_like = 0 THEN 1 ELSE 0 END) AS nb_dislikes
+            FROM rating
+            INNER JOIN user ON user.id_user = rating.id_user
+            LEFT JOIN review_likes ON review_likes.id_rating = rating.id_rating
+            WHERE id_movie = :id 
+            GROUP BY rating.id_rating, user.pseudo, formatted_duration
+            ORDER BY rating.date_review DESC");
             $requete->execute(["id" => $id]);
    
             $reviews = $requete->fetchAll();
@@ -651,7 +667,24 @@ class MovieController {
                 
         }
 
+     //  ^ display nb of review (ajax)
 
+     public function getNumberRating($id) {
+        $pdo = Connect::seConnecter(); 
+         $requeteNombreNote = $pdo->prepare("SELECT COUNT(rating.note) AS nb_note
+        FROM rating
+        INNER JOIN movie ON movie.id_movie = rating.id_movie
+        WHERE movie.id_movie = :id
+        ");
+        $requeteNombreNote->execute(["id" => $id]);
+        $result = $requeteNombreNote->fetch();
+
+         // Renvoyez la réponse JSON
+         header('Content-Type: application/json');
+         echo json_encode($result);
+     }
+       
+        
     
     //  ^ Check likes/dislkes to display nb (ajax)
 
@@ -682,6 +715,9 @@ class MovieController {
         echo json_encode($result);
 
     }
+
+
+
 
 
 

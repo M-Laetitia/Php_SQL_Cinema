@@ -289,6 +289,115 @@ $(document).ready(function() {
     });
 });
 
+
+//  ^ AJOUTER RATING (ajax)
+$(document).ready(function() {
+    
+    $("#rating-form").submit(function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        var movieId = $form.data("movieid");
+        var userRating = $form.find("input[name='user_rating']").val();
+        console.log(userRating)
+
+    
+        $.ajax({
+            type: "POST",
+            url : "index.php?action=addRating&id=" + movieId,
+            data: { user_rating: userRating },
+            
+            success: function(response) {
+
+                // console.log("Review response:", response);
+                if (response.success) {
+                    $("#reviewMessage").text(response.message);
+                    // afficherCritiques();
+                   
+                } else {
+                    $("#reviewMessage").text(response.message);
+                }
+
+                // Clear the form or perform other necessary actions
+                // $("#reviewForm")[0].reset();
+            }
+        });
+    });
+});
+
+
+//  ^ DISPLAY RATING (ajax)
+$(document).ready(function() {
+    // Fonction pour mettre à jour la moyenne des notes
+    function updateAverageRating() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var filmId = urlParams.get("id");
+        
+
+        $.ajax({
+            type: "POST",
+            url: "index.php?action=getAverageRating&id=" + filmId,
+            dataType: "json",
+            success: function(response) {
+                console.log("rep", response)
+
+                if (response.noteMoyenne) {
+                    
+                    var averageRatingContainer = $(".average-rating");
+                    averageRatingContainer.empty(); // Efface tout contenu précédent
+    
+                    var noteMoyenne = parseFloat(response.noteMoyenne); // Convertir en nombre
+                    for (var i = 1; i <= 5; i++) {
+                       
+                        if (i <= noteMoyenne) {
+                            averageRatingContainer.append('<i class="fa-solid fa-star fa-lg star-filled"></i>');
+                            
+                        } else {
+                            averageRatingContainer.append('<i class="far fa-star fa-lg star-empty"></i>');
+                        }
+                    }
+                }
+            },
+            error: function(error) {
+                console.error("Erreur lors de la récupération de la moyenne des notes : " + error);
+            }
+        });
+    }
+
+    updateAverageRating();
+
+});
+
+//  ^ DISPLAY RATE NB (ajax)
+$(document).ready(function() {
+
+    function getNumberRating() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var filmId = urlParams.get("id");
+        
+
+        $.ajax({
+            type: "POST",
+            url: "index.php?action=getNumberRating&id=" + filmId,
+            dataType: "json",
+            success: function(response) {
+               
+                
+                if (response.nb_note) {
+                    $("#ratingNumber").text("Ratings (" + response.nb_note + ")");
+                    
+                }
+            },
+            error: function(error) {
+                console.error("Erreur lors de la récupération de la moyenne des notes : " + error);
+            }
+        });
+    }
+
+    getNumberRating();
+
+});
+
+
 //  ^ DISPLAY REVIEW
 $(document).ready(function() { 
     function afficherCritiques() {
@@ -422,82 +531,17 @@ $(document).ready(function () {
 
 
 
-// $(document).ready(function() {
-//     console.log("click");
-//     var movieId = $("#submitReview").data("movieid");
-//     console.log(movieId);
-
-//     // Ajouter un gestionnaire de soumission du formulaire
-//     $("#reviewForm").submit(function(event) {
-//         event.preventDefault();
-//         var $form = $(this);
-//         var reviewTitle = $form.find("input[name='review_title']").val();
-//         var reviewText = $form.find("textarea[name='review_text']").val();
-
-//         // Envoyez la requête AJAX pour obtenir le pseudo de l'utilisateur et la date depuis la base de données
-//         var url = "index.php?action=afficherCritiquesFilm&id=" + movieId;
-//         $.ajax({
-//             type: "GET",
-//             url: url,
-//             success: function(response) {
-//                 var reviewPseudo = response.pseudo;
-//                 var reviewDate = response.date;
-
-//                 // Affichez le commentaire avec le pseudo et la date directement
-//                 var reviewDiv = $("<div>");
-//                 var title = $("<p>").text("Title: " + reviewTitle);
-//                 var text = $("<p>").text("Text: " + reviewText);
-//                 var authorAndDate = $("<p>").text("Author: " + reviewPseudo + " - Date: " + reviewDate);
-
-//                 reviewDiv.append(title, text, authorAndDate);
-//                 $("#reviews-space").prepend(reviewDiv);
-
-//                 // Effacez le formulaire ou effectuez d'autres actions si nécessaire
-//                 $form[0].reset();
-//             }
-//         });
-        
-//         // Actualiser les critiques après avoir soumis le commentaire
-//         afficherCritiques();
-//     });
-
-//     // Appeler la fonction pour afficher les critiques lors du chargement de la page
-//     afficherCritiques();
+//^ getting the number of review
+// $.ajax({
+//     type: "POST",
+//     url: "index.php?action=getCommentCount",
+//     success: function (response) {
+//         response = JSON.parse(response);
+//         if (response) {
+//             response.forEach(photo =>
+//                 $(".comment-count[data-id_photo='" + photo.id + "']").text(photo.comment_count)
+//             );
+//         }
+//     },
+//     // ...
 // });
-    
-// //  ^ Check likes/dislkes to display nb
-
-
-    // var containers = $(".likesDivCount");
-
-    // var urlParams = new URLSearchParams(window.location.search);
-    // var filmId = urlParams.get("id");
-    // console.log("récup id via url page", filmId)
-
-    // containers.each(function() {
-    //     console.log("test fonction")
-    //     var reviewId = $(this).attr("id");
-    //     console.log("ID de la revue : " + reviewId);
-    //     // Vous pouvez maintenant utiliser l'ID comme vous le souhaitez pour filtrer les données.
-        
-    //     $.ajax({
-    //     type: "POST",
-    //     url: "index.php?action=getReviewLikesDislikesCount",
-    //     data: { review_id: reviewId, film_id: filmId},
-    //     success: function(response) {
-    //         console.log("réponse nb likes" , response )
-    //         // Mise à jour de l'affichage des likes et dislikes sur la page
-    //         response.forEach(function(review) {
-    //             console.log("review" , review)
-    //             var reviewId = review.id_rating;
-    //             var likes = review.likes;
-    //             var dislikes = review.dislikes;
-      
-    //             // Mettre à jour l'affichage pour cette review en utilisant reviewId, likes et dislikes
-    //             $(".likes-count[data-id_review='" + reviewId + "']").text(likes);
-    //             $(".dislikes-count[data-id_review='" + reviewId + "']").text(dislikes);
-    //         });
-    //     }
-    // });
-    // });
-
