@@ -100,7 +100,7 @@ class UserController {
 
         // effectuer une requête pour vérifier si l'user a liké/dislké cette review
         $requete = $pdo->prepare(
-        "SELECT review_likes.is_like, rating.id_movie
+        "SELECT review_likes.is_like, rating.id_movie, rating.id_rating
         FROM review_likes
         LEFT JOIN rating ON rating.id_rating = review_likes.id_rating
         

@@ -121,10 +121,10 @@ $("#label_genre").on("input", function() {
 });
 
 
-//  ^ ADD like
+//  ^ ADD like 
 
-$(document).ready(function() {
-    $(".fa-solid.fa-heart.fa-heart-click").on("click", function() {
+$(document).on("click", ".fa-solid.fa-heart.fa-heart-click", function() {
+
         console.log("click");
         let reviewId = $(this).data("id_review");
         console.log("check review id:" , reviewId);
@@ -141,59 +141,51 @@ $(document).ready(function() {
                 console.log("réponse", response)
                     if(response.likeAction == "liked") {
                         
-                        // $(".fa-solid.fa-heart.fa-heart-click[data-id_review='" + reviewId + "']").removeClass(".likes.fa-heart");
+
 
                         $(".fa-heart-click[data-id_review='" + reviewId + "']").addClass("likedIcon");
                         console.log("logo id" , reviewId)
 
                     } else if (response.likeAction == "unliked") {
                         $(".fa-heart-click[data-id_review='" + reviewId + "']").removeClass("likedIcon");
+
+                      
                     }
+
                 }
             }
         })
 
-        var containers = $(".review-text");
-
         var urlParams = new URLSearchParams(window.location.search);
         var filmId = urlParams.get("id");
-        // console.log("récup id via url page", filmId)
-    
-        containers.each(function() {
-            var reviewId = $(this).attr("id");
-            // console.log("ID de la revue : " + reviewId);
-            // Vous pouvez maintenant utiliser l'ID comme vous le souhaitez pour filtrer les données.
-            
-            $.ajax({
+
+        $.ajax({
             type: "POST",
             url: "index.php?action=getReviewLikesDislikesCount",
-            data: { review_id: reviewId, film_id: filmId},
+            data: { review_id: reviewId,
+                film_id: filmId },
+            dataType: "json",          
             success: function(response) {
-                console.log("réponse nb likes" , response )
-                // Mise à jour de l'affichage des likes et dislikes sur la page
-                response.forEach(function(review) {
-                    console.log("review" , review)
+                console.log("la seocnde fonction se lance")
+                response.forEach(function(review) {     
                     var reviewId = review.id_rating;
                     var likes = review.likes;
                     var dislikes = review.dislikes;
-                    console.log("01" , reviewId )
-                    console.log("02" , likes )
-                    console.log("03" , dislikes )
-            
-                    // Mettre à jour l'affichage pour cette review en utilisant reviewId, likes et dislikes
-                    $(".likes-count[data-id_review='" + reviewId + "']").text(likes);
-                    $(".dislikes-count[data-id_review='" + reviewId + "']").text(dislikes);
-                });
-            }
-        });
+
+
+                var likesCountElement = $(".likes-count[data-id_review='" + reviewId + "']");
+                var dislikesCountElement = $(".dislikes-count[data-id_review='" + reviewId + "']");
+                likesCountElement.text(likes);
+                dislikesCountElement.text(dislikes);
+            });
+        }
         });
     })
-});
+
 
 //  ^ ADD dislike
 
-$(document).ready(function() {
-    $(".fa-solid.fa-heart-crack").on("click", function() {
+$(document).on("click", ".fa-solid.fa-heart-crack", function() {
         console.log("click");
         let reviewId = $(this).data("id_review");
         console.log("check review id:" , reviewId);
@@ -204,8 +196,9 @@ $(document).ready(function() {
             data : {review_id: reviewId},
             
             success : function(response) {
-                console.log(response)
-                console.log("data:",  reviewId  )
+                // console.log(response)
+                // console.log("data:",  reviewId  )
+
                 if(response.success) {
                 console.log("réponse", response)
                     if(response.likeAction == "disliked") {
@@ -216,135 +209,45 @@ $(document).ready(function() {
                     } else if (response.likeAction == "undisliked") {
                         $(".fa-heart-crack[data-id_review='" + reviewId + "']").removeClass("dislikedIcon");
                     }
+
+                    
                 }
+                
             }
         })
 
-        var containers = $(".review-text");
-
         var urlParams = new URLSearchParams(window.location.search);
         var filmId = urlParams.get("id");
-        // console.log("récup id via url page", filmId)
-    
-        containers.each(function() {
-            var reviewId = $(this).attr("id");
-            // console.log("ID de la revue : " + reviewId);
-            // Vous pouvez maintenant utiliser l'ID comme vous le souhaitez pour filtrer les données.
-            
-            $.ajax({
+
+        $.ajax({
             type: "POST",
             url: "index.php?action=getReviewLikesDislikesCount",
-            data: { review_id: reviewId, film_id: filmId},
+            data: { review_id: reviewId,
+                film_id: filmId },
+            dataType: "json",          
             success: function(response) {
-                console.log("réponse nb likes" , response )
-                // Mise à jour de l'affichage des likes et dislikes sur la page
-                response.forEach(function(review) {
-                    console.log("review" , review)
+                console.log("la seocnde fonction se lance")
+                response.forEach(function(review) {     
                     var reviewId = review.id_rating;
                     var likes = review.likes;
                     var dislikes = review.dislikes;
-                    console.log("01" , reviewId )
-                    console.log("02" , likes )
-                    console.log("03" , dislikes )
-            
-                    // Mettre à jour l'affichage pour cette review en utilisant reviewId, likes et dislikes
-                    $(".likes-count[data-id_review='" + reviewId + "']").text(likes);
-                    $(".dislikes-count[data-id_review='" + reviewId + "']").text(dislikes);
-                });
-            }
-        });
-        });
-    })
-});
 
 
-//  ^ Check likes/dislkes to display nb
-$(document).ready(function() {
-
-    var containers = $(".review-text");
-
-    var urlParams = new URLSearchParams(window.location.search);
-    var filmId = urlParams.get("id");
-    // console.log("récup id via url page", filmId)
-
-    containers.each(function() {
-        var reviewId = $(this).attr("id");
-        // console.log("ID de la revue : " + reviewId);
-        // Vous pouvez maintenant utiliser l'ID comme vous le souhaitez pour filtrer les données.
-        
-        $.ajax({
-        type: "POST",
-        url: "index.php?action=getReviewLikesDislikesCount",
-        data: { review_id: reviewId, film_id: filmId},
-        success: function(response) {
-            console.log("réponse nb likes" , response )
-            // Mise à jour de l'affichage des likes et dislikes sur la page
-            response.forEach(function(review) {
-                console.log("review" , review)
-                var reviewId = review.id_rating;
-                var likes = review.likes;
-                var dislikes = review.dislikes;
-                console.log("01" , reviewId )
-                console.log("02" , likes )
-                console.log("03" , dislikes )
-        
-                // Mettre à jour l'affichage pour cette review en utilisant reviewId, likes et dislikes
-                $(".likes-count[data-id_review='" + reviewId + "']").text(likes);
-                $(".dislikes-count[data-id_review='" + reviewId + "']").text(dislikes);
+                var likesCountElement = $(".likes-count[data-id_review='" + reviewId + "']");
+                var dislikesCountElement = $(".dislikes-count[data-id_review='" + reviewId + "']");
+                likesCountElement.text(likes);
+                dislikesCountElement.text(dislikes);
             });
         }
-    });
-    });
-
-    
-});
-
-
-
-
-//  ^ Check review liked - keep the style change on the icon
-// requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews
-$(document).ready(function () {
-
-    var urlParams = new URLSearchParams(window.location.search);
-    var filmId = urlParams.get("id");
-    // console.log("récup id via url page", filmId)
-
-    var containers = $(".review-text");
-
-    containers.each(function() {
-        var reviewId = $(this).attr("id");
-        var container = $(this); 
-        $.ajax({
-            type : "POST",
-            url : "index.php?action=checkLikedReviews",
-            data: {film_id: filmId, review_id: reviewId},
-
-            success: function (response) {
-                console.log("isliked réponse 1", response )
-
-                response.forEach(review => {
-
-                    if (review.is_like == 1) {
-                        container.find(".fa-heart").addClass("likedIcon");
-                    } else {
-                        container.find(".fa-heart").removeClass("likedIcon");
-                    }
-    
-                    if (review.is_like == 0) {
-                        container.find(".fa-heart-crack").addClass("dislikedIcon");
-                    } else {
-                        container.find(".fa-heart-crack").removeClass("dislikedIcon");
-                    }
-                });
-            },
-            error : function(error) {
-                console.error ("Error when adding a like or a dislike : " + error);
-            }
         });
     })
 
-});
+
+
+
+
+
+
 
 //  ^ AJOUTER REVIEW
 $(document).ready(function() {
@@ -387,75 +290,214 @@ $(document).ready(function() {
 });
 
 //  ^ DISPLAY REVIEW
-function afficherCritiques() {
-    console.log("afficherCritiques function is called");
-    var movieId = $("#submitReview").data("movieid");
-    var url = "index.php?action=afficherCritiquesFilm&id=" + movieId;
-
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json",
-        success: function(response) {
-            console.log(response);
-            var reviewsDiv = $("#reviews-space");
-            reviewsDiv.empty();
-
-            response.forEach(review => {
-                var reviewData = JSON.parse(review.reviewComplete);
-
-                var reviewDiv = $("<div>");
-                var title = $("<p>").text("Title: " + reviewData.title);
-                var text = $("<p>").text("Text: " + reviewData.text);
-                var authorAndDate = $("<p>").text("Author: " + review.pseudo + " - Date: " + review.date_review);
-
-                reviewDiv.append(title, text, authorAndDate);
-                reviewsDiv.append(reviewDiv);
-            });
-        }
-    });
-}
-
-$(document).ready(function() {
-    console.log("click");
-    var movieId = $("#submitReview").data("movieid");
-    console.log(movieId);
-
-    // Ajouter un gestionnaire de soumission du formulaire
-    $("#reviewForm").submit(function(event) {
-        event.preventDefault();
-        var $form = $(this);
-        var reviewTitle = $form.find("input[name='review_title']").val();
-        var reviewText = $form.find("textarea[name='review_text']").val();
-
-        // Envoyez la requête AJAX pour obtenir le pseudo de l'utilisateur et la date depuis la base de données
+$(document).ready(function() { 
+    function afficherCritiques() {
+        // console.log("afficherCritiques function is called");
+        var movieId = $("#submitReview").data("movieid");
         var url = "index.php?action=afficherCritiquesFilm&id=" + movieId;
+
         $.ajax({
             type: "GET",
             url: url,
+            dataType: "json",
             success: function(response) {
-                var reviewPseudo = response.pseudo;
-                var reviewDate = response.date;
+                console.log("responses" , response);
+                
+                
+                var reviewsDiv = $(".movie-review");
+                // reviewsDiv.empty();
 
-                // Affichez le commentaire avec le pseudo et la date directement
-                var reviewDiv = $("<div>");
-                var title = $("<p>").text("Title: " + reviewTitle);
-                var text = $("<p>").text("Text: " + reviewText);
-                var authorAndDate = $("<p>").text("Author: " + reviewPseudo + " - Date: " + reviewDate);
+                response.forEach(review => {
+                    console.log("review:" , review)
+                    console.log("pseudo", review.pseudo
+                    )
 
-                reviewDiv.append(title, text, authorAndDate);
-                $("#reviews-space").prepend(reviewDiv);
+                    var pseudo = review.pseudo;
+                    var date_review = review.formatted_duration;
+                    var id_rating = review.id_rating;
+                    var likes = review.nb_likes; 
+                    var dislikes = review.nb_dislikes;
 
-                // Effacez le formulaire ou effectuez d'autres actions si nécessaire
-                $form[0].reset();
+                    var reviewData = JSON.parse(review.reviewComplete);
+                    console.log("reviewData" , reviewData)
+
+                    
+                    // Créee un conteneur pour chaque revue
+                    var reviewAll = $("<div class='review-all'>");
+                    // Créez un conteneur pour les détails de la revue
+                    var reviewLikes = $("<div clasmos='review-likes'>");
+                    var review = $("<div class='review'>");
+
+                    var titleRate = $("<div class='title_rate'>");
+                    var title = $("<p>").text("Title: " + reviewData.title);
+                    var note = $("<p>").text("Note: " );
+
+                    var text= $("<div class='text'>");
+                    var textReview = $("<p>").text("Text: " + reviewData.text);
+
+                    var reviewId =  id_rating;
+
+                    var likesDiv = $("<div  id='" + reviewId + "' class='likesDiv'>");
+                    var likesCount = $("<span class='likes-count' data-id_review='" + reviewId + "'>" + likes + "</span>");
+    
+                    var likeIcon = $("<i data-id_review='" + reviewId + "' class='fa-solid fa-heart fa-heart-click'></i>");
+
+                    var dislikeIcon = $("<i data-id_review='" + reviewId + "' class='fa-solid fa-heart-crack'></i>");
+                    var dislikesCount = $("<span class='dislikes-count' data-id_review='" + reviewId + "'>" + dislikes + "</span>");
+
+                    likesDiv.append(likeIcon, likesCount, dislikeIcon, dislikesCount )
+
+
+                    // var likeDislike = $("<p>").text("likes: " );
+
+                    var pseudoDate = $("<div class='pseudo-date'>");
+                    var author = $("<p>").text("author: " + pseudo);
+                    var date = $("<p>").text("date: " + date_review);
+
+
+                    titleRate.append(title, note )
+                    text.append(textReview);
+                    // likesDiv.append(likeDislike);
+                    pseudoDate.append(author, date);
+
+                    review.append(titleRate,text, likesDiv )
+
+                    reviewLikes.append(review, likesDiv)
+
+                    reviewAll.append(reviewLikes, pseudoDate)
+                    reviewsDiv.append(reviewAll)
+                });
             }
         });
-        
-        // Actualiser les critiques après avoir soumis le commentaire
-        afficherCritiques();
-    });
-
-    // Appeler la fonction pour afficher les critiques lors du chargement de la page
+    }
     afficherCritiques();
 });
+
+//  ^ Check review liked - keep the style change on the icon
+// requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews
+$(document).ready(function () {
+
+  
+    var urlParams = new URLSearchParams(window.location.search);
+    var filmId = urlParams.get("id");
+    console.log("récup id url page", filmId)
     
+
+        $.ajax({
+            type : "POST",
+            url : "index.php?action=checkLikedReviews",
+            data: { film_id: filmId},
+
+            success: function (response) {
+              
+   
+                response.forEach(review => {
+                    var reviewId = review.id_rating;
+                    if (review.is_like == 1) {
+                        var likesCountElement = $(".fa-heart[data-id_review='" + reviewId + "']");
+                        likesCountElement.addClass("likedIcon");
+
+                    } else {
+                        var likesCountElement = $(".fa-heart[data-id_review='" + reviewId + "']");
+                        likesCountElement.removeClass("likedIcon");
+                    }
+    
+                    if (review.is_like == 0) {
+                        var likesCountElement = $(".fa-heart-crack[data-id_review='" + reviewId + "']");
+                        likesCountElement.addClass("dislikedIcon");
+                    } else {
+                        var likesCountElement = $(".fa-heart-crack[data-id_review='" + reviewId + "']");
+                        likesCountElement.removeClass("dislikedIcon");
+                    }
+                });
+            },
+            error : function(error) {
+                console.error ("Error when adding a like or a dislike : " + error);
+            }
+        });
+    
+
+    });
+
+
+
+
+// $(document).ready(function() {
+//     console.log("click");
+//     var movieId = $("#submitReview").data("movieid");
+//     console.log(movieId);
+
+//     // Ajouter un gestionnaire de soumission du formulaire
+//     $("#reviewForm").submit(function(event) {
+//         event.preventDefault();
+//         var $form = $(this);
+//         var reviewTitle = $form.find("input[name='review_title']").val();
+//         var reviewText = $form.find("textarea[name='review_text']").val();
+
+//         // Envoyez la requête AJAX pour obtenir le pseudo de l'utilisateur et la date depuis la base de données
+//         var url = "index.php?action=afficherCritiquesFilm&id=" + movieId;
+//         $.ajax({
+//             type: "GET",
+//             url: url,
+//             success: function(response) {
+//                 var reviewPseudo = response.pseudo;
+//                 var reviewDate = response.date;
+
+//                 // Affichez le commentaire avec le pseudo et la date directement
+//                 var reviewDiv = $("<div>");
+//                 var title = $("<p>").text("Title: " + reviewTitle);
+//                 var text = $("<p>").text("Text: " + reviewText);
+//                 var authorAndDate = $("<p>").text("Author: " + reviewPseudo + " - Date: " + reviewDate);
+
+//                 reviewDiv.append(title, text, authorAndDate);
+//                 $("#reviews-space").prepend(reviewDiv);
+
+//                 // Effacez le formulaire ou effectuez d'autres actions si nécessaire
+//                 $form[0].reset();
+//             }
+//         });
+        
+//         // Actualiser les critiques après avoir soumis le commentaire
+//         afficherCritiques();
+//     });
+
+//     // Appeler la fonction pour afficher les critiques lors du chargement de la page
+//     afficherCritiques();
+// });
+    
+// //  ^ Check likes/dislkes to display nb
+
+
+    // var containers = $(".likesDivCount");
+
+    // var urlParams = new URLSearchParams(window.location.search);
+    // var filmId = urlParams.get("id");
+    // console.log("récup id via url page", filmId)
+
+    // containers.each(function() {
+    //     console.log("test fonction")
+    //     var reviewId = $(this).attr("id");
+    //     console.log("ID de la revue : " + reviewId);
+    //     // Vous pouvez maintenant utiliser l'ID comme vous le souhaitez pour filtrer les données.
+        
+    //     $.ajax({
+    //     type: "POST",
+    //     url: "index.php?action=getReviewLikesDislikesCount",
+    //     data: { review_id: reviewId, film_id: filmId},
+    //     success: function(response) {
+    //         console.log("réponse nb likes" , response )
+    //         // Mise à jour de l'affichage des likes et dislikes sur la page
+    //         response.forEach(function(review) {
+    //             console.log("review" , review)
+    //             var reviewId = review.id_rating;
+    //             var likes = review.likes;
+    //             var dislikes = review.dislikes;
+      
+    //             // Mettre à jour l'affichage pour cette review en utilisant reviewId, likes et dislikes
+    //             $(".likes-count[data-id_review='" + reviewId + "']").text(likes);
+    //             $(".dislikes-count[data-id_review='" + reviewId + "']").text(dislikes);
+    //         });
+    //     }
+    // });
+    // });
+
