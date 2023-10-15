@@ -302,33 +302,6 @@ $(document).ready(function() {
 
 
 
-// ^ ADD a rating 
-$(document).ready(function() {
-    $("#submitForm").on("submit", function (event) {
-        event.preventDefault();
-
-
-        let movieRating = $form.find("input[name='user_rating']").val();
-
-        $.ajax({
-            type: "POST",
-            url : "index.php?action=addRating",
-            data : {
-                note : movieRating
-            },
-        success: function(response) {
-            if(response.success) {
-                $(".fa-solid.fa-x.fa-lg").addClass("rated"); 
-            }
-       
-        }
-        })
-        
-    })
-})
-
-
-
 //  ^ Check review liked - keep the style change on the icon
 // requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews
 $(document).ready(function () {
@@ -373,67 +346,116 @@ $(document).ready(function () {
 
 });
 
+//  ^ AJOUTER REVIEW
+$(document).ready(function() {
+    
+    $("#reviewForm").submit(function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        var movieId = $form.data("movieid");
+        var reviewTitle = $form.find("input[name='review_title']").val();
+        var reviewText = $form.find("textarea[name='review_text']").val();
 
+        console.log(reviewTitle)
+        console.log(reviewText)
 
-  // modèle  2
+    
+        $.ajax({
+            type: "POST",
+            url : "index.php?action=ajouterReview&id=" + movieId,
+            data: {
+                review_title: reviewTitle,
+                review_text: reviewText
+            },
+            
+            success: function(response) {
+                
+                console.log("Review response:", response);
+                if (response.success) {
+                    $("#reviewMessage").text(response.message);
+                    // afficherCritiques();
+                   
+                } else {
+                    $("#reviewMessage").text(response.message);
+                }
 
-//   $("#person_first_name, #person_last_name").on("input", function () {
-//     const firstName = $("#person_first_name").val();
-//     const lastName = $("#person_last_name").val();
+                // Clear the form or perform other necessary actions
+                // $("#reviewForm")[0].reset();
+            }
+        });
+    });
+});
 
-//     // Vérifier si les deux champs sont remplis
-//     if (firstName && lastName) {
-//         const actorName = { firstName, lastName };
+//  ^ DISPLAY REVIEW
+function afficherCritiques() {
+    console.log("afficherCritiques function is called");
+    var movieId = $("#submitReview").data("movieid");
+    var url = "index.php?action=afficherCritiquesFilm&id=" + movieId;
 
-//         $.ajax({
-//             type: "POST",
-//             url: "index.php?action=checkActor",
-//             data: actorName,
-//             success: function (response) {
-//                 // Le serveur devrait renvoyer une réponse JSON, par exemple :
-//                 // { exists: true } si l'acteur existe déjà
-//                 // { exists: false } si l'acteur n'existe pas encore
-//                 const result = JSON.parse(response);
-//                 if (result.exists) {
-//                     $("#actorMessage").text("Cet acteur existe déjà.");
-//                 } else {
-//                     $("#actorMessage").text("Cet acteur n'existe pas encore.");
-//                 }
-//             }
-//         });
-//     }
-// });
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        success: function(response) {
+            console.log(response);
+            var reviewsDiv = $("#reviews-space");
+            reviewsDiv.empty();
 
+            response.forEach(review => {
+                var reviewData = JSON.parse(review.reviewComplete);
 
-// modèle 
+                var reviewDiv = $("<div>");
+                var title = $("<p>").text("Title: " + reviewData.title);
+                var text = $("<p>").text("Text: " + reviewData.text);
+                var authorAndDate = $("<p>").text("Author: " + review.pseudo + " - Date: " + review.date_review);
 
-// $("#person_first_name, #person_last_name").on("input", function() {
-//     let firstName = $("#person_first_name").val();
-//     let lastName = $("#person_last_name").val();
+                reviewDiv.append(title, text, authorAndDate);
+                reviewsDiv.append(reviewDiv);
+            });
+        }
+    });
+}
 
-//     if (firstName && lastName) {
-//         // Les deux champs sont remplis, vous pouvez effectuer la vérification AJAX
-//         let actorName = firstName + " " + lastName;
-//         console.log("actor name", actorName);
+$(document).ready(function() {
+    console.log("click");
+    var movieId = $("#submitReview").data("movieid");
+    console.log(movieId);
 
-//         $.ajax({
-//             type: "POST",
-//             url: "index.php?action=checkActor",
-//             data: { actorName: actorName },
-//             success: function(response) {
-//                 $("#actorMessage").text(response);
-//             }
-//         });
-//     }
-// });
+    // Ajouter un gestionnaire de soumission du formulaire
+    $("#reviewForm").submit(function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        var reviewTitle = $form.find("input[name='review_title']").val();
+        var reviewText = $form.find("textarea[name='review_text']").val();
 
+        // Envoyez la requête AJAX pour obtenir le pseudo de l'utilisateur et la date depuis la base de données
+        var url = "index.php?action=afficherCritiquesFilm&id=" + movieId;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(response) {
+                var reviewPseudo = response.pseudo;
+                var reviewDate = response.date;
 
+                // Affichez le commentaire avec le pseudo et la date directement
+                var reviewDiv = $("<div>");
+                var title = $("<p>").text("Title: " + reviewTitle);
+                var text = $("<p>").text("Text: " + reviewText);
+                var authorAndDate = $("<p>").text("Author: " + reviewPseudo + " - Date: " + reviewDate);
 
+                reviewDiv.append(title, text, authorAndDate);
+                $("#reviews-space").prepend(reviewDiv);
 
+                // Effacez le formulaire ou effectuez d'autres actions si nécessaire
+                $form[0].reset();
+            }
+        });
+        
+        // Actualiser les critiques après avoir soumis le commentaire
+        afficherCritiques();
+    });
 
-
-
-
-
-
-
+    // Appeler la fonction pour afficher les critiques lors du chargement de la page
+    afficherCritiques();
+});
+    

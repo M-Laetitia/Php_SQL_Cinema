@@ -545,7 +545,7 @@ class MovieController {
                     $_SESSION["message"] = " Your rating has been successfully sent!";
                 } else {
                     $_SESSION["message"] = "an error has occurred; please send a rating between 1 and 5!";
-
+                    
                 }
             } else {
 
@@ -558,12 +558,13 @@ class MovieController {
     }
      
     // ^ Ajouter review (ajax)
-    public function ajouterReview() {
+    public function ajouterReview($id) {
         $userId = $_SESSION['user']['id_user'];
         $filmId = $_GET['id'];
-        
-    
-        if(isset($_POST["submitReview"])) {
+        // $response = ['success' => false, 'message' => ''];
+       
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            //id movie
             $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
            
@@ -609,18 +610,48 @@ class MovieController {
                     ]);
                 }
                 
-                $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
-
-                 echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
+                // $_SESSION["message"] = "Review successfully posted! Thanks for sharing!<i class='fa-solid fa-check'></i>";
+                // $response['success'] = true;
+                // $response['message'] = "Review successfully posted!";
+        
              } else {
-                 $_SESSION["message"] = "A problem has occurred. The review must be between 200 and 800 characters.";
-                
-             }
+                //  $_SESSION["message"] = "A problem has occurred. The review must be between 200 and 800 characters.";
+                //  $response['message'] = "A problem has occurred. The review must be between 200 and 800 characters.";
+                }
+
+                // Renvoyer une réponse JSON
+                header('Content-Type: application/json');
+                echo json_encode($response);
+            } else {
+                // Affichez votre page normale si la méthode n'est pas POST
+                require "view/movie/detailFilm.php";
+            }
         }
-    }
 
 
- 
+
+
+        // ^ Display review (ajax)
+        public function afficherCritiquesFilm($id) {
+
+            $pdo = Connect::seConnecter();
+            $requete = $pdo->prepare(
+                "SELECT rating.* , user.pseudo
+                FROM rating
+                INNER JOIN user ON user.id_user = rating.id_user
+             WHERE id_movie = :id 
+            ORDER BY date_review DESC");
+            $requete->execute(["id" => $id]);
+   
+            $reviews = $requete->fetchAll();
+
+            // Renvoyez la réponse JSON
+            header('Content-Type: application/json');
+            echo json_encode($reviews);
+                
+        }
+
+
     
     //  ^ Check likes/dislkes to display nb (ajax)
 
@@ -632,6 +663,8 @@ class MovieController {
 
         $requete= $pdo->prepare(
         "SELECT rating.id_rating, 
+
+        -- calcule le nombre de likes. Le CASE - expression conditionnelle qui vérifie si review_likes.is_like est égal à 1 (= un like) pour chaque ligne de la table. Si c'est le cas, il attribue la valeur 1, sinon il attribue la valeur 0.
         SUM(CASE WHEN review_likes.is_like = 1 THEN 1 ELSE 0 END) AS likes,
         SUM(CASE WHEN review_likes.is_like = 0 THEN 1 ELSE 0 END) AS dislikes
         FROM rating

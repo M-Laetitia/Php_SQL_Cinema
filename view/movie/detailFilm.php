@@ -64,7 +64,7 @@
         </div>
 
 
- 
+        <div id="reviews-space"></div>
 
         <div class="review">
 
@@ -122,85 +122,12 @@
 
             <!-- AFFICHAGE REVIEW --------------------------------------------->
             <div class="movie-review">
-            <?php if (empty($reviews)) { ?>
-                 <p>It's empty here! Be the first to share with us your review.</p>
-                 <?php } else { ?>
-                <?php foreach ($reviews as $review) { ?>
-                    <div id=<?= $review["id_rating"] ?> class="review-text">
 
-                        <div class="text">
-                            <p><span class="text-highlight">★</span> <?= $review["note"] ?>/5</p>
-
-                            <?php
-                                $reviewData = json_decode($review["reviewComplete"], true); // Décoder les données JSON en tant que tableau associatif
-                                if ($reviewData) {
-                                    ?>
-                                    <p><?= $reviewData["title"] ?></p>
-                                    <p><?= $reviewData["text"] ?></p>
-                                    <?php
-                                }
-                            ?>
-
-
-                        </div>
-
-                        <div class="likes">
-                            
-                        <?php if (isset($_SESSION["user"])) : ?>
-                            <!-- Afficher le formulaire de like uniquement si l'utilisateur est connecté -->
-                        
-                                <i data-id_review="<?=  $review['id_rating'] ?>" class="fa-solid fa-heart fa-heart-click"></i>
-                 
-                        <?php else : ?>
-                            <!-- Afficher une icône de like pour les utilisateurs non connectés -->
-                            <i  class="fa-solid fa-heart" style="cursor: default;"></i>
-                        <?php endif; ?>
-
-                        <div class="likes-count" data-id_review="<?=  $review['id_rating'] ?>"></div>
-                        
-       
-                        <?php if (isset($_SESSION["user"])) : ?>
-                            
-                                    <i data-id_review="<?=  $review['id_rating'] ?>" class="fa-solid fa-heart-crack"></i>
-             
-                        <?php else : ?>
-                            <!-- Afficher une icône de like pour les utilisateurs non connectés -->
-                            <i class="fa-solid fa-heart-crack" style="cursor: default;"></i>
-                        <?php endif; ?>
-                     
-                            <div class="dislikes-count" data-id_review="<?=  $review['id_rating'] ?>"></div>
-                            
-                        </div>
-
-                        <!-- Possibilité d'éditer/supprimer une review uniquement si user moderateur-->
-                        <?php 
-                        // mauvaise façon de vérifier la présence de la clé role et de sa valeur
-                        // if(isset($_SESSION["user"]['role'] === 'moderateur')) { 
-                        if (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur') {
-
-                            $userId = $_SESSION['user']['id_user'];
-                            // var_dump($review['id_rating']); die; ?>
-
-                        <div class="edit_delete">
-                            <div><a href="index.php?action=supprimerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-x"></i></a></div> 
-                            <div><a href="index.php?action=editerReview&id=<?=$review['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
-                        </div>
-                        <?php } else { ?>
-
-                            <div class="edit_delete" style="visibility: hidden;">
-                                 <div><i class="fa-solid fa-x"></i></div>
-                                 <div><i class="fa-solid fa-file-pen"></i></div>
-                             </div>
-                        <?php } ?>
-
-                    </div>
-                    
-                    <div class="info">
-                        <p><?= $review["pseudo"] ?> - <?= $review["formatted_date"]?></p>
-                    </div>
-                <?php } ?>
-                <?php } ?>
+            
+      
             </div>
+
+            <p id="reviewMessage" class="alertMessage"></p>
 
             <div class="addReview-popUp">
                 <div class="reviewplace">
@@ -211,7 +138,9 @@
                     
                     <div class="form">
 
-                        <form id="" enctype="multipart/form-data" action="index.php?action=ajouterReview&id=<?= $movie["id_movie"]?>" method="post">
+
+                        <form data-movieid="<?= $movie["id_movie"] ?>" id="reviewForm" enctype="multipart/form-data" action="index.php?action=ajouterReview&id=<?= $movie["id_movie"]?>" method="post">
+                        <label for="review_title"></label>
 
                             <label for="review_title"></label>
                             <input type="text" placeholder="Title" name="review_title" id="review_title" required>
@@ -220,16 +149,18 @@
                             <textarea placeholder="Tell us everything..." name="review_text" id="review_text"  required></textarea>
 
                             <div class="btn-submit">
-                                    <input type="submit" class="submit" name="submitReview" value="publish" >
+                            <input type="submit" class="submit" name="submitReview" value="publish" data-movieid="<?= $movie["id_movie"] ?>" id="submitReview">
                             </div>
 
-                            <?php
+                          
+
+                        </form>
+
+                          <!-- <?php
                             if (isset($_SESSION["message"])) {
                                 echo "<p>" . $_SESSION["message"] . "</p>";
                                 unset($_SESSION["message"]); // Supprimer le message de la session
-                            }?>
-
-                        </form>
+                            }?> -->
 
                         
                     </div>

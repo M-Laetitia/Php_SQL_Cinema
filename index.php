@@ -48,15 +48,16 @@ if(isset($_GET["action"])) {
         case "themePreference" : $ctrlUser->themePreference(); break;
         case "listeFilmNote" : $ctrlUser->listeFilmNote(); break;
         
-        case "addDislike" : $ctrlUser->addDislike($id); break;
+       
         case "editerReviewUser" : $ctrlUser->editerReviewUser($id); break;
 
         // ^ (ajax)
         case "addLike" : $ctrlUser->addLike(); break;
+        case "addDislike" : $ctrlUser->addDislike(); break;
         case "checkRegister" : $ctrlUser->checkRegister(); break;
         case "checkLikedReviews" : $ctrlUser->checkLikedReviews(); break;
         
-        
+         
         // MODO
         case "editerReview" : $ctrlUser->editerReview($id); break;
         case "supprimerReview" : $ctrlUser->supprimerReview($id); break;
@@ -75,11 +76,14 @@ if(isset($_GET["action"])) {
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
         case "addRating" : $ctrlMovie->addRating($id); break;
         case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
-        case "ajouterReview" : $ctrlMovie->ajouterReview($id); break;
+        
         case "listReview" : $ctrlMovie->listReview($id); break;
 
         // ^ (ajax)
         case "checkMovie" : $ctrlMovie->checkMovie(); break;
+        case "getReviewLikesDislikesCount" : $ctrlMovie->getReviewLikesDislikesCount(); break;
+        case "afficherCritiquesFilm" : $ctrlMovie->afficherCritiquesFilm($id); break;
+        case "ajouterReview" : $ctrlMovie->ajouterReview($id); break;
       
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
@@ -110,7 +114,7 @@ if(isset($_GET["action"])) {
         case "ajouterGenre" : $ctrlGenre->ajouterGenre(); break;
         case "supprimerGenre" : $ctrlGenre->supprimerGenre($id); break;
         case "getAjouterGenre" : $ctrlGenre->getAjouterGenre(); break;
-        case "updateGenre" : $ctrlGenre->updateGenre($id); break;
+        case "updateGenre" : $ctrlGenre->updateGenre(); break;
         // ^ (ajax)
         case "checkGenre" : $ctrlGenre->checkGenre(); break;
         
