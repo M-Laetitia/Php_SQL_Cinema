@@ -251,6 +251,7 @@ $(document).on("click", ".fa-solid.fa-heart-crack", function() {
 
 //  ^ AJOUTER REVIEW
 $(document).ready(function() {
+    // afficherCritiques();
     
     $("#reviewForm").submit(function(event) {
         event.preventDefault();
@@ -273,60 +274,31 @@ $(document).ready(function() {
             
             success: function(response) {
                 
-                console.log("Review response:", response);
+                console.log("Review2 response:", response);
                 if (response.success) {
                     $("#reviewMessage").text(response.message);
-                    // afficherCritiques();
+
+                    afficherCritiques();
                    
                 } else {
                     $("#reviewMessage").text(response.message);
+                    
                 }
 
-                // Clear the form or perform other necessary actions
-                // $("#reviewForm")[0].reset();
             }
         });
+ 
     });
+    afficherCritiques();
 });
 
 
-//  ^ AJOUTER RATING (ajax)
+
+
+//  ^ MOVIE RATING (ajax)
 $(document).ready(function() {
-    
-    $("#rating-form").submit(function(event) {
-        event.preventDefault();
-        var $form = $(this);
-        var movieId = $form.data("movieid");
-        var userRating = $form.find("input[name='user_rating']").val();
-        console.log(userRating)
-
-    
-        $.ajax({
-            type: "POST",
-            url : "index.php?action=addRating&id=" + movieId,
-            data: { user_rating: userRating },
-            
-            success: function(response) {
-
-                // console.log("Review response:", response);
-                if (response.success) {
-                    $("#reviewMessage").text(response.message);
-                    // afficherCritiques();
-                   
-                } else {
-                    $("#reviewMessage").text(response.message);
-                }
-
-                // Clear the form or perform other necessary actions
-                // $("#reviewForm")[0].reset();
-            }
-        });
-    });
-});
 
 
-//  ^ DISPLAY RATING (ajax)
-$(document).ready(function() {
     // Fonction pour mettre à jour la moyenne des notes
     function updateAverageRating() {
         var urlParams = new URLSearchParams(window.location.search);
@@ -362,14 +334,6 @@ $(document).ready(function() {
             }
         });
     }
-
-    updateAverageRating();
-
-});
-
-//  ^ DISPLAY RATE NB (ajax)
-$(document).ready(function() {
-
     function getNumberRating() {
         var urlParams = new URLSearchParams(window.location.search);
         var filmId = urlParams.get("id");
@@ -393,13 +357,38 @@ $(document).ready(function() {
         });
     }
 
-    getNumberRating();
+    $("#rating-form").submit(function(event) {
+        event.preventDefault();
+        var $form = $(this);
+        var movieId = $form.data("movieid");
+        var userRating = $form.find("input[name='user_rating']").val();
+        console.log(userRating)
+    
+        $.ajax({
+            type: "POST",
+            url : "index.php?action=addRating&id=" + movieId,
+            data: { user_rating: userRating },
+            
+            success: function(response) {
 
+                if (response.success) {
+                    $("#reviewMessage").text(response.message);
+                   
+                } else {
+                    $("#reviewMessage").text(response.message);
+                }
+            }
+        });
+    });
+
+    updateAverageRating();
+    getNumberRating()
 });
 
 
+
 //  ^ DISPLAY REVIEW
-$(document).ready(function() { 
+
     function afficherCritiques() {
         // console.log("afficherCritiques function is called");
         var movieId = $("#submitReview").data("movieid");
@@ -479,8 +468,8 @@ $(document).ready(function() {
             }
         });
     }
-    afficherCritiques();
-});
+   
+
 
 //  ^ Check review liked - keep the style change on the icon
 // requête pour récupérer les likes/dislikes d'un utilisateur actuel pour les reviews

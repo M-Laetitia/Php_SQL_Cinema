@@ -70,20 +70,12 @@
 
             <div class="rate-average">
                 <div class="rate">
-                    <p style="margin-right:0.3rem" >Ratings  (<?= $nombreNotes["nb_note"] ?>) :  </p>
 
-                    <div>
-                        <?php
-                            $note =$notes["noteMoyenne"]; 
-                            for ($i = 1; $i <= 5; $i++) {
-                                if ($i <= $note) {
-                                    echo '<i class="fa-solid fa-star fa-lg star_filled"></i>'; 
-                                } else {
-                                    echo '<i class="far fa-star fa-lg star_empty"></i>'; 
-                                }
-                            }
-                        ?>
-                    </div>
+                    <p id="ratingNumber" style="margin-right:0.3rem" ></p>
+                    
+                    <div class="average-rating"></div>
+
+             
 
                 </div>
 
@@ -121,13 +113,14 @@
 
 
             <!-- AFFICHAGE REVIEW --------------------------------------------->
-            <div class="movie-review">
-
             
-      
+            
+            
+            <div class="movie-review">
+            
             </div>
 
-            <p id="reviewMessage" class="alertMessage"></p>
+            <!-- <p id="reviewMessage" class="alertMessage"></p> -->
 
             <div class="addReview-popUp">
                 <div class="reviewplace">
@@ -176,7 +169,7 @@
                     
                     <div class="form">
                         <div class="popUpRating" >
-                            <form id="rating-form" action="index.php?action=addRating&id=<?=$movie["id_movie"]?>" enctype="multipart/form-data" method="POST">
+                            <form id="rating-form" data-movieid="<?= $movie["id_movie"] ?>">
 
                                                    
                             <div>
@@ -184,10 +177,9 @@
                             </div>
 
                             <div class="btn-submit">
-                                <button  id="submitForm" type="submit">RATE</button>
+                                <button  name="submitForm"  data-movieid="<?= $movie["id_movie"] ?>" id="submitForm" type="submit">RATE</button>
                             </div>
-                    
-
+                      
                             </form>
 
                             <div>
@@ -227,19 +219,19 @@
 
 
 <script>
-    //displaying review popUp
-    const displayReviewBtn = document.getElementById('reviews-btn')
-    const reviewList = document.querySelector('.movie-review')
-    // console.log(reviewList);
-    displayReviewBtn.addEventListener('click', () => {
-    if (reviewList.style.display === 'none' || reviewList.style.display === '') {
-        displayReviewBtn.textContent = '▲';
-        reviewList.style.display = 'block'
-    }else {
-        displayReviewBtn.textContent = '▼';
-        reviewList.style.display = 'none'
-    }
-    });
+    // //displaying review popUp
+    // const displayReviewBtn = document.getElementById('reviews-btn')
+    // const reviewList = document.querySelector('.movie-review')
+    // // console.log(reviewList);
+    // displayReviewBtn.addEventListener('click', () => {
+    // if (reviewList.style.display === 'none' || reviewList.style.display === '') {
+    //     displayReviewBtn.textContent = '▲';
+    //     reviewList.style.display = 'block'
+    // }else {
+    //     displayReviewBtn.textContent = '▼';
+    //     reviewList.style.display = 'none'
+    // }
+    // });
 
     // add review popUp
     const addReview_btn = document.getElementById('add-review-btn')
