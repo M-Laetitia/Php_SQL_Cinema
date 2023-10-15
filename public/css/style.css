@@ -198,6 +198,11 @@ main.custom-background::before {
     color : red;
 }
 
+.fa-solid.fa-star.fa-lg.star-filled{
+    color: var(--clr-pink) !important;
+}
+
+
 /* ~ & message avertissement ---------- */
 
 .messages_neutral p {

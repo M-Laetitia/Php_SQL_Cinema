@@ -117,34 +117,34 @@ function scrollToTop() {
   };
   
   //^ pop-up to add a rating
-  const ratingBtn = document.getElementById('add-rating-button')
-  const popUpDiv= document.querySelector('.popUpRating');
+//   const ratingBtn = document.getElementById('add-rating-button')
+//   const popUpDiv= document.querySelector('.popUpRating');
 
-  if (ratingBtn ){ 
-  ratingBtn.addEventListener('click', (e) => {
-      e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
-      popUpDiv.style.display = 'block';
-    })
-  }
+//   if (ratingBtn ){ 
+//   ratingBtn.addEventListener('click', (e) => {
+//       e.preventDefault();// Pour éviter que le lien ou le bouton ne provoque une action par défaut.
+//       popUpDiv.style.display = 'block';
+//     })
+//   }
   
-  const ratingForm = document.getElementById('rating-form');
+//   const ratingForm = document.getElementById('rating-form');
 
-  if (ratingForm) {
-    ratingForm.addEventListener('submit', (e) => {
-    popUpDiv.style.display = 'none';
-    });
+//   if (ratingForm) {
+//     ratingForm.addEventListener('submit', (e) => {
+//     popUpDiv.style.display = 'none';
+//     });
 
-  const closePopUp = document.getElementById('closePopUp')
-    closePopUp.addEventListener("mouseover", (e) => {
-    e.preventDefault();
-    closePopUp.style.cursor = "pointer";
-    });
+//   const closePopUp = document.getElementById('closePopUp')
+//     closePopUp.addEventListener("mouseover", (e) => {
+//     e.preventDefault();
+//     closePopUp.style.cursor = "pointer";
+//     });
 
-    closePopUp.addEventListener('click', (e) => {
-    e.preventDefault();
-    popUpDiv.style.display = 'none';
-    }) 
-}
+//     closePopUp.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     popUpDiv.style.display = 'none';
+//     }) 
+// }
 
 // ^ Jquery / Ajax queries
 

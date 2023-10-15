@@ -630,9 +630,9 @@ textarea::-webkit-scrollbar-thumb {
    
 }
 
-.movie-review {
+/* .movie-review {
     display: none;
-}
+} */
 
 
 .container_movie .review-text {
@@ -755,9 +755,9 @@ textarea::-webkit-scrollbar-thumb {
     color : var(--clr-pink);
 } */
 
-.likes .fa-heart-crack{
+/* .likes .fa-heart-crack{
     color : var(--clr-orange);
-}
+} */
 
 
 .fa-heart-click:hover {
