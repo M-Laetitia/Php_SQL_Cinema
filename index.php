@@ -75,7 +75,7 @@ if(isset($_GET["action"])) {
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
         case "addRating" : $ctrlMovie->addRating($id); break;
-        case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
+        // case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
         
         case "listReview" : $ctrlMovie->listReview($id); break;
 
@@ -84,6 +84,10 @@ if(isset($_GET["action"])) {
         case "getReviewLikesDislikesCount" : $ctrlMovie->getReviewLikesDislikesCount(); break;
         case "afficherCritiquesFilm" : $ctrlMovie->afficherCritiquesFilm($id); break;
         case "ajouterReview" : $ctrlMovie->ajouterReview($id); break;
+        case "addRating" : $ctrlMovie->addRating($id); break;
+        
+        case "getNumberRating" : $ctrlMovie->getNumberRating($id); break;
+        case "getAverageRating" : $ctrlMovie->getAverageRating($id); break;
       
 
         case "landingPage" : $ctrlMovie->landingPage(); break;
