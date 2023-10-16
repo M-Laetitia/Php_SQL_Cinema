@@ -25,6 +25,6 @@ Form page :
 -page pour soumettre acteur, réal, rôle, genre?
 
 
-{"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae tempus quam pellentesque nec nam aliquam. Eget arcu dictum varius duis at consectetur. Massa ultricies mi quis hendrerit dolor magna. Id diam maecenas ultricies mi eget mauris pharetra et.", "title": "Some title or whatever"}
+{"text": "A science-fiction masterpiece. Nolan executes a marvelous direction that slowly but efficiently puts in place a dark world creating a necessity to save humanity. Add to that great performances from Nolan and Hathaway plus a great score from Hans Zimmer. The result is on the best science-fiction movies of all time.", "title": "Masterpiece"}
 
 
