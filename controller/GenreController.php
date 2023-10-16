@@ -62,11 +62,10 @@ class GenreController {
                 // header("Location: index.php?action=listGenres");  
             }
         }
-    require "view/genre/ajouterGenre.php";
+        require "view/genre/ajouterGenre.php";
     }
 
     // ^ Check genre (ajax)
-
     public function checkGenre() {
         $pdo = Connect::SeConnecter ();
 
@@ -87,10 +86,7 @@ class GenreController {
                 echo "";
             }
         }
-
     }
-
-    
 
     // ^ Supprimer genre
     public function supprimerGenre($id) {
@@ -103,33 +99,29 @@ class GenreController {
         }
         $_SESSION["message"] = " This genre has been deleted ! <i class='fa-solid fa-check'></i> ";
         echo "<script>setTimeout(\"location.href = 'index.php?action=listGenres';\",1500);</script>";
-
         // header("Location: index.php?action=listGenres");
     }
 
     // ^ update genre
     public function updateGenre($id) {
         $pdo = Connect::seConnecter();
-        // récupérer les données du genre à mettre à jour si besoin d'afficher les informations actuelles du genre dans le formulaire de mise à jour, pour que l'utilisateur puisse voir les données existantes avant de les modifier.
+        // récupérer les données du genre à mettre à jour pour afficher les informations actuelles du genre dans le formulaire de mise à jour, pour que l'utilisateur puisse voir les données existantes avant de les modifier.
         $requeteGenre = $pdo->prepare("SELECT id_genre, label_genre FROM genre WHERE id_genre = :id"); 
         $requeteGenre->execute(["id"=>$id]);
 
         if(isset($_POST['updateGenre'])) {
-            // Récupérez les données du formulaire
+
             $label_genre = filter_input(INPUT_POST, "label_genre", FILTER_SANITIZE_SPECIAL_CHARS);
             // vérifier si la variable $label_genre n'est pas évaluée comme étant false ou nulle. L'utilisation de if($label_genre) sans vérification supplémentaire pourrait poser des problèmes:  si le champ de saisie du nom de genre dans le formulaire est laissé vide, $label_genre serait une chaîne vide (""). Une chaîne vide est évaluée comme true dans un contexte booléen, ce qui signifie que la condition if($label_genre) serait vraie même si le champ est vide.
                 if($label_genre !== false) {
                 $pdo = Connect::seConnecter(); 
-                    // Préparez la requête de mise à jour
                     $requeteUpdateGenre = $pdo->prepare("UPDATE genre SET label_genre = :label_genre WHERE id_genre = :id");
-                    // Exécutez la mise à jour en liant les paramètres
                     $requeteUpdateGenre->execute([
                     "label_genre" => $label_genre,
                     "id" => $id]);
             
             $_SESSION["message"] = " This genre has been updated! <i class='fa-solid fa-check'></i> ";
             echo "<script>setTimeout(\"location.href = 'index.php?action=listGenres';\",1500);</script>";
-            // header("Location: index.php?action=listGenres");
             }
         }
     require "view/genre/updateGenre.php" ;

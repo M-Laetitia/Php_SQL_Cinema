@@ -1,5 +1,4 @@
 <?php ob_start();
-
 $genre = $requeteGenre->fetch();?>
 
 <div class="container container-genre">
@@ -9,8 +8,6 @@ $genre = $requeteGenre->fetch();?>
         <div><i id="confirmationBox" class="fa-solid fa-x"></i></a></div>
         <div><a href="index.php?action=updateGenre&id=<?=$genre["id_genre"]?>"><i class="fa-solid fa-file-pen"></i></a></div>
     </div>
-
-    
 
     <div id="deleteConfirmationGenre">
         <p>Are you sure to want to delete this genre? This action can't be undone.</p>   
@@ -26,11 +23,9 @@ $genre = $requeteGenre->fetch();?>
                 <div class="poster">
                     <?php
                     if($genre["movie_image"] == NULL){
-                        // echo '<img src="./public/Images/default_movie.jpg" alt="black and white film stock">';
                         echo '<a href="index.php?action=detailFilm&id=' . $genre["id_movie"] . '"><img src="./public/Images/default_movie.jpg" alt="black and white film stock"></a>';
                     }
                     else{
-                    // echo "<img src=". $genre["movie_image"] .">";
                     echo '<a href="index.php?action=detailFilm&id=' . $genre["id_movie"] . '"><img src="' . $genre["movie_image"] . '"  alt= "' . $genre["movie_alt_desc"] . '"  ></a>';
                     }
                     ?> 
@@ -44,7 +39,6 @@ $genre = $requeteGenre->fetch();?>
         <?php } ?>
 
         <div class="messages_neutral">
-          
             <?php
                 if (isset($_SESSION["message"])) {
                     echo "<p>" . $_SESSION["message"] . "</p>";
@@ -72,7 +66,6 @@ $genre = $requeteGenre->fetch();?>
     });
 
 </script>
-
 
 <?php
 $titre = $genre["label_genre"] .  " movies list";

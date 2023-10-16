@@ -1,10 +1,3 @@
-<style>
-#review {
-    border : 1px solid grey;
-}
-
-</style>
-
 <?php ob_start(); 
 $review = $requeteReviewUser ->fetch();
 $reviewComplete = json_decode($review['reviewComplete'], true);
@@ -13,7 +6,6 @@ $review_text = $reviewComplete['text'];
 ?>
 
 <h1 class="title_ref"> Edit review</h1>
-
 
 <div class="list edit-review-page">
     <p></p>
@@ -45,15 +37,10 @@ $review_text = $reviewComplete['text'];
     </div>
 </div>
    
-
-
-
 <?php
-
 $titre = "Add review";
 $meta_description = "";
 $contenu = ob_get_clean();
 require "view/template.php";
-
 ?>
 

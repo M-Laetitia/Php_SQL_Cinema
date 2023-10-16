@@ -1,13 +1,8 @@
 <?php ob_start(); 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 ?>
 
-
 <div class="container-list">
-    
     <div class="list list-search">
-        
 
         <?php if (empty($results['films']) && empty($results['acteurs']) && empty($results['realisateurs']) && empty($results['genres']) && empty($results['roles'])) { ?>
             <p>No result found. </p>
@@ -114,20 +109,9 @@ ini_set('display_errors', 1);
                         </div>
                 </div>
             <?php } ?>
-
-
-
-
         <?php } ?>
-
-
-        
     </div>
-
 </div>
-
-<!-- <h3>Résultats de la recherche :</h3> -->
-
 
 
 <?php

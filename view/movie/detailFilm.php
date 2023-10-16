@@ -232,18 +232,18 @@
 
 <script>
     // //displaying review popUp
-    // const displayReviewBtn = document.getElementById('reviews-btn')
-    // const reviewList = document.querySelector('.movie-review')
-    // // console.log(reviewList);
-    // displayReviewBtn.addEventListener('click', () => {
-    // if (reviewList.style.display === 'none' || reviewList.style.display === '') {
-    //     displayReviewBtn.textContent = '▲';
-    //     reviewList.style.display = 'block'
-    // }else {
-    //     displayReviewBtn.textContent = '▼';
-    //     reviewList.style.display = 'none'
-    // }
-    // });
+    const displayReviewBtn = document.getElementById('reviews-btn')
+    const reviewList = document.querySelector('.movie-review')
+    // console.log(reviewList);
+    displayReviewBtn.addEventListener('click', () => {
+    if (reviewList.style.display === 'none' || reviewList.style.display === '') {
+        displayReviewBtn.textContent = '▲';
+        reviewList.style.display = 'block'
+    }else {
+        displayReviewBtn.textContent = '▼';
+        reviewList.style.display = 'none'
+    }
+    });
 
     // add review popUp
     const addReview_btn = document.getElementById('add-review-btn')

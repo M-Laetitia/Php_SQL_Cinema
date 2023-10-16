@@ -1,6 +1,5 @@
 <?php
 // On remarquera ici l'utilisation du "use" pour accéder à la classe Connect située dans le
-// namespace "Model"
 namespace Controller;
 use Model\Connect;
 
@@ -11,7 +10,6 @@ error_reporting(E_ALL);
 ini_set('file_uploads', 'On');
 
 class MovieController {
-
     // ^ landing page 
     public function landingPage(){
         require "view/landingPage/landingPage.php";
@@ -45,7 +43,6 @@ class MovieController {
 
     // ^ Détail d'un film
     public function detailFilm($id){
-        
         $pdo = Connect::seConnecter();
         $requetedetailFilm = $pdo->prepare("
         SELECT movie.id_movie, categorise.id_movie,  movie.movie_title, CONCAT(person.person_first_name, ' ', person.person_last_name) AS realisateurComplete, DATE_FORMAT(movie.movie_duration, '%H:%i') AS formatted_duration,
@@ -80,26 +77,20 @@ class MovieController {
         WHERE movie.id_movie = :id
         ");
         $requeteCastingFilm->execute(["id" => $id]);
-        
-        
-
        
-
         $requeteBackground = $pdo->prepare("SELECT  movie.movie_background
         FROM movie WHERE movie.id_movie = :id"
         );
         $requeteBackground->execute(["id" => $id]);
         $backgroundData = $requeteBackground->fetch();
         $filmBackgroundPath = $backgroundData['movie_background'];
-        // var_dump($filmBackgroundPath); die; 
         $backgroundDataForJS = [
             'backgroundPath' => $filmBackgroundPath, // Chemin de l'image de fond 
         ];
         $backgroundDataJSON = json_encode($backgroundDataForJS);
-        // var_dump($backgroundDataJSON);die;
+
 
         $filmId = $_GET['id'];
-    
         $requeteReview = $pdo->prepare("SELECT 
         rating.reviewComplete, DATE_FORMAT(rating.date_review, '%d-%m-%Y %H:%i') AS formatted_date, user.pseudo, rating.note, rating.id_rating,
         likes.likes_count AS nb_likes,
@@ -128,7 +119,6 @@ class MovieController {
         $requeteReview->execute(["filmId" => $filmId]);
         $reviews = $requeteReview->fetchAll();
         
-
         $requeteNbReview = $pdo->prepare("SELECT COUNT(rating.reviewComplete) AS nb_review
         FROM rating
         INNER JOIN movie ON movie.id_movie = rating.id_movie
@@ -158,10 +148,8 @@ class MovieController {
         $pdo = Connect::seConnecter();
         if(isset($_POST["submitFilm"])) {
 
-            $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
-            //rajouter iMAGE
-            if(isset($_FILES["movie_image"])){  // name de l'input dans le formulaire de l'ajout du film
-                // voir upload-img_php pour détail du process
+            $movieImageChemin = NULL; 
+            if(isset($_FILES["movie_image"])){ 
                 $tmpName = $_FILES["movie_image"]["tmp_name"];
                 $name = $_FILES["movie_image"]["name"];
                 $size = $_FILES["movie_image"]["size"];
@@ -169,7 +157,7 @@ class MovieController {
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880; // 5 Mo (en octets)
+                $tailleMax = 5242880;
             
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
@@ -178,7 +166,7 @@ class MovieController {
                 } elseif ($size > $tailleMax) {
                     echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
                 } else {
-                    // L'image est valide, on procède au traitement
+                  
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
@@ -186,12 +174,11 @@ class MovieController {
                 }
 
                 } else {
-                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
                 }
 
-            //rajouter background
-            $movieBackgroundChemin = NULL; // Définir la variable avec une valeur par défaut 
+            
+            $movieBackgroundChemin = NULL;
             if(isset($_FILES["movie_background"])){  
                 $tmpName = $_FILES["movie_background"]["tmp_name"];
                 $name = $_FILES["movie_background"]["name"];
@@ -200,7 +187,7 @@ class MovieController {
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880; // 5 Mo (en octets)
+                $tailleMax = 5242880; 
             
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
@@ -209,7 +196,6 @@ class MovieController {
                 } elseif ($size > $tailleMax) {
                     echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
                 } else {
-                    // L'image est valide, on procède au traitement
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
@@ -217,7 +203,6 @@ class MovieController {
                 }
 
                 } else {
-                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieBackgroundChemin = NULL;
                 }
 
@@ -279,7 +264,6 @@ class MovieController {
                 $_SESSION["message"] = " This movie has been added! <i class='fa-solid fa-check'></i> ";
                  echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>"; 
 
-                // header("Location: index.php?action=listFilms");
             } else {
                 $_SESSION["message"] = " An error has occured, please check you fill out all the required fields !";
             }
@@ -287,7 +271,6 @@ class MovieController {
     }
 
     // ^ Check Movie title (ajax)
-
     public function checkMovie() {
         $pdo = Connect::SeConnecter ();
 
@@ -308,7 +291,6 @@ class MovieController {
                 echo "";
             }
         }
-
     }
 
     // ^ Aller à la page d'ajout de casting
@@ -323,7 +305,6 @@ class MovieController {
         FROM role");
         require "view/movie/ajouterCasting.php";
     }
-
 
     // ^ Ajouter casting
     public function ajouterCasting() {
@@ -351,7 +332,6 @@ class MovieController {
 
                 $_SESSION["message"] = " This casting has been added! <i class='fa-solid fa-check'></i> ";
                  echo "<script>setTimeout(\"location.href = 'index.php?action=listRoles';\",1500);</script>"; 
-                // header("Location: index.php?action=listRoles");
             } else {
                 $_SESSION["message"] = "Please, select a Movie, a Role and an Actor before submitting the form";
             }
@@ -371,7 +351,6 @@ class MovieController {
             $requeteSupprimerFilm->execute(["id" => $id]);
         }
         header("Location: index.php?action=listFilms");
-        // require "view/movie/detailFilm.php";
     }
 
     // ^ Update un film 
@@ -421,9 +400,7 @@ class MovieController {
                     $movieImageChemin = NULL;
                 }
 
-            //rajouter background
-            if(isset($_FILES["movie_background"])){  // name de l'input dans le formulaire de l'ajout du film
-                // voir upload-img_php pour détail du process
+            if(isset($_FILES["movie_background"])){ 
                 $tmpName = $_FILES["movie_background"]["tmp_name"];
                 $name = $_FILES["movie_background"]["name"];
                 $size = $_FILES["movie_background"]["size"];
@@ -431,7 +408,7 @@ class MovieController {
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880; // 5 Mo (en octets)
+                $tailleMax = 5242880; 
             
                 if ($error != 0) {
                     echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
@@ -440,7 +417,6 @@ class MovieController {
                 } elseif ($size > $tailleMax) {
                     echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
                 } else {
-                    // L'image est valide, on procède au traitement
                     $uniqueName = uniqid('', true);
                     $FileNameUnique = $uniqueName. '.' .$extension;
                     move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
@@ -448,7 +424,6 @@ class MovieController {
                 }
 
                 } else {
-                    /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieBackgroundChemin = NULL;
                 }
 
@@ -461,7 +436,6 @@ class MovieController {
             $movie_country = filter_input(INPUT_POST, "movie_country", FILTER_SANITIZE_SPECIAL_CHARS);
 
             if($movie_title  && $movie_duration  && $movie_release_date  && strlen($movie_release_date) === 4 && $movie_rating && $director  && $movie_country &&  $movie_synopsys ) {
-                // var_dump("ok"); die;
                 //Update Film
                 $reqUpdateFilm = $pdo->prepare("UPDATE movie SET movie_title = :movie_title, movie_release_date = :movie_release_date, movie_duration = :movie_duration, movie_synopsys = :movie_synopsys, movie_rating = :movie_rating, movie_country = :movie_country, movie_image = :movieImageChemin, id_director = :director, movie_background = :movieBackgroundChemin WHERE id_movie= :id");
                 $reqUpdateFilm->execute([
@@ -482,7 +456,6 @@ class MovieController {
                 
                 //Update genre
                 $NewSelectedGenres = $_POST["genre"];
-                // var_dump($_POST);die;
                 foreach ($NewSelectedGenres as $genre) {
                     $requeteUpdateGenre = $pdo->prepare("INSERT INTO categorise (id_movie, id_genre) VALUES (:id_movie, :id_genre)");
                     $requeteUpdateGenre->execute(["id_movie" => $id, "id_genre" => $genre]);
@@ -493,7 +466,6 @@ class MovieController {
             } else {
                 $_SESSION["message"] = " an error has occurred; please make sure you have filled in all required fields";
             }
-            // header("Location: index.php?action=listFilms");
         }
         require("view/movie/updateFilm.php");
     }
@@ -504,7 +476,6 @@ class MovieController {
         $filmId = $_GET['id'];
         $response = ['success' => false, 'message' => ''];
         
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $user_rating = filter_input(INPUT_POST, "user_rating", FILTER_SANITIZE_NUMBER_INT);
 
@@ -538,14 +509,10 @@ class MovieController {
                 } else {
                     // $_SESSION["message"] = "an error has occurred; please send a rating between 1 and 5!";
                     $response["message"] = "An error has occurred; please send a rating between 1 and 5!";
-                }
-                // header('Content-Type: application/json');
-                // echo json_encode($response);
-                $response["message"] = "Film ID missing in URL";
-           
-
-                header('Content-Type: application/json');
-                echo json_encode($response);
+            }
+            $response["message"] = "Film ID missing in URL";
+            header('Content-Type: application/json');
+            echo json_encode($response);
         }
     }
 
@@ -557,16 +524,13 @@ class MovieController {
         INNER JOIN rating ON rating.id_movie = movie.id_movie
         WHERE movie.id_movie = :id");
         $requeteNoteMoyenne->execute(["id" => $id]);
-
         $result = $requeteNoteMoyenne->fetch();
 
         header("Content-Type: application/json");
         echo json_encode($result);
-
     }
 
             
-     
     // ^ Ajouter review (ajax)
     public function ajouterReview($id) {
         $userId = $_SESSION['user']['id_user'];
@@ -574,11 +538,9 @@ class MovieController {
         $response = ['success' => false, 'message' => ''];
        
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-            //id movie
             $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
            
-    
             // $pattern = '/^.{200,800}$/';
             if ($review_title && $review_text) {
                 $pdo = Connect::seConnecter();
@@ -592,8 +554,7 @@ class MovieController {
                 ]);
     
                 $resultatExisteReview = $requeteExisteReview->fetch();
-
-                 // Enregistrez la review au format JSON
+                // Enregistrez la review au format JSON
                 $reviewComplete = [
                     "title" => $review_title,
                     "text" => $review_text
@@ -638,65 +599,54 @@ class MovieController {
             }
         }
 
+    // ^ Display review (ajax)
+    public function afficherCritiquesFilm($id) {
 
+        $pdo = Connect::seConnecter();
+        $requete = $pdo->prepare(
+        "SELECT
+        rating.*,
+        user.pseudo,
+        DATE_FORMAT(rating.date_review, '%D %M %Y %H:%i') AS formatted_duration,
+        SUM(CASE WHEN review_likes.is_like = 1 THEN 1 ELSE 0 END) AS nb_likes,
+        SUM(CASE WHEN review_likes.is_like = 0 THEN 1 ELSE 0 END) AS nb_dislikes
+        FROM rating
+        INNER JOIN user ON user.id_user = rating.id_user
+        LEFT JOIN review_likes ON review_likes.id_rating = rating.id_rating
+        WHERE id_movie = :id 
+        GROUP BY rating.id_rating, user.pseudo, formatted_duration
+        ORDER BY rating.date_review DESC");
+        $requete->execute(["id" => $id]);
 
-        // ^ Display review (ajax)
-        public function afficherCritiquesFilm($id) {
+        $reviews = $requete->fetchAll();
+        // Renvoyez la réponse JSON
+        header('Content-Type: application/json');
+        echo json_encode($reviews);
+    }
 
-            $pdo = Connect::seConnecter();
-            $requete = $pdo->prepare(
-                "SELECT
-                rating.*,
-                user.pseudo,
-                DATE_FORMAT(rating.date_review, '%D %M %Y %H:%i') AS formatted_duration,
-                SUM(CASE WHEN review_likes.is_like = 1 THEN 1 ELSE 0 END) AS nb_likes,
-                SUM(CASE WHEN review_likes.is_like = 0 THEN 1 ELSE 0 END) AS nb_dislikes
-            FROM rating
-            INNER JOIN user ON user.id_user = rating.id_user
-            LEFT JOIN review_likes ON review_likes.id_rating = rating.id_rating
-            WHERE id_movie = :id 
-            GROUP BY rating.id_rating, user.pseudo, formatted_duration
-            ORDER BY rating.date_review DESC");
-            $requete->execute(["id" => $id]);
-   
-            $reviews = $requete->fetchAll();
-
-            // Renvoyez la réponse JSON
-            header('Content-Type: application/json');
-            echo json_encode($reviews);
-                
-        }
-
-     //  ^ display nb of review (ajax)
-
-     public function getNumberRating($id) {
+    //  ^ display nb of review (ajax)
+    public function getNumberRating($id) {
         $pdo = Connect::seConnecter(); 
-         $requeteNombreNote = $pdo->prepare("SELECT COUNT(rating.note) AS nb_note
+        $requeteNombreNote = $pdo->prepare("SELECT COUNT(rating.note) AS nb_note
         FROM rating
         INNER JOIN movie ON movie.id_movie = rating.id_movie
         WHERE movie.id_movie = :id
         ");
         $requeteNombreNote->execute(["id" => $id]);
         $result = $requeteNombreNote->fetch();
-
          // Renvoyez la réponse JSON
          header('Content-Type: application/json');
          echo json_encode($result);
-     }
+    }
        
-        
-    
     //  ^ Check likes/dislkes to display nb (ajax)
-
     public function getReviewLikesDislikesCount() {
         $filmId = $_POST['film_id']; 
         $reviewId = $_POST['review_id']; 
         $pdo = Connect::seConnecter(); 
 
-
         $requete= $pdo->prepare(
         "SELECT rating.id_rating, 
-
         -- calcule le nombre de likes. Le CASE - expression conditionnelle qui vérifie si review_likes.is_like est égal à 1 (= un like) pour chaque ligne de la table. Si c'est le cas, il attribue la valeur 1, sinon il attribue la valeur 0.
         SUM(CASE WHEN review_likes.is_like = 1 THEN 1 ELSE 0 END) AS likes,
         SUM(CASE WHEN review_likes.is_like = 0 THEN 1 ELSE 0 END) AS dislikes
@@ -713,13 +663,7 @@ class MovieController {
 
         header('Content-Type: application/json');
         echo json_encode($result);
-
     }
-
-
-
-
-
 
 }
 ?>

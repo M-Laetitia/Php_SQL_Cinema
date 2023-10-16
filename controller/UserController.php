@@ -4,7 +4,6 @@ use Model\Connect;
 session_start();
 
 class UserController {
-
     // ^ Register
     public function register() {
         $pdo = Connect::seConnecter();
@@ -40,7 +39,6 @@ class UserController {
                                 "dateInscription" => $dateInscription]);
                             $_SESSION["message"] = "Account successfully created! <br>Thank you for joining us!";
                             echo "<script>setTimeout(\"location.href = 'index.php?action=login';\",1500);</script>";
-                            // header ("Location: index.php?action=landingPage"); exit;
                         } else {
                             $_SESSION["message"] = "The password is not strong enough. It must contain at least one capital letter, one number, one special character and be between 8 and 20 characters long.";
                         }
@@ -62,7 +60,6 @@ class UserController {
         if(isset($_POST["submit"]))  {
         $pdo = Connect::seConnecter();
 
-            
             $loggin = filter_input(INPUT_POST, "loggin", FILTER_SANITIZE_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL);
             $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -80,7 +77,6 @@ class UserController {
                         echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
  
                     } else {
-                        // Identifiants invalides
                        $_SESSION["message"] = "Invalid email or password.";
                     }
                 } else {
@@ -91,8 +87,7 @@ class UserController {
         require("view/user/login.php");
     }
 
-    // // ^ Ckeck if the user liked/disliked a review
-
+    // ^ Ckeck if the user liked/disliked a review
     public function checkLikedReviews() {
         $pdo = Connect::seConnecter();
         $id_user = $_SESSION['user']['id_user'];
@@ -103,7 +98,6 @@ class UserController {
         "SELECT review_likes.is_like, rating.id_movie, rating.id_rating
         FROM review_likes
         LEFT JOIN rating ON rating.id_rating = review_likes.id_rating
-        
         WHERE review_likes.id_user = :id_user AND rating.id_movie = :filmId
         ");
 
@@ -113,23 +107,16 @@ class UserController {
         ]);
 
         $result = $requete->fetchAll();
-        // $response = array("liked" => ($result["liked"]> 0));
-
         header("Content-Type: application/json");
         echo json_encode($result);
-
-        
     }
-
 
     // ^ Log out
     public function logout() {
         // session_unset();
-        
         // $_SESSION["message"] = "You had been disconnected. See you soon !";
         unset($_SESSION["user"]);
         // echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
-        
         // exit ; 
         header("Location: index.php?action=landingPage"); exit;
     }
@@ -139,6 +126,7 @@ class UserController {
         if($_SESSION["user"]) {
             $pdo = Connect::seConnecter();
             $user = $_SESSION['user']['id_user'];
+
             // afficher liste films notés
             $requete = $pdo->prepare("SELECT rating.note, movie.movie_title, movie.id_movie
             FROM rating 
@@ -157,7 +145,6 @@ class UserController {
             require("view/user/profile.php"); 
         } 
         else {
-            // echo "pas d'user connecté";
             header ("Location: index.php?action=landingPage"); exit;
         }
     }
@@ -170,17 +157,15 @@ class UserController {
             $user= $_SESSION["user"]["id_user"]; // obtenir l'identifisant de l'user connecté
             $requete = $pdo->prepare("DELETE FROM user WHERE id_user = :id_user ");
             $requete->execute(["id_user" => $user]);
-            // var_dump(($_SESSION["user"]));die;
             // Destroys all data registered to a session
             session_destroy();
 
             $_SESSION["message"] = "This account has been deleted!";
             echo "<script>setTimeout(\"location.href = 'index.php?action=landingPage';\",1500);</script>";
-            // header ("Location: index.php?action=landingPage"); exit;
+        
         } else {
             echo "pas d'user connecté";
             $_SESSION["message"] = " There is no user currently connected!";
-            // header ("Location: index.php?action=landingPage"); exit;
         }
     }
 
@@ -190,7 +175,7 @@ class UserController {
         $id_user = $_SESSION['user']['id_user'];
         // vérif si le formulaire a été soumis
         if(ISSET($_POST['theme'])) {
-            // Créer un tableau associatif ?
+            // Créer un tableau associatif
             $newTheme = array('theme' => $_POST['theme']); 
             // convertir le tableau associatif en JSON
             $jsonTheme = json_encode($newTheme); 
@@ -224,11 +209,9 @@ class UserController {
     }
 
     // ^ check register (ajax)
-
     public function checkRegister() {
         $pdo = Connect::SeConnecter ();
 
-        
         if (isset($_POST["pseudo"])) {
             $pseudo = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_SPECIAL_CHARS);
     
@@ -271,10 +254,7 @@ class UserController {
     }
 
 
-
-
-    // ^ Edit review modo
-
+    // ^ Edit review (modo)
     public function editerReview ($id) {
         $pdo = Connect::seConnecter();
 
@@ -286,11 +266,9 @@ class UserController {
         $requeteReview->execute(["id"=>$id]);
   
         if(isset($_POST['editReview'])) {
-            // var_dump("ok"); die;
             $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
             
-
             if(($review_title !== false && $review_text !== false) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur')) {
 
                 $reviewComplete = [
@@ -307,22 +285,17 @@ class UserController {
                     "id" => $id
                 ]);
 
-                
-
                $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
                 header("Location: index.php?action=listFilms");
             }
-
         }
         require "view/user/editerReview.php" ;
     }
 
-      // ^ Edit review user
-
-      public function editerReviewUser($id) {
+    // ^ Edit review (use
+    public function editerReviewUser($id) {
         $pdo = Connect::seConnecter();
       
-
         $requeteReviewUser = $pdo->prepare ("SELECT DATE_FORMAT(rating.date_review,'%d-%m-%Y %H:%i') AS formatted_date, rating.reviewComplete, user.pseudo, movie.movie_title, rating.id_rating
         FROM rating 
         INNER JOIN movie ON movie.id_movie=rating.id_movie
@@ -330,13 +303,11 @@ class UserController {
         WHERE id_rating = :id");
         $requeteReviewUser->execute(["id"=>$id]);
 
-
         if(isset($_POST['editReviewUser'])) {
             // var_dump("ok"); die;
             $review_title = filter_input(INPUT_POST, "review_title", FILTER_SANITIZE_SPECIAL_CHARS);
             $review_text = filter_input(INPUT_POST, "review_text", FILTER_SANITIZE_SPECIAL_CHARS);
             
-
             if(($review_title !== false && $review_text !== false) && (isset($_SESSION["user"]) )) {
 
                 $reviewComplete = [
@@ -356,14 +327,12 @@ class UserController {
                $_SESSION["message"] = "Review successfully edited! <i class='fa-solid fa-check'></i>";
                 header("Location: index.php?action=profile");
             }
-
         }
         require "view/user/editerReviewUser.php" ;
     }
 
-
     // ^ Supprimer une review par modo 
-       public function supprimerReview($id) {
+    public function supprimerReview($id) {
         $pdo = Connect::seConnecter();
 
         if (isset($id) && is_numeric($id) && (isset($_SESSION["user"]) && isset($_SESSION["user"]["role"]) && $_SESSION["user"]["role"] === 'moderateur') ) {
@@ -376,9 +345,8 @@ class UserController {
 
         $_SESSION["message"] = "This review has been deleted!";
         echo "<script>setTimeout(\"location.href = 'index.php?action=listFilms';\",1500);</script>";
-        // header("Location: index.php?action=listFilms");
-    }
 
+    }
 
     // ^ Liker une review
     public function addLike()  {
@@ -389,7 +357,6 @@ class UserController {
         
         if (isset($_POST['review_id'])) {
             $reviewId = $_POST["review_id"];
-
             // vérifier si l'user a déjà like cette photo
             $requete = $pdo->prepare("SELECT * FROM review_likes WHERE id_rating = :reviewId AND id_user = :id_user");
             $requete->execute([
@@ -424,26 +391,21 @@ class UserController {
                         "likeValue" => $likeValue
                     ]);
 
-                    $response['likeAction'] = "liked";
-                }
-                $response['success'] = true;
-            
+                $response['likeAction'] = "liked";
+            }
+            $response['success'] = true;
             header('Content-Type: application/json');
             echo json_encode($response);
         }
     }
 
-
-
     // ^ disliker une review
     public function addDislike()  {
         $pdo = Connect::seConnecter();
         $id_user = $_SESSION['user']['id_user'];
-
         $response = array('success' => false);
         
         if (isset($_POST['review_id'])) {
-
         $reviewId = $_POST["review_id"];
 
         $requete = $pdo->prepare("SELECT * FROM review_likes WHERE id_rating = :reviewId AND id_user = :id_user");
@@ -485,8 +447,5 @@ class UserController {
     header('Content-Type: application/json');
     echo json_encode($response);
     }
-
-
-
 }
 ?>

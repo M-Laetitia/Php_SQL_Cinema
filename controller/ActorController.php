@@ -65,7 +65,6 @@ class ActorController {
         $pdo = Connect::seConnecter();
         if(isset($_POST["submitActor"])){
 
-            //rajouter iMAGE
             $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
             if(isset($_FILES["actor_image"]) ){  // name de l'input dans le formulaire de l'ajout du film
                 // voir upload-img_php pour détail du process
@@ -76,22 +75,19 @@ class ActorController {
                 $tabExtension = explode(".", $name); 
                 $extension = strtolower(end($tabExtension)); 
                 $extensionsAutorisees = ['jpg', 'jpeg', 'png', 'WebP' ];
-                $tailleMax = 5242880; // 5 Mo (en octets)
+                $tailleMax = 5242880; 
             
                 if ($error != 0) {
-                    // echo 'Une erreur s\'est produite lors du téléchargement de l\'image.';
                     } elseif (!in_array($extension, $extensionsAutorisees)) {
                         echo 'Mauvais format d\'image. Formats autorisés : JPG, JPEG, PNG, WebP.';
                     } elseif ($size > $tailleMax) {
                         echo 'L\'image est trop grande. La taille maximale autorisée est de 5 Mo.';
                     } else {
-                        // L'image est valide, on procède au traitement
                         $uniqueName = uniqid('', true);
                         $FileNameUnique = $uniqueName. '.' .$extension;
                         move_uploaded_file($tmpName, './public/Images/upload/'.$FileNameUnique);
                         $movieImageChemin = './public/Images/upload/'.$FileNameUnique;
                     }
-
                 } else {
                     /* Si pas de fichier car NULL autorisé dans la BDD pour les images */
                     $movieImageChemin = NULL;
@@ -105,10 +101,8 @@ class ActorController {
             $person_nationality = filter_input(INPUT_POST, "person_nationality", FILTER_SANITIZE_SPECIAL_CHARS);
 
             // si filtrées et existantes alors on peut exécuter la requête
-            // The INSERT INTO statement is used to insert new records in a table.*
             if($person_first_name && $person_last_name && $person_sexe && $person_birthday && $person_nationality){
                 $pdo = Connect::seConnecter();
-
                 $imageAlt = "Portrait of " . $person_first_name . ' ' . $person_last_name;
 
                 $requeteAjouterPersonne = $pdo->prepare(" INSERT INTO person (person_first_name, person_last_name, person_sexe, person_birthday, person_nationality, person_image, person_alt_desc ) 
@@ -133,13 +127,11 @@ class ActorController {
                 $_SESSION["message"] = " An error has occured, please check that you have filled in all required fields ";
             }
         }
-        // header("Location: index.php?action=listActeurs");
     }
 
      // ^ Check Person (ajax)
     public function checkActor() {
         $pdo = Connect::seConnecter();
-
         $response = ['actorExists' => false, 'message' => ''];
 
         if(isset($_POST["person_first_name"], $_POST["person_last_name"])) {
@@ -169,24 +161,10 @@ class ActorController {
                 $response['actorExists'] = true;
                 $response['message'] = "This director has already been added.";
             }
-     
-          
         }
         header('Content-Type: application/json');
         echo json_encode($response);
     }
-
-    // récupérer id_person vérif si id_person avec id_actor
-    // messaga acteur
-    // vérif id_person avec id_director
-    //message réalisateur
-
-    // SELECT person.person_first_name, person.person_last_name, person.id_person, actor.*, director.*
-    // FROM person
-    // LEFT JOIN director ON director.id_person = person.id_person
-    // LEFT JOIN actor ON actor.id_person = person.id_person
-
-
 
     // ^ Supprimer un acteur 
     public function supprimerActeur($id) {
@@ -200,19 +178,19 @@ class ActorController {
         }
         $_SESSION["message"] = " This actor has been deleted ! <i class='fa-solid fa-check'></i> ";
         echo "<script>setTimeout(\"location.href = 'index.php?action=listActeurs';\",1500);</script>";
-        // header("Location: index.php?action=listActeurs");
     }
 
     // ^ Editer un acteur 
     public function updateActeur($id) {
         $pdo = Connect::seConnecter();
-        $requeteUpdateActeur = $pdo->prepare(" SELECT actor.id_actor, CONCAT(person.person_first_name, ' ', person.person_last_name) AS acteurComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name, person.person_nationality, person.person_image
+        $requeteUpdateActeur = $pdo->prepare(
+        "SELECT actor.id_actor, CONCAT(person.person_first_name, ' ', person.person_last_name) AS acteurComplete, person.person_sexe, person.person_birthday, person.person_first_name, person.person_last_name, person.person_nationality, person.person_image
         FROM actor
         INNER JOIN person ON person.id_person = actor.id_person
         WHERE actor.id_actor = :id");
         $requeteUpdateActeur->execute(["id"=>$id]);
 
-        $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
+        $movieImageChemin = NULL;
         if(isset($_POST["updateActor"])){ 
             if(isset($_FILES["actor_image"])){ 
                 $tmpName = $_FILES["actor_image"]["tmp_name"];
@@ -262,7 +240,6 @@ class ActorController {
 
                 $_SESSION["message"] = " This actor has been updated! <i class='fa-solid fa-check'></i> ";
                 echo "<script>setTimeout(\"location.href = 'index.php?action=listActeurs';\",1500);</script>";
-                // header("Location: index.php?action=listActeurs");
             }
         }
     require "view/actor/updateActeur.php" ;

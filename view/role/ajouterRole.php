@@ -23,7 +23,6 @@
                     <div class="btn-submit">
                         <input type="submit" class="submit" name="submitRole" id="submitRole">
                     </div>
-
                 </form>
 
                 <div class="messages_neutral">
@@ -33,15 +32,11 @@
                             unset($_SESSION["message"]); // Supprimer le message de la session
                     }?>
                 </div>
-
-                
             </div>
         </div>
     </div>
 </div>
-
-
-  
+ 
 <?php
 $titre = "Add a Role";
 $meta_description = "form to add a Role and to expand the database";

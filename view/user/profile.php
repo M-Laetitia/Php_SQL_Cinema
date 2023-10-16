@@ -2,9 +2,6 @@
 ob_start(); 
 ?>
 
-
-
-
 <div class="container-list register">
     <div class="list">
         <?php
@@ -74,20 +71,14 @@ ob_start();
                                                 <?php
                                             }
                                         ?>
-
-                                       
-
                                         <div><a href="index.php?action=editerReviewUser&id=<?=$reviews['id_rating']?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
                                     </div>
-
-                                        
                                     <?php
                                 }
                             }
                         ?>
                     </div>
             </div>
-
 
             <div class="liste-notes">
             <p>My movie ratings: </p>
@@ -114,23 +105,14 @@ ob_start();
                     </div>
             </div>
 
-
-
         <div id="logoutDelete">
             <p><a href="index.php?action=logout"> <span class="text-highlight"><i class="fa-solid fa-power-off"></i></span> Log out</a></p>
             <p><a href="index.php?action=deleteAccount"> <span class="text-highlight"><i class="fa-regular fa-circle-xmark"></i></span> Delete Account</a></p>
         </div>
-        
     </div>
-
 </div>
 
-
-
-
-
 <script>
-
     // display or hide the movie ratings list
     const toggleButton = document.getElementById('toggle-list');
     const ratingsList = document.getElementById('ratings-list');
@@ -144,8 +126,6 @@ ob_start();
             toggleButton.textContent = '▼'; // Flèche vers le bas
         }
     });
-
-
 
     // display or hide the movie reviews list
     const toggleReviewButton = document.getElementById('toggle-review');
@@ -165,10 +145,8 @@ ob_start();
 </script>
 
 <?php
-
 $titre = "Profile";
 $meta_description = "";
 $contenu = ob_get_clean();
 require "view/template.php";
-
 ?>

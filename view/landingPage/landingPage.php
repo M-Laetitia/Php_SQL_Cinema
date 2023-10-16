@@ -1,6 +1,5 @@
 <?php ob_start(); ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +17,7 @@
     <!-- Google icon -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-    
+
     <link rel="stylesheet" href="public/css/style-home.css">
     <link rel="stylesheet" href="./public/css/style.css">
     <link rel="stylesheet" href="./public/css/style-form.css">
@@ -28,10 +27,7 @@
     <link rel="stylesheet" href="./public/css/style-user.css">
     <link rel="stylesheet" href="./public/css/style-home.css">
 
-
-
     <title>Home</title>
-
 
 </head>
 
@@ -39,15 +35,12 @@
 
 <main class="homepage">
     <div class="top">
-        <!-- <img src="public/Images/background_home.jpg" alt="vintage Cinematographer’s room"> -->
-
         <div class="message">
             <h1>Welcome to CineVault</h1>
             <h2>Your Personal Movie Journey</h2>
             <p>Explore the fascinating world of cinema with CineVault, your one-stop destination for all things movies. Whether you're a film enthusiast, a casual viewer, or just looking for a great movie night, CineVault has got you covered.</p>
         </div>
 
-        
         <div class="icon">
 
             <div class="list-el" id="list-left" style="visibility:hidden">
@@ -72,7 +65,6 @@
                 <a href="index.php?action=getAjouterRealisateur"><p>Directors</p></a>
             </div>
             
-
         </div>
         
     </div>
@@ -142,7 +134,5 @@
 
 <?php
 $titre = "Home";
-// $contenu = ob_get_clean();
-// require "view/template.php";
 ?>
 

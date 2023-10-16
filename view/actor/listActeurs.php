@@ -14,7 +14,6 @@
                         }
                         else{
                             echo '<a href="index.php?action=detailActeur&id=' . $person["id_actor"] . '"><img src="' . $person["person_image"] . '" alt= "' . $person["person_alt_desc"] . '" ></a>';
-
                             // Another way to make the redirection with the hyperlink by clicking on the picture:
                             // echo '<img src="' . $person["person_image"] . '" onclick="window.location=\'index.php?action=detailActeur&id=' . $person["id_actor"] . '\'">';
                         }

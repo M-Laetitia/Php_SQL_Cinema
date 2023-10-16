@@ -50,7 +50,6 @@
                             <!-- label est associé a un input ce qu'on met dans le for va correspondre au name du chemin input que l'on veut associé -->
                             <label for="actor_image">Let's add a picture :</label>
                             <input type="file"  name="actor_image" id="actor_image" >
-                            <!-- <button type="submit"> Send</button> -->
                             <p id="autorised-format">Autorised format : jpg, jpeg, png, WebP</p>
                     </div>
 

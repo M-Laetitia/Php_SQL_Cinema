@@ -1,10 +1,5 @@
 <?php
 // localhost/molin/Php_SQL_Cinema/index.php?action=listFilms
-//localhost/molin/Php_SQL_Cinema/index.php?action=listActeurs
-//localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailActeur&id=1
-//localhost/Laetitia/Nouveau%20dossier/Php_SQL_Cinema/index.php?action=detailRole&id=2
-// view-source:localhost/molin/Php_SQL_Cinema/index.php?action=listRealisateurs
-
 
 // On "use" le controller Cinema
 use Controller\MovieController;
@@ -14,7 +9,6 @@ use Controller\GenreController;
 use Controller\RoleController; 
 use Controller\SearchController;
 use Controller\UserController;
-
 
 // On autocharge les classes du projet
 spl_autoload_register(function ($class_name) {
@@ -39,7 +33,7 @@ $id=(isset($_GET["id"])) ? $_GET["id"] : null;
 if(isset($_GET["action"])) {
     switch ($_GET["action"]) {
 
-        // USER 
+        // ^ USER 
         case "register" : $ctrlUser->register(); break;
         case "login" : $ctrlUser->login(); break;
         case "logout" : $ctrlUser->logout(); break;
@@ -47,25 +41,21 @@ if(isset($_GET["action"])) {
         case "deleteAccount": $ctrlUser->deleteAccount(); break;
         case "themePreference" : $ctrlUser->themePreference(); break;
         case "listeFilmNote" : $ctrlUser->listeFilmNote(); break;
-        
-       
         case "editerReviewUser" : $ctrlUser->editerReviewUser($id); break;
-
-        // ^ (ajax)
+        //ajax
         case "addLike" : $ctrlUser->addLike(); break;
         case "addDislike" : $ctrlUser->addDislike(); break;
         case "checkRegister" : $ctrlUser->checkRegister(); break;
         case "checkLikedReviews" : $ctrlUser->checkLikedReviews(); break;
         
-         
-        // MODO
+        // ^ MODO
         case "editerReview" : $ctrlUser->editerReview($id); break;
         case "supprimerReview" : $ctrlUser->supprimerReview($id); break;
         
-        // SEARCH
+        // ^SEARCH
         case "search" : $ctrlSearch->search(); break;
 
-        // MOVIE
+        // ^MOVIE
         case "listFilms" : $ctrlMovie->listFilms(); break;
         case "detailFilm" : $ctrlMovie->detailFilm($id); break;
         case "ajouterFilm" : $ctrlMovie->ajouterFilm(); break;
@@ -75,36 +65,28 @@ if(isset($_GET["action"])) {
         case "getAjouterCasting" : $ctrlMovie->getAjouterCasting(); break; 
         case "updateFilm" : $ctrlMovie->updateFilm($id); break;
         case "addRating" : $ctrlMovie->addRating($id); break;
-        // case "ratingAverage" :  $ctrlMovie->ratingAverage($id); break;
-        
-        case "listReview" : $ctrlMovie->listReview($id); break;
-
-        // ^ (ajax)
+        case "landingPage" : $ctrlMovie->landingPage(); break;
+        // case "listReview" : $ctrlMovie->listReview($id); break;
+        //ajax
         case "checkMovie" : $ctrlMovie->checkMovie(); break;
         case "getReviewLikesDislikesCount" : $ctrlMovie->getReviewLikesDislikesCount(); break;
         case "afficherCritiquesFilm" : $ctrlMovie->afficherCritiquesFilm($id); break;
         case "ajouterReview" : $ctrlMovie->ajouterReview($id); break;
         case "addRating" : $ctrlMovie->addRating($id); break;
-        
         case "getNumberRating" : $ctrlMovie->getNumberRating($id); break;
         case "getAverageRating" : $ctrlMovie->getAverageRating($id); break;
-      
 
-        case "landingPage" : $ctrlMovie->landingPage(); break;
-        // case "landingPage" : $ctrlMovie->landingPage(); break;
-
-        // ACTOR
+        // ^ ACTOR
         case "listActeurs" : $ctrlActor->listActeurs(); break;
         case "detailActeur" : $ctrlActor->detailActeur($id); break;
         case "ajouterActeur" : $ctrlActor->ajouterActeur(); break;
         case "supprimerActeur" : $ctrlActor->supprimerActeur($id); break;
         case "getAjouterActeur" : $ctrlActor->getAjouterActeur(); break;
         case "updateActeur" : $ctrlActor->updateActeur($id); break; 
-
-        // ^ (ajax)
+        //ajax
         case "checkActor" : $ctrlActor->checkActor(); break; 
 
-        // DIRECTOR
+        // ^ DIRECTOR
         case "listRealisateurs" : $ctrlDirector->listRealisateurs(); break;
         case "detailRealisateur" : $ctrlDirector->detailRealisateur($id); break;
         case "ajouterRealisateur" : $ctrlDirector->ajouterRealisateur(); break;
@@ -112,28 +94,25 @@ if(isset($_GET["action"])) {
         case "getAjouterRealisateur" : $ctrlDirector->getAjouterRealisateur(); break;
         case "updateRealisateur" : $ctrlDirector->updateRealisateur($id); break; 
 
-        // GENRE
+        // ^ GENRE
         case "listGenres" : $ctrlGenre->listGenres(); break;
         case "detailGenre" : $ctrlGenre->detailGenre($id); break;
         case "ajouterGenre" : $ctrlGenre->ajouterGenre(); break;
         case "supprimerGenre" : $ctrlGenre->supprimerGenre($id); break;
         case "getAjouterGenre" : $ctrlGenre->getAjouterGenre(); break;
         case "updateGenre" : $ctrlGenre->updateGenre(); break;
-        // ^ (ajax)
+        //ajax
         case "checkGenre" : $ctrlGenre->checkGenre(); break;
-        
 
-        // ROLE
+        // ^ ROLE
         case "listRoles" : $ctrlRole->listRoles(); break;
         case "detailRole" : $ctrlRole->detailRole($id); break;
         case "ajouterRole" : $ctrlRole->ajouterRole(); break;
         case "supprimerRole" : $ctrlRole->supprimerRole($id); break;
         case "getAjouterRole" : $ctrlRole->getAjouterRole(); break;
         case "updateRole" : $ctrlRole->updateRole($id); break;
-
-        // ^ (ajax)
+        //ajax
         case "checkRole" : $ctrlRole->checkRole(); break;
-        
     }
 }
 ?>

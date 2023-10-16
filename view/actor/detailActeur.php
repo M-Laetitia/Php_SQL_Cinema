@@ -74,21 +74,16 @@ $person = $requetedetailActeur->fetch();
     </div>
 </div>
 
-<div id="deleteConfirmation">
-    
-    <p>Are you sure to want to delete this actor? This action can't be undone.</p>
-    
+<div id="deleteConfirmation"> 
+    <p>Are you sure to want to delete this actor? This action can't be undone.</p>  
     <div class="confirm_cancel">
         <a href="index.php?action=supprimerActeur&id=<?=$person["id_actor"]?>"><i class="fa-solid fa-check fa-lg"></i></a>
         <i id="confirmationClose-btn" class="fa-solid fa-x fa-lg" ></i>
     </div>
-    
-    
 </div>
 
 
 <script>
-
     const confirmationPopUP = document.getElementById("confirmationBox")
     const popUpConfirmation = document.getElementById("deleteConfirmation")
     const closeConfirmationPopUp = document.getElementById("confirmationClose-btn")
@@ -99,11 +94,9 @@ $person = $requetedetailActeur->fetch();
         popUpConfirmation.style.display = 'none'
     }
     });
-
     closeConfirmationPopUp.addEventListener('click', () => {
         popUpConfirmation.style.display = 'none'
     });
-
 </script>
 
 <?php

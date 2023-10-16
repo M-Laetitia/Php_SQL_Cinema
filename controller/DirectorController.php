@@ -127,7 +127,7 @@ class DirectorController {
         WHERE director.id_director = :id");
         $requeteUpdateRealisateur->execute(["id"=>$id]);
 
-        $movieImageChemin = NULL; // Définir la variable avec une valeur par défaut 
+        $movieImageChemin = NULL; 
         if(isset($_POST["updateDirector"])){ 
             if(isset($_FILES["director_image"])){
                 $tmpName = $_FILES["director_image"]["tmp_name"];
@@ -178,8 +178,6 @@ class DirectorController {
             
             $_SESSION["message"] = " This director has been updated ! <i class='fa-solid fa-check'></i> ";
             echo "<script>setTimeout(\"location.href = 'index.php?action=listRealisateurs';\",1500);</script>";
-
-            // header("Location: index.php?action=listRealisateurs");
             }
         }
     require "view/director/updateRealisateur.php" ;

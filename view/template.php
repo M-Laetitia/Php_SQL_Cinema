@@ -16,19 +16,21 @@
     <!-- Google icon -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" >
 
-    <!-- ! jQuery cdn -->
+    <!-- jQuery cdn -->
     <script
-    src="https://code.jquery.com/jquery-3.7.1.js"
-    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
+
+    <!-- FavIcon -->
+    <link rel="shortcut icon" type="image/x-icon" href="./public/Images/favicon-32x32.png" />
 
     <?php
     $user_theme = $_SESSION['user_theme'] ?? 'light';
     echo '<link rel="stylesheet" href="' . $user_theme . '.css">';
     ?>
 
-
-
+    <!-- stylesheet -->
     <link rel="stylesheet" href="./public/css/style.css">
     <link rel="stylesheet" href="./public/css/style-form.css">
     <link rel="stylesheet" href="./public/css/style-listing.css">
@@ -37,14 +39,12 @@
     <link rel="stylesheet" href="./public/css/style-user.css">
     <link rel="stylesheet" href="./public/css/style-home.css">
 
-
     <title><?= $titre ?></title>
     <meta name="description" content="<?= $meta_description ?>">
 
 </head>
 
 <body >
-
     <header>
         <a href="index.php?action=landingPage">
             <div class="logo">
@@ -53,10 +53,6 @@
         </a>
         
         <nav>
-
-          
-
-
             <div class="primary-navigation">
                 <ul>
                     <li><a href="index.php?action=listFilms"> Movie</a></li>
@@ -94,15 +90,12 @@
             </form>
 
             <?php
-
                 if(isset($_SESSION["user"])) { ?>
                     <div class="nav-user">
                         <div id="profile-btn">
                             <p><a href="index.php?action=profile"><i class="fa-solid fa-user"></i></a></p>
                         </div>
                     </div>     
-                    
-
                 <?php } else { ?>
                     <div class="nav-user">
                         <div id="SignIn-btn">
@@ -111,7 +104,6 @@
                     </div>     
 
             <?php } ?>
-
             <div>
                 <input type="checkbox" class="checkbox" id="checkbox">
                 <label for="checkbox" class="checkbox-label">
@@ -121,33 +113,13 @@
                     <span class="ball"></span>
                 </label>
             </div>
-            
         </nav>
-
     </header>
 
-
-    <!-- <div class="userConn">
-        <p><a href="index.php?action=register">Register</a></p>
-        <p><a href="index.php?action=login">Log in</a></p>
-        <p><a href="index.php?action=profile">Profile</a></p>
-        <p><a href="index.php?action=logout">Log out</a></p>
-        <p><a href="index.php?action=deleteAccount">Delete Account</a></p>
-    </div> -->
-
-
-
-        
-
-
-
     <main>
-        
         <?= $contenu ?> 
-
         <button id="scrollToTopButton"></button> 
     </main>
-
 
     <!-- <footer>
         <div>
@@ -155,11 +127,9 @@
         </div>
     </footer> -->
 
-
-  
     <script src="public/js/script.js"></script>
     <script src="public/js/ajax.js"></script>
- 
+    <script src="public/js/user_form.js"></script>
 
 </body>
 

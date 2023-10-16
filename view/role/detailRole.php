@@ -1,7 +1,5 @@
 <?php ob_start();
-$role = $requeteDetailRole->fetch();
-// var_dump($role);die;?>
-
+$role = $requeteDetailRole->fetch();?>
 
 <div class="container container-genre">
     <h1> <?= $role["name_role"]?></h1>
@@ -45,12 +43,10 @@ $role = $requeteDetailRole->fetch();
               
                     <?php } ?>
                 </div>
-                
             </div>
         <?php } ?>
     </div>
 </div>
-
 
 <script>
 

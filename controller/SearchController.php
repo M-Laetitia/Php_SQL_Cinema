@@ -10,7 +10,6 @@ class SearchController {
         $pdo = Connect::seConnecter();
         if(isset($_POST['submit-search'])) {
             $search = $_POST['search'];
-            // var_dump($search);die;
             // initialisation variable pour stocker les résultats de la recherche
             $results = [];
     
@@ -67,8 +66,6 @@ class SearchController {
                 'roles' => $resultRoles,
                 'genres' => $resultsGenres,
             ];
-    
-            // var_dump($results);die;
             require ("view/search/search.php");
         }
     }

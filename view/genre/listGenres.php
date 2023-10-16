@@ -2,7 +2,6 @@
 
 <h1 class="title_ref"> Genres List</h1>
 <div class="container-list">
-    <!-- <div class="searchBar"></div> -->
     <div class="list">
         <?php 
             foreach($requete->fetchAll() as $genre) { ?>

@@ -28,7 +28,6 @@ class RoleController {
         INNER JOIN person ON person.id_person = actor.id_person
         WHERE role.id_role = :id");
         $requeteDetailRole->execute (["id" => $id]);
-        // var_dump($requeteDetailRole); die;
         require "view/role/detailRole.php";
     }
 
@@ -55,7 +54,6 @@ class RoleController {
             }
             $_SESSION["message"] = " This role has been added ! <i class='fa-solid fa-check'></i> ";
             echo "<script>setTimeout(\"location.href = ' index.php?action=listRoles';\",1500);</script>";
-            // header("Location: index.php?action=listRoles");
         }
         else {
             $_SESSION["message"] = "An error has occurred; please make sure you have filled in all required fields";
@@ -86,7 +84,6 @@ class RoleController {
                 echo "";
             }
         }
-
     }
 
     // ^ Supprimer un role
@@ -104,26 +101,23 @@ class RoleController {
     // ^ Update role
     public function updateRole($id) {
         $pdo = Connect::seConnecter();
-        // récupérer les données du genre à mettre à jour si besoin d'afficher les informations actuelles du genre dans le formulaire de mise à jour, pour que l'utilisateur puisse voir les données existantes avant de les modifier.
+        
         $requeteRole = $pdo->prepare("SELECT id_role, name_role FROM role WHERE id_role = :id"); 
         $requeteRole->execute(["id"=>$id]);
         if(isset($_POST['updateRole'])) {
-            // Récupérez les données du formulaire
+
             $name_role = filter_input(INPUT_POST, "name_role", FILTER_SANITIZE_SPECIAL_CHARS);
 
                 if($name_role !== false) {
                 $pdo = Connect::seConnecter(); 
-                    // Préparez la requête de mise à jour
-                    $requeteUpdateRole = $pdo->prepare("UPDATE role SET name_role = :name_role WHERE id_role = :id");
 
-                    // Exécutez la mise à jour en liant les paramètres
+                    $requeteUpdateRole = $pdo->prepare("UPDATE role SET name_role = :name_role WHERE id_role = :id");
                     $requeteUpdateRole->execute([
                     "name_role" => $name_role,
                     "id" => $id]);
 
                 $_SESSION["message"] = " This role has been updated ! <i class='fa-solid fa-check'></i> ";
                 echo "<script>setTimeout(\"location.href = ' index.php?action=listRoles';\",1500);</script>";
-                // header("Location: index.php?action=listRoles");
             }
             else {
             $_SESSION["message"] = "An error occured.";

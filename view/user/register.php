@@ -1,16 +1,11 @@
 <?php ob_start(); ?>
 
-
-
 <div class="container-list register">
 
     <div class="list">
-
     <div>
         <h1>Join Us !</h1>
     </div>
-
-    
 
     <form enctype="multipart/form-data" action="index.php?action=register" method="POST">
 
@@ -28,13 +23,10 @@
             <input type="password" name="pass2" id="pass2">
         </div>
 
-        
-        
         <div id=btn-register >
             <input  type="submit" name="submit" value="Register">
         </div>
-
-        
+ 
     </form>
 
         <div>
@@ -47,23 +39,14 @@
 
         <div id="registerMessage"></div>
 
-    
-
-
     </div>
 </div>
 
-
-
-
-
 <?php
-
 $titre = "Register";
 $meta_description = "";
 $contenu = ob_get_clean();
 require "view/template.php";
-
 ?>
 
 
