@@ -51,9 +51,18 @@
                     </ul>
                     
                     <div class="edit_delete">
-                        <div><a href="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>"><i class="fa-solid fa-x"></i></a></div>
+                        <div><i id="confirmationBox" class="fa-solid fa-x"></i></a></div>
                         <div><a href="index.php?action=updateFilm&id=<?=$movie["id_movie"]?>"> <i class="fa-solid fa-file-pen"></i></a></div> 
                     </div>
+
+                    <div id="deleteConfirmationMovie">
+                        <p>Are you sure to want to delete this movie? This action can't be undone.</p>   
+                        <div class="confirm_cancel">
+                            <a href="index.php?action=supprimerFilm&id=<?=$movie["id_movie"]?>"><i class="fa-solid fa-check fa-lg"></i></a>
+                            <i id="confirmationClose-btn" class="fa-solid fa-x fa-lg" ></i>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -197,6 +206,9 @@
     </div>
 </div>
 
+
+
+
 <script>
     function bgImageLoader(bgImage){
 
@@ -266,6 +278,24 @@
     const ratingClose_btn = document.getElementById('ratingClose-btn')
     ratingClose_btn.addEventListener('click', () => {
         addRatingPopUp.style.display = 'none'
+    });
+
+
+    // POP up confirm cancel delete
+
+    const confirmationPopUP = document.getElementById("confirmationBox")
+    const popUpConfirmation = document.getElementById("deleteConfirmationMovie")
+    const closeConfirmationPopUp = document.getElementById("confirmationClose-btn")
+    confirmationPopUP.addEventListener('click', () => {
+    if (popUpConfirmation.style.display === 'none' || popUpConfirmation.style.display === '') {
+        popUpConfirmation.style.display = 'flex'
+    }else {
+        popUpConfirmation.style.display = 'none'
+    }
+    });
+
+    closeConfirmationPopUp.addEventListener('click', () => {
+        popUpConfirmation.style.display = 'none'
     });
 
 </script>

@@ -6,8 +6,18 @@ $genre = $requeteGenre->fetch();?>
     <h1><?= $genre["label_genre"] ?></h1>
 
     <div class="edit_delete">
-        <div><a href="index.php?action=supprimerGenre&id=<?=$genre["id_genre"]?>"><i class="fa-solid fa-x"></i></a></div>
+        <div><i id="confirmationBox" class="fa-solid fa-x"></i></a></div>
         <div><a href="index.php?action=updateGenre&id=<?=$genre["id_genre"]?>"><i class="fa-solid fa-file-pen"></i></a></div>
+    </div>
+
+    
+
+    <div id="deleteConfirmationGenre">
+        <p>Are you sure to want to delete this genre? This action can't be undone.</p>   
+        <div class="confirm_cancel">
+        <a href="index.php?action=supprimerGenre&id=<?=$genre["id_genre"]?>"><i class="fa-solid fa-check fa-lg"></i></a>
+            <i id="confirmationClose-btn" class="fa-solid fa-x fa-lg" ></i>
+        </div>
     </div>
 
     <div class="list">
@@ -43,6 +53,26 @@ $genre = $requeteGenre->fetch();?>
         </div>
     </div>
 </div>
+
+<script>
+
+    const confirmationPopUP = document.getElementById("confirmationBox")
+    const popUpConfirmation = document.getElementById("deleteConfirmationGenre")
+    const closeConfirmationPopUp = document.getElementById("confirmationClose-btn")
+    confirmationPopUP.addEventListener('click', () => {
+    if (popUpConfirmation.style.display === 'none' || popUpConfirmation.style.display === '') {
+        popUpConfirmation.style.display = 'flex'
+    }else {
+        popUpConfirmation.style.display = 'none'
+    }
+    });
+
+    closeConfirmationPopUp.addEventListener('click', () => {
+        popUpConfirmation.style.display = 'none'
+    });
+
+</script>
+
 
 <?php
 $titre = $genre["label_genre"] .  " movies list";

@@ -48,11 +48,40 @@ $person = $requetedetailRealisateur->fetch();
             </ul>
         
             <div class="edit_delete">
-                <div><a href="index.php?action=supprimerRealisateur&id=<?=$person["id_director"]?>"><i class="fa-solid fa-x"></i></a></div>
+                <div><i id="confirmationBox" class="fa-solid fa-x"></i></div>
                 <div><a href="index.php?action=updateRealisateur&id=<?=$person["id_director"]?>"> <i class="fa-solid fa-file-pen"></i></a>   </div> 
             </div>
         </div>
     </div>
+
+    <div id="deleteConfirmation">
+        <p>Are you sure to want to delete this director? This action can't be undone.</p>   
+        <div class="confirm_cancel">
+            <a href="index.php?action=supprimerRealisateur&id=<?=$person["id_director"]?>"><i class="fa-solid fa-check fa-lg"></i></a>
+            <i id="confirmationClose-btn" class="fa-solid fa-x fa-lg" ></i>
+        </div>
+    </div>
+
+    
+<script>
+
+    const confirmationPopUP = document.getElementById("confirmationBox")
+    const popUpConfirmation = document.getElementById("deleteConfirmation")
+    const closeConfirmationPopUp = document.getElementById("confirmationClose-btn")
+    confirmationPopUP.addEventListener('click', () => {
+    if (popUpConfirmation.style.display === 'none' || popUpConfirmation.style.display === '') {
+        popUpConfirmation.style.display = 'flex'
+    }else {
+        popUpConfirmation.style.display = 'none'
+    }
+    });
+
+    closeConfirmationPopUp.addEventListener('click', () => {
+        popUpConfirmation.style.display = 'none'
+    });
+
+</script>
+
 
 <?php
 $titre = "More about " . $person["realComplete"];
