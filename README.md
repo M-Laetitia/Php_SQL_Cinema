@@ -17,8 +17,7 @@ HTML-CSS | PHP | MySQL | JavaScript | jQuery | AJAX
 ▪ Light/Dark Mode: Users can toggle between light and dark modes to customize their viewing experience.
 
 
-## Skills learned
-▪ 
+## Skills learned 
 ▪ Security: Implementing security measures, especially when handling database with prepared statements and filtering/sanitizing.
 ▪ CRUD Operations:  Performing Create, Read, Update, and Delete operations within the application
 ▪ AJAX Integration: Learning and incorporating AJAX into the application for dynamic content loading and enhancing the user experience.
@@ -26,4 +25,7 @@ HTML-CSS | PHP | MySQL | JavaScript | jQuery | AJAX
 
 
 ##  Acknowledgments
-light/dark mode button design and scroll up button.
+▪ Light/Dark Theme Toggle using CSS and Javascript - Umer Farooq [CodePen](https://codepen.io/Umer_Farooq/pen/eYJgKGN)  
+▪  Back to Top Button - Matthew Cain [CodePen](https://codepen.io/matthewcain/pen/ZepbeR)  
+
+
