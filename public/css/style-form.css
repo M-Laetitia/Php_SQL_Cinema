@@ -77,6 +77,10 @@ select {
 /* & FORMS --                          */
 /* & --------------------------------- */
 
+#review {
+    border : 1px solid grey;
+}
+
 .alertMessage {
     font-size: var(--fs-400);
 }

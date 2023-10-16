@@ -191,11 +191,11 @@ main.custom-background::before {
 }
 
 .dislikedIcon {
-    color : orange;
+    color : var(--clr-orange);
 }
 
 .rated {
-    color : red;
+    color : var(--clr-pink);
 }
 
 .fa-solid.fa-star.fa-lg.star-filled{
@@ -680,6 +680,7 @@ nav .add_entity {
     cursor: pointer;
     position: relative;
     display: inline-block;
+    padding: 0;
 }
 
 .container-list-movie .movie-card .poster::before {

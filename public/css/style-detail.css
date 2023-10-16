@@ -151,6 +151,7 @@ select {
 
 .container-genre .poster {
     height: 80%;
+    width: 100%;
     border-radius: 1rem;
     overflow: hidden;
     cursor: pointer;
@@ -630,12 +631,12 @@ textarea::-webkit-scrollbar-thumb {
    
 }
 
-/* .movie-review {
+.movie-review {
     display: none;
-} */
+}
 
 
-.container_movie .review-text {
+.review-likes {
     background-color: var(--clr-grey-light);
     padding : 1rem 1.5rem 1.5rem 1.5rem;
     width: 100%;
@@ -648,7 +649,7 @@ textarea::-webkit-scrollbar-thumb {
     
 }
 
-.container_movie .review-text:before {
+.review-likes:before {
     /* clip-path: polygon(0 0,50% 50%,100% 0); */
     content: "";
     display: block;
@@ -660,6 +661,38 @@ textarea::-webkit-scrollbar-thumb {
     left: 2rem;
     bottom: -0.7rem;
     
+}
+
+.review-likes .review {
+    margin : 0 !important;
+    padding: 0;
+
+}
+
+.likesDiv i{
+    cursor: pointer;
+}
+
+.likesDiv {
+    display: flex;
+    column-gap: 0.3rem;
+    margin-top: 1.2rem;
+}
+
+
+.pseudo-date {
+ /* background-color: red; */
+ display: flex;
+ margin-top: 1.2rem;
+ /* width: 200px;
+ height: 100px; */
+}
+
+.title_rate {
+    /* background-color: red; */
+    width: 140%;
+    display : flex;
+    justify-content: space-between;
 }
 
 .container_movie .review-text p:first-child {
@@ -1093,4 +1126,105 @@ position: relative;
     position: absolute;
     /* z-index: -1; */
 }
+
+/*? Delete confirmation ----------  */
+
+#deleteConfirmation {
+    width: 24rem;
+    height: 8rem;
+    position : absolute;
+    top: 84%;
+    right: 62%;
+    background-color: var(--clr-grey-black);
+    border-radius: 0.5rem;
+    border-top: 1px solid var(--clr-pink);
+    padding: 1rem;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+#confirmationBox {
+    cursor: pointer;
+}
+
+#confirmationBox:hover {
+    color: var(--clr-pink);
+}
+
+.edit_delete {
+    position: relative;
+}
+
+.fa-check{
+    text-decoration: none;
+    color: var(--clr-white)
+}
+
+.fa-check:hover{
+    color: var(--clr-orange)
+}
+
+#confirmationClose-btn {
+    cursor: pointer;
+}
+
+#confirmationClose-btn:hover {
+    color: var(--clr-pink)
+}
+
+.confirm_cancel {
+    width: 30%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#deleteConfirmationMovie {
+    width: 24rem;
+    height: 8rem;
+    position : absolute;
+    top: 52%;
+    right: 48%;
+    background-color: var(--clr-grey-black);
+    border-radius: 0.5rem;
+    border-top: 1px solid var(--clr-pink);
+    padding: 1rem;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+#deleteConfirmationGenre {
+    width: 24rem;
+    height: 8rem;
+    position : absolute;
+    top: 20%;
+    right: 63%;
+    background-color: var(--clr-grey-black);
+    border-radius: 0.5rem;
+    border-top: 1px solid var(--clr-pink);
+    padding: 1rem;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}  
+
+#deleteConfirmationRole {
+    width: 24rem;
+    height: 8rem;
+    position : absolute;
+    top: 20%;
+    right: 62%;
+    background-color: var(--clr-grey-black);
+    border-radius: 0.5rem;
+    border-top: 1px solid var(--clr-pink);
+    padding: 1rem;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+}  
 
