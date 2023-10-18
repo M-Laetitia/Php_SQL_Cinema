@@ -8,11 +8,12 @@
   </a>
 </div>
 
-## Description 
+## ![features](https://img.shields.io/badge/%E2%9C%A6-%23ec4c50?style=flat) Description 
 This project is a web application that serves as a  cinema database and a collaborative platform for movie enthusiasts. Users can contribute information about movies, actors, directors, genres, and more to create detailed profiles for films and the people behind them. Registered users can leave reviews and ratings for movies and interact with others by liking or disliking reviews. 
 
 ## Technologies Used
 HTML-CSS | PHP | MySQL | JavaScript | jQuery | AJAX
+
 
 ## Key features
 ▪ User Registration and Login: Users can create accounts and log in to the platform, with moderator accounts having additional privileges.  
