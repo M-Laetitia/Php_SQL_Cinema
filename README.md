@@ -2,6 +2,12 @@
 
 ![Project Cinema Main page](asset/images/01.jpg)
 
+<div align="center">
+<a href="">
+    <img src="asset/images/readMe.png" alt="Logo" width="80">
+  </a>
+</div>
+
 ## Description 
 This project is a web application that serves as a  cinema database and a collaborative platform for movie enthusiasts. Users can contribute information about movies, actors, directors, genres, and more to create detailed profiles for films and the people behind them. Registered users can leave reviews and ratings for movies and interact with others by liking or disliking reviews. 
 
